@@ -112,10 +112,6 @@ func main() {
 		klog.Fatalf("unable to create CSR controller: %v", err)
 	}
 
-	statusController := NewStatusController(mgr.GetConfig())
-	go statusController.Run(1, stop)
-	statusController.versionGetter.SetVersion(operatorVersionKey, getReleaseVersion())
-
 	// Start the Cmd
 	klog.Info("starting the cmd")
 	if err := mgr.Start(control.SetupSignalHandler()); err != nil {
