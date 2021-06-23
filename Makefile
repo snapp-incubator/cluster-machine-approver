@@ -9,7 +9,7 @@ export GOPROXY
 NO_DOCKER ?= 0
 
 ifeq ($(shell command -v podman > /dev/null 2>&1 ; echo $$? ), 0)
-	ENGINE=podman
+	ENGINE="sudo podman"
 else ifeq ($(shell command -v docker > /dev/null 2>&1 ; echo $$? ), 0)
 	ENGINE=docker
 else
