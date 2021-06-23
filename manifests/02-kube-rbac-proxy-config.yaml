@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: kube-rbac-proxy
-  namespace: openshift-cluster-machine-approver
+  namespace: machine-approver
   annotations:
     include.release.openshift.io/ibm-cloud-managed: "true"
     include.release.openshift.io/self-managed-high-availability: "true"
@@ -15,4 +15,4 @@ data:
         apiVersion: v1
         resource: namespace
         subresource: metrics
-        namespace: openshift-cluster-machine-approver
+        namespace: machine-approver

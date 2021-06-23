@@ -49,7 +49,7 @@ images:
 ifeq ($(NO_DOCKER), 1)
 	./hack/imagebuilder.sh
 endif
-	$(IMAGE_BUILD_CMD) -f Dockerfile -t openshift/origin-cluster-machine-approver:latest .
+	$(IMAGE_BUILD_CMD) -f Dockerfile -t registry.okd4.teh-1.snappcloud.io/public-reg/cluster-machine-approver:latest .
 .PHONY: images
 
 clean:

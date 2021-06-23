@@ -5,7 +5,7 @@ metadata:
     prometheus: k8s
     role: alert-rules
   name: machineapprover-rules
-  namespace: openshift-cluster-machine-approver
+  namespace: machine-approver
   annotations:
     exclude.release.openshift.io/internal-openshift-hosted: "true"
     include.release.openshift.io/self-managed-high-availability: "true"

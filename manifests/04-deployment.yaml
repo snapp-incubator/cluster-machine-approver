@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: openshift-cluster-machine-approver
+  namespace: machine-approver
   name: machine-approver
   labels:
     app: machine-approver
@@ -56,7 +56,7 @@ spec:
         - mountPath: /etc/tls/private
           name: machine-approver-tls
       - name: machine-approver-controller
-        image: docker.io/openshift/origin-cluster-machine-approver:v4.0
+        image: registry.okd4.teh-1.snappcloud.io/public-reg/cluster-machine-approver:latest
         imagePullPolicy: IfNotPresent
         command: ["/usr/bin/machine-approver"]
         args:

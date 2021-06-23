@@ -7,8 +7,8 @@ metadata:
     include.release.openshift.io/single-node-developer: "true"
     openshift.io/node-selector: ""
     workload.openshift.io/allowed: "management"
-  name: openshift-cluster-machine-approver
+  name: machine-approver
   labels:
     openshift.io/run-level: "0"
     # allow openshift-monitoring to look for ServiceMonitor objects in this namespace
-    openshift.io/cluster-monitoring: "true" 
+    openshift.io/cluster-monitoring: "true"

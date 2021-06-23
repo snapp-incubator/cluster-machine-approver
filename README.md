@@ -58,7 +58,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: machine-approver-config
-  namespace: openshift-cluster-machine-approver
+  namespace: machine-approver
 data:
   config.yaml: |-
     nodeClientCert:

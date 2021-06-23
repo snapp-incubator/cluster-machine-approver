@@ -26,7 +26,7 @@ import (
 
 const (
 	clusterOperatorName           = "machine-approver"
-	clusterOperatorNamespace      = "openshift-cluster-machine-approver"
+	clusterOperatorNamespace      = "machine-approver"
 	unknownVersionValue           = "unknown"
 	queueKey                      = "trigger"
 	operatorVersionKey            = "operator"
