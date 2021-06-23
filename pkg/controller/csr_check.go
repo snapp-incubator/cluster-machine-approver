@@ -159,105 +159,6 @@ func authorizeCSR(
 		return false, nil
 	}
 
-	// Check for an existing serving cert from the node.  If found, use the
-	// renewal flow.  Any error connecting to the node, including validation of
-	// the presented cert against the current Kubelet CA, will result in
-	// fallback to the original flow relying on the machine-api.
-	//
-	// This is only supported if we were given a CA to verify against.
-	if ca != nil {
-		servingCert, err := getServingCert(c, nodeAsking, ca)
-		if err == nil && servingCert != nil {
-			klog.Infof("Found existing serving cert for %s", nodeAsking)
-
-			err := authorizeServingRenewal(nodeAsking, csr, servingCert, x509.VerifyOptions{Roots: ca})
-
-			// No error, the renewal is authorized.
-			if err == nil {
-				return true, nil
-			}
-
-			klog.Infof("Could not use current serving cert for renewal: %v", err)
-			klog.Infof("Current SAN Values: %v, CSR SAN Values: %v",
-				certSANs(servingCert), csrSANs(csr))
-		}
-
-		if err != nil {
-			klog.Infof("Failed to retrieve current serving cert: %v", err)
-		}
-	}
-
-	// Fall back to the original machine-api based authorization scheme.
-	klog.Infof("Falling back to machine-api authorization for %s", nodeAsking)
-
-	// Check that we have a registered node with the request name
-	targetMachine, ok := findMatchingMachineFromNodeRef(nodeAsking, machines)
-	if !ok {
-		klog.Errorf("%v: Serving Cert: No target machine for node %q", req.Name, nodeAsking)
-		//TODO: set annotation/emit event here.
-		// Return error so we requeue in case we're racing with node linker.
-		return false, fmt.Errorf("Unable to find machine for node")
-	}
-
-	// SAN checks for both DNS and IPs, e.g.,
-	// DNS:ip-10-0-152-205, DNS:ip-10-0-152-205.ec2.internal, IP Address:10.0.152.205, IP Address:10.0.152.205
-	// All names in the request must correspond to addresses assigned to a single machine.
-	for _, san := range csr.DNSNames {
-		if len(san) == 0 {
-			continue
-		}
-		var attemptedAddresses []string
-		var foundSan bool
-		for _, addr := range targetMachine.Status.Addresses {
-			switch addr.Type {
-			case corev1.NodeInternalDNS, corev1.NodeExternalDNS, corev1.NodeHostName:
-				if san == addr.Address {
-					foundSan = true
-					break
-				} else {
-					attemptedAddresses = append(attemptedAddresses, addr.Address)
-				}
-			default:
-			}
-		}
-		// The CSR requested a DNS name that did not belong to the machine
-		if !foundSan {
-			//TODO: set annotation/emit event here.
-			// return error so we requeue, in case machine network is out of date
-			// for some reason
-			klog.Errorf("%v: DNS name '%s' not in machine names: %s", req.Name, san, strings.Join(attemptedAddresses, " "))
-			return false, fmt.Errorf("DNS name '%s' not in machine names: %s", san, strings.Join(attemptedAddresses, " "))
-		}
-	}
-
-	for _, san := range csr.IPAddresses {
-		if len(san) == 0 {
-			continue
-		}
-		var attemptedAddresses []string
-		var foundSan bool
-		for _, addr := range targetMachine.Status.Addresses {
-			switch addr.Type {
-			case corev1.NodeInternalIP, corev1.NodeExternalIP:
-				if san.String() == addr.Address {
-					foundSan = true
-					break
-				} else {
-					attemptedAddresses = append(attemptedAddresses, addr.Address)
-				}
-			default:
-			}
-		}
-		// The CSR requested an IP name that did not belong to the machine
-		if !foundSan {
-			//TODO: set annotation/emit event here.
-			// return error so we requeue, in case machine network is out of date
-			// for some reason
-			klog.Errorf("%v: IP address '%s' not in machine addresses: %s", req.Name, san, strings.Join(attemptedAddresses, " "))
-			return false, fmt.Errorf("IP address '%s' not in machine addresses: %s", san, strings.Join(attemptedAddresses, " "))
-		}
-	}
-
 	return true, nil
 }
 
@@ -282,27 +183,6 @@ func authorizeNodeClientCSR(c client.Client, machines []machinev1.Machine, req *
 	} else if err == nil {
 		//TODO: set annotation/emit event here.
 		klog.Errorf("%v: node %s already exists, cannot approve", req.Name, nodeName)
-		return false, nil
-	}
-
-	nodeMachine, ok := findMatchingMachineFromInternalDNS(nodeName, machines)
-	if !ok {
-		//TODO: set annotation/emit event here.
-		klog.Errorf("%v: failed to find machine for node %s, cannot approve", req.Name, nodeName)
-		return false, fmt.Errorf("failed to find machine for node %s", nodeName)
-	}
-
-	if nodeMachine.Status.NodeRef != nil {
-		//TODO: set annotation/emit event here.
-		klog.Errorf("%v: machine for node %s already has node ref, cannot approve", req.Name, nodeName)
-		return false, nil
-	}
-
-	start := nodeMachine.CreationTimestamp.Add(-maxMachineClockSkew)
-	end := nodeMachine.CreationTimestamp.Add(maxMachineDelta)
-	if !inTimeSpan(start, end, req.CreationTimestamp.Time) {
-		//TODO: set annotation/emit event here.
-		klog.Errorf("%v: CSR creation time %s not in range (%s, %s)", req.Name, req.CreationTimestamp.Time, start, end)
 		return false, nil
 	}
 
@@ -352,26 +232,6 @@ func authorizeServingRenewal(nodeName string, csr *x509.CertificateRequest, curr
 
 func isReqFromNodeBootstrapper(req *certificatesv1.CertificateSigningRequest) bool {
 	return req.Spec.Username == nodeBootstrapperUsername && nodeBootstrapperGroups.Equal(sets.NewString(req.Spec.Groups...))
-}
-
-func findMatchingMachineFromNodeRef(nodeName string, machines []machinev1.Machine) (machinev1.Machine, bool) {
-	for _, machine := range machines {
-		if machine.Status.NodeRef != nil && machine.Status.NodeRef.Name == nodeName {
-			return machine, true
-		}
-	}
-	return machinev1.Machine{}, false
-}
-
-func findMatchingMachineFromInternalDNS(nodeName string, machines []machinev1.Machine) (machinev1.Machine, bool) {
-	for _, machine := range machines {
-		for _, address := range machine.Status.Addresses {
-			if address.Type == corev1.NodeInternalDNS && address.Address == nodeName {
-				return machine, true
-			}
-		}
-	}
-	return machinev1.Machine{}, false
 }
 
 func inTimeSpan(start, end, check time.Time) bool {

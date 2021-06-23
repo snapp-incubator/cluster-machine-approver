@@ -5,11 +5,12 @@ export GOFLAGS
 GOPROXY ?=
 export GOPROXY
 
-
+REG ?= registry.okd4.teh-1.snappcloud.io
+IMG ?= $(REG)/public-reg/cluster-machine-approver:latest
 NO_DOCKER ?= 0
 
 ifeq ($(shell command -v podman > /dev/null 2>&1 ; echo $$? ), 0)
-	ENGINE="sudo podman"
+	ENGINE=podman
 else ifeq ($(shell command -v docker > /dev/null 2>&1 ; echo $$? ), 0)
 	ENGINE=docker
 else
@@ -26,7 +27,7 @@ ifeq ($(NO_DOCKER), 1)
   IMAGE_BUILD_CMD = imagebuilder
 else
   DOCKER_CMD := $(ENGINE) run --env GO111MODULE=$(GO111MODULE) --env GOFLAGS=$(GOFLAGS) --rm -v "$(PWD)":/go/src/github.com/openshift/cluster-machine-approver:Z  -w /go/src/github.com/openshift/cluster-machine-approver openshift/origin-release:golang-1.15
-  IMAGE_BUILD_CMD = $(ENGINE) build
+  IMAGE_BUILD_CMD = sudo $(ENGINE) build
 endif
 
 all build:
@@ -49,7 +50,7 @@ images:
 ifeq ($(NO_DOCKER), 1)
 	./hack/imagebuilder.sh
 endif
-	$(IMAGE_BUILD_CMD) -f Dockerfile -t registry.okd4.teh-1.snappcloud.io/public-reg/cluster-machine-approver:latest .
+	$(IMAGE_BUILD_CMD) -f Dockerfile -t $(IMG) .
 .PHONY: images
 
 clean:
@@ -63,3 +64,13 @@ test-e2e: ## Run e2e tests
 .PHONY: vendor
 vendor:
 	$(DOCKER_CMD) hack/go-mod.sh
+
+image-push: image-login
+	sudo $(ENGINE) push $(IMG)
+
+image-login:
+	sudo $(ENGINE) login ${REG} -u ${REG_USER} -p ${REG_PASSWORD}
+
+
+redeploy: images image-push
+	oc delete po --all -n machine-approver
