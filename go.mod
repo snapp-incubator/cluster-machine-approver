@@ -3,7 +3,7 @@ module github.com/openshift/cluster-machine-approver
 go 1.15
 
 require (
-	github.com/onsi/ginkgo v1.16.4
+	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.18.1
 	github.com/openshift/api v0.0.0-20210415150416-88a128ebb551
 	github.com/openshift/client-go v0.0.0-20210409155308-a8e62c60e930
