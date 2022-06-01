@@ -9,7 +9,7 @@ require (
 	github.com/openshift/client-go v0.0.0-20210409155308-a8e62c60e930
 	github.com/openshift/cluster-api v0.0.0-20191129101638-b09907ac6668
 	github.com/openshift/library-go v0.0.0-20210414082648-6e767630a0dc
-	github.com/prometheus/client_golang v1.12.1
+	github.com/prometheus/client_golang v1.12.2
 	k8s.io/api v0.23.4
 	k8s.io/apimachinery v0.23.4
 	k8s.io/client-go v11.0.1-0.20190409021438-1a26190bd76a+incompatible
