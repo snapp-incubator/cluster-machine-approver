@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.19.0
+	github.com/onsi/gomega v1.20.0
 	github.com/openshift/api v0.0.0-20210415150416-88a128ebb551
 	github.com/openshift/client-go v0.0.0-20210409155308-a8e62c60e930
 	github.com/openshift/cluster-api v0.0.0-20191129101638-b09907ac6668
