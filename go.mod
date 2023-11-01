@@ -13,7 +13,7 @@ require (
 	k8s.io/api v0.23.4
 	k8s.io/apimachinery v0.23.4
 	k8s.io/client-go v11.0.1-0.20190409021438-1a26190bd76a+incompatible
-	k8s.io/klog/v2 v2.100.1
+	k8s.io/klog/v2 v2.110.1
 	sigs.k8s.io/controller-runtime v0.9.0-beta.1.0.20210512131817-ce2f0c92d77e
 )
 
