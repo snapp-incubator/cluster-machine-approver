@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
+	machinev1 "github.com/openshift/api/machine/v1beta1"
 	certificatesv1 "k8s.io/api/certificates/v1"
 	certificatesv1client "k8s.io/client-go/kubernetes/typed/certificates/v1"
 
@@ -25,7 +25,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-	"sigs.k8s.io/controller-runtime/pkg/source"
 )
 
 const (
@@ -54,7 +53,7 @@ func (m *CertificateApprover) buildWithManager(mgr ctrl.Manager, options control
 			DeleteFunc:  func(e event.DeleteEvent) bool { return false },
 		})).
 		Watches(
-			&source.Kind{Type: &corev1.ConfigMap{}},
+			&corev1.ConfigMap{},
 			handler.EnqueueRequestsFromMapFunc(m.toCSRs),
 			builder.WithPredicates(predicate.Funcs{
 				CreateFunc:  func(e event.CreateEvent) bool { return caConfigMapFilter(e.Object, nil) },
@@ -69,10 +68,10 @@ func pendingCertFilter(obj runtime.Object) bool {
 	return ok && !isApproved(*cert)
 }
 
-func (m *CertificateApprover) toCSRs(client.Object) []reconcile.Request {
+func (m *CertificateApprover) toCSRs(ctx context.Context, _ client.Object) []reconcile.Request {
 	requests := []reconcile.Request{}
 	list := &certificatesv1.CertificateSigningRequestList{}
-	err := m.List(context.Background(), list)
+	err := m.List(ctx, list)
 	if err != nil {
 		klog.Errorf("Unable to list pending CSRs: %v", err)
 		return nil

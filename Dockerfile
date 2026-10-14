@@ -1,9 +1,9 @@
-FROM registry.ci.openshift.org/openshift/release:golang-1.21 AS builder
+FROM docker.io/library/golang:1.27 AS builder
 WORKDIR /go/src/github.com/openshift/cluster-machine-approver
 COPY . .
-RUN make build
+RUN CGO_ENABLED=0 make build
 
-FROM registry.ci.openshift.org/openshift/origin-v4.0:base
+FROM registry.access.redhat.com/ubi10/ubi-minimal:latest
 COPY --from=builder /go/src/github.com/openshift/cluster-machine-approver/machine-approver /usr/bin/
 COPY manifests /manifests
 ENTRYPOINT ["/usr/bin/machine-approver"]

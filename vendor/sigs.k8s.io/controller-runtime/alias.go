@@ -18,10 +18,10 @@ package controllerruntime
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/builder"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
-	cfg "sigs.k8s.io/controller-runtime/pkg/config"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
@@ -45,17 +45,46 @@ type Result = reconcile.Result
 // A Manager is required to create Controllers.
 type Manager = manager.Manager
 
-// Options are the arguments for creating a new Manager
+// Options are the arguments for creating a new Manager.
 type Options = manager.Options
 
 // SchemeBuilder builds a new Scheme for mapping go types to Kubernetes GroupVersionKinds.
-type SchemeBuilder = scheme.Builder
+//
+// Deprecated: This helper is only useful in api packages, but api packages should be
+// easy to import and hence have minimal dependencies. Typically, these dependencies
+// include only the standard library, k8s.io/apimachinery and other api packages.
+//
+// Use the apimachinery builder instead:
+//
+//	import (
+//		metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+//		"k8s.io/apimachinery/pkg/runtime"
+//		"k8s.io/apimachinery/pkg/runtime/schema"
+//	)
+//
+//	const GroupName = ""
+//
+//	var (
+//		SchemeGroupVersion = schema.GroupVersion{Group: GroupName, Version: "v1"}
+//		SchemeBuilder 		 = runtime.NewSchemeBuilder(addKnownTypes)
+//		AddToScheme   		 = SchemeBuilder.AddToScheme
+//	)
+//
+//	func addKnownTypes(scheme *runtime.Scheme) error {
+//		scheme.AddKnownTypes(SchemeGroupVersion,
+//			&Pod{},
+//		)
+//
+//		metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
+//		return nil
+//	}
+type SchemeBuilder = scheme.Builder //nolint:staticcheck // this is the deprecation alias
 
 // GroupVersion contains the "group" and the "version", which uniquely identifies the API.
 type GroupVersion = schema.GroupVersion
 
 // GroupResource specifies a Group and a Resource, but does not force a version.  This is useful for identifying
-// concepts during lookup stages without having partially valid types
+// concepts during lookup stages without having partially valid types.
 type GroupResource = schema.GroupResource
 
 // TypeMeta describes an individual object in an API response or request
@@ -70,9 +99,16 @@ type TypeMeta = metav1.TypeMeta
 type ObjectMeta = metav1.ObjectMeta
 
 var (
+	// RegisterFlags registers flag variables to the given FlagSet if not already registered.
+	// It uses the default command line FlagSet, if none is provided. Currently, it only registers the kubeconfig flag.
+	RegisterFlags = config.RegisterFlags
+
 	// GetConfigOrDie creates a *rest.Config for talking to a Kubernetes apiserver.
 	// If --kubeconfig is set, will use the kubeconfig file at that location.  Otherwise will assume running
 	// in cluster and use the cluster provided kubeconfig.
+	//
+	// The returned `*rest.Config` has client-side rate limiting disabled as we can rely on API priority and
+	// fairness. Set its QPS to a value equal or bigger than 0 to re-enable it.
 	//
 	// Will log an error and exit if there is an error creating the rest.Config.
 	GetConfigOrDie = config.GetConfigOrDie
@@ -80,6 +116,9 @@ var (
 	// GetConfig creates a *rest.Config for talking to a Kubernetes apiserver.
 	// If --kubeconfig is set, will use the kubeconfig file at that location.  Otherwise will assume running
 	// in cluster and use the cluster provided kubeconfig.
+	//
+	// The returned `*rest.Config` has client-side rate limiting disabled as we can rely on API priority and
+	// fairness. Set its QPS to a value equal or bigger than 0 to re-enable it.
 	//
 	// Config precedence
 	//
@@ -89,22 +128,25 @@ var (
 	//
 	// * In-cluster config if running in cluster
 	//
-	// * $HOME/.kube/config if exists
+	// * $HOME/.kube/config if exists.
 	GetConfig = config.GetConfig
 
-	// ConfigFile returns the cfg.File function for deferred config file loading,
-	// this is passed into Options{}.From() to populate the Options fields for
-	// the manager.
-	ConfigFile = cfg.File
-
-	// NewControllerManagedBy returns a new controller builder that will be started by the provided Manager
+	// NewControllerManagedBy returns a new controller builder that will be started by the provided Manager.
 	NewControllerManagedBy = builder.ControllerManagedBy
 
-	// NewWebhookManagedBy returns a new webhook builder that will be started by the provided Manager
-	NewWebhookManagedBy = builder.WebhookManagedBy
-
 	// NewManager returns a new Manager for creating Controllers.
+	// Note that if ContentType in the given config is not set, "application/vnd.kubernetes.protobuf"
+	// will be used for all built-in resources of Kubernetes, and "application/json" is for other types
+	// including all CRD resources.
 	NewManager = manager.New
+
+	// CreateOrPatch creates or patches the given object obj in the Kubernetes
+	// cluster. The object's desired state should be reconciled with the existing
+	// state using the passed in ReconcileFn. obj must be a struct pointer so that
+	// obj can be patched with the content returned by the Server.
+	//
+	// It returns the executed operation and an error.
+	CreateOrPatch = controllerutil.CreateOrPatch
 
 	// CreateOrUpdate creates or updates the given object obj in the Kubernetes
 	// cluster. The object's desired state should be reconciled with the existing
@@ -121,8 +163,8 @@ var (
 	// there is another OwnerReference with Controller flag set.
 	SetControllerReference = controllerutil.SetControllerReference
 
-	// SetupSignalHandler registered for SIGTERM and SIGINT. A stop channel is returned
-	// which is closed on one of these signals. If a second signal is caught, the program
+	// SetupSignalHandler registers for SIGTERM and SIGINT. A context is returned
+	// which is canceled on one of these signals. If a second signal is caught, the program
 	// is terminated with exit code 1.
 	SetupSignalHandler = signals.SetupSignalHandler
 
@@ -135,7 +177,7 @@ var (
 	// The logger, when used with controllers, can be expected to contain basic information about the object
 	// that's being reconciled like:
 	// - `reconciler group` and `reconciler kind` coming from the For(...) object passed in when building a controller.
-	// - `name` and `namespace` injected from the reconciliation request.
+	// - `name` and `namespace` from the reconciliation request.
 	//
 	// This is meant to be used with the context supplied in a struct that satisfies the Reconciler interface.
 	LoggerFrom = log.FromContext
@@ -148,3 +190,8 @@ var (
 	// SetLogger sets a concrete logging implementation for all deferred Loggers.
 	SetLogger = log.SetLogger
 )
+
+// NewWebhookManagedBy returns a new webhook builder for the provided type T.
+func NewWebhookManagedBy[T runtime.Object](mgr manager.Manager, obj T) *builder.WebhookBuilder[T] {
+	return builder.WebhookManagedBy(mgr, obj)
+}

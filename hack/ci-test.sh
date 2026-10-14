@@ -18,10 +18,18 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-REPO_ROOT=$(dirname "${BASH_SOURCE}")/..
+REPO_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+ENVTEST_K8S_VERSION=${ENVTEST_K8S_VERSION:-1.37.0}
+SETUP_ENVTEST_VERSION=${SETUP_ENVTEST_VERSION:-release-0.25}
+LOCALBIN="$REPO_ROOT/bin"
 
-cd $REPO_ROOT && \
-	source ./hack/fetch_ext_bins.sh && \
-	fetch_tools && \
-	setup_envs && \
-	make unit
+cd "$REPO_ROOT"
+mkdir -p "$LOCALBIN"
+if [ ! -x "$LOCALBIN/setup-envtest" ]; then
+	GOFLAGS= GOBIN="$LOCALBIN" go install "sigs.k8s.io/controller-runtime/tools/setup-envtest@${SETUP_ENVTEST_VERSION}"
+fi
+
+KUBEBUILDER_ASSETS="$("$LOCALBIN/setup-envtest" use "$ENVTEST_K8S_VERSION" --bin-dir "$LOCALBIN" -p path)"
+export KUBEBUILDER_ASSETS
+
+make unit

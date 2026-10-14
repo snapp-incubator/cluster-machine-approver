@@ -35,6 +35,16 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&GenericOperatorConfig{},
 		&ImageContentSourcePolicy{},
 		&ImageContentSourcePolicyList{},
+		&OLM{},
+		&OLMList{},
+		&EtcdBackup{},
+		&EtcdBackupList{},
+		&ClusterVersionOperator{},
+		&ClusterVersionOperatorList{},
+		&ClusterAPI{},
+		&ClusterAPIList{},
+		&Ingress{},
+		&IngressList{},
 	)
 
 	return nil

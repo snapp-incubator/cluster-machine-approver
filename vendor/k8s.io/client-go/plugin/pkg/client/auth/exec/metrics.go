@@ -18,6 +18,7 @@ package exec
 
 import (
 	"errors"
+	"io/fs"
 	"os/exec"
 	"reflect"
 	"sync"
@@ -48,6 +49,13 @@ const (
 	// used in some failure modes (e.g., plugin not found, client internal error) so that someone
 	// can more easily monitor all unsuccessful invocations.
 	failureExitCode = 1
+
+	// pluginAllowed represents an exec plugin invocation that was allowed by
+	// the plugin policy and/or the allowlist
+	pluginAllowed = "allowed"
+	// pluginAllowed represents an exec plugin invocation that was denied by
+	// the plugin policy and/or the allowlist
+	pluginDenied = "denied"
 )
 
 type certificateExpirationTracker struct {
@@ -92,6 +100,7 @@ func (c *certificateExpirationTracker) set(a *Authenticator, t time.Time) {
 func incrementCallsMetric(err error) {
 	execExitError := &exec.ExitError{}
 	execError := &exec.Error{}
+	pathError := &fs.PathError{}
 	switch {
 	case err == nil: // Binary execution succeeded.
 		metrics.ExecPluginCalls.Increment(successExitCode, noError)
@@ -99,11 +108,20 @@ func incrementCallsMetric(err error) {
 	case errors.As(err, &execExitError): // Binary execution failed (see "os/exec".Cmd.Run()).
 		metrics.ExecPluginCalls.Increment(execExitError.ExitCode(), pluginExecutionError)
 
-	case errors.As(err, &execError): // Binary does not exist (see exec.Error).
+	case errors.As(err, &execError), errors.As(err, &pathError): // Binary does not exist (see exec.Error, fs.PathError).
 		metrics.ExecPluginCalls.Increment(failureExitCode, pluginNotFoundError)
 
 	default: // We don't know about this error type.
 		klog.V(2).InfoS("unexpected exec plugin return error type", "type", reflect.TypeOf(err).String(), "err", err)
 		metrics.ExecPluginCalls.Increment(failureExitCode, clientInternalError)
 	}
+}
+
+func incrementPolicyMetric(err error) {
+	if err != nil {
+		metrics.ExecPluginPolicyCalls.Increment(pluginDenied)
+		return
+	}
+
+	metrics.ExecPluginPolicyCalls.Increment(pluginAllowed)
 }

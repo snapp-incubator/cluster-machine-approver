@@ -3,25 +3,54 @@
 package v1
 
 import (
-	"context"
+	context "context"
 	time "time"
 
-	configv1 "github.com/openshift/api/config/v1"
+	apiconfigv1 "github.com/openshift/api/config/v1"
 	versioned "github.com/openshift/client-go/config/clientset/versioned"
 	internalinterfaces "github.com/openshift/client-go/config/informers/externalversions/internalinterfaces"
-	v1 "github.com/openshift/client-go/config/listers/config/v1"
+	configv1 "github.com/openshift/client-go/config/listers/config/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
+	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
 )
 
 // ConsoleInformer provides access to a shared informer and lister for
-// Consoles.
+// Consoles. Prefer using the type-safe variant (see [TypedConsoleInformer]).
 type ConsoleInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1.ConsoleLister
+	Lister() configv1.ConsoleLister
 }
+
+// TypedConsoleInformer provides access to a shared informer and lister for
+// Consoles, including the type-safe TypedInformer variant.
+// It is a superset of ConsoleInformer.
+type TypedConsoleInformer interface {
+	Informer() cache.SharedIndexInformer
+	TypedInformer() ConsoleIndexInformer
+	Lister() configv1.ConsoleLister
+}
+
+// ConsoleIndexInformer is a wrapper around the underlying [cache.SharedIndexInformer]
+// with type-safe variants of several methods.
+type ConsoleIndexInformer cache.TypedSharedIndexInformer[*apiconfigv1.Console]
+
+// ConsoleHandlerFuncs is a specialization of [cache.TypedResourceEventHandlerFuncs] for Console.
+type ConsoleHandlerFuncs = cache.TypedResourceEventHandlerFuncs[*apiconfigv1.Console]
+
+// ConsoleDetailedHandlerFuncs is a specialization of [cache.TypedResourceEventHandlerDetailedFuncs] for Console.
+type ConsoleDetailedHandlerFuncs = cache.TypedResourceEventHandlerDetailedFuncs[*apiconfigv1.Console]
+
+// ConsoleFilteringHandler is a specialization of [cache.TypedFilteringResourceEventHandler] for Console.
+type ConsoleFilteringHandler = cache.TypedFilteringResourceEventHandler[*apiconfigv1.Console]
+
+// ConsoleIndexers is a specialization of [cache.TypedIndexers] for Console.
+type ConsoleIndexers = cache.TypedIndexers[*apiconfigv1.Console]
+
+// DeletedConsole is a specialization of [cache.DeletedObject] for Console.
+type DeletedConsole = cache.DeletedObject[*apiconfigv1.Console]
 
 type consoleInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
@@ -31,43 +60,132 @@ type consoleInformer struct {
 // NewConsoleInformer constructs a new informer for Console type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
+// If you really need an independent one, prefer using the type-safe variant (see [NewTypedConsoleInformer]).
 func NewConsoleInformer(client versioned.Interface, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredConsoleInformer(client, resyncPeriod, indexers, nil)
+	return NewConsoleInformerWithOptions(client, internalinterfaces.InformerOptions{ResyncPeriod: resyncPeriod, Indexers: indexers})
+}
+
+// NewTypedConsoleInformer constructs a new informer for Console type.
+// Always prefer using an informer factory to get a shared informer instead of getting an independent
+// one. This reduces memory footprint and number of connections to the server.
+func NewTypedConsoleInformer(client versioned.Interface, resyncPeriod time.Duration, indexers ConsoleIndexers) ConsoleIndexInformer {
+	return NewTypedConsoleInformerWithOptions(client, internalinterfaces.InformerOptions{ResyncPeriod: resyncPeriod, Indexers: cache.TypedIndexersToIndexers(indexers)})
 }
 
 // NewFilteredConsoleInformer constructs a new informer for Console type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
+// If you really need an independent one, prefer using the type-safe variant (see [NewTypedFilteredConsoleInformer]).
 func NewFilteredConsoleInformer(client versioned.Interface, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
-	return cache.NewSharedIndexInformer(
-		&cache.ListWatch{
-			ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
+	return NewTypedConsoleInformerWithOptions(client, internalinterfaces.InformerOptions{ResyncPeriod: resyncPeriod, Indexers: indexers, TweakListOptions: tweakListOptions})
+}
+
+// NewTypedFilteredConsoleInformer constructs a new informer for Console type.
+// Always prefer using an informer factory to get a shared informer instead of getting an independent
+// one. This reduces memory footprint and number of connections to the server.
+func NewTypedFilteredConsoleInformer(client versioned.Interface, resyncPeriod time.Duration, indexers ConsoleIndexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) ConsoleIndexInformer {
+	return NewTypedConsoleInformerWithOptions(client, internalinterfaces.InformerOptions{ResyncPeriod: resyncPeriod, Indexers: cache.TypedIndexersToIndexers(indexers), TweakListOptions: tweakListOptions})
+}
+
+// NewConsoleInformerWithOptions constructs a new informer for Console type with additional options.
+// Always prefer using an informer factory to get a shared informer instead of getting an independent
+// one. This reduces memory footprint and number of connections to the server.
+// If you really need an independent one, prefer using the type-safe variant (see [NewTypedConsoleInformerWithOptions]).
+func NewConsoleInformerWithOptions(client versioned.Interface, options internalinterfaces.InformerOptions) cache.SharedIndexInformer {
+	return NewTypedConsoleInformerWithOptions(client, options)
+}
+
+// NewTypedConsoleInformerWithOptions constructs a new informer for Console type with additional options.
+// Always prefer using an informer factory to get a shared informer instead of getting an independent
+// one. This reduces memory footprint and number of connections to the server.
+func NewTypedConsoleInformerWithOptions(client versioned.Interface, options internalinterfaces.InformerOptions) ConsoleIndexInformer {
+	gvr := schema.GroupVersionResource{Group: "config.openshift.io", Version: "v1", Resource: "consoles"}
+	identifier := options.InformerName.WithResource(gvr)
+	tweakListOptions := options.TweakListOptions
+	return cache.NewTypedSharedIndexInformer[*apiconfigv1.Console](cache.NewSharedIndexInformerWithOptions(
+		cache.ToListWatcherWithWatchListSemantics(&cache.ListWatch{
+			ListFunc: func(opts metav1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
-					tweakListOptions(&options)
+					tweakListOptions(&opts)
 				}
-				return client.ConfigV1().Consoles().List(context.TODO(), options)
+				return client.ConfigV1().Consoles().List(context.Background(), opts)
 			},
-			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
+			WatchFunc: func(opts metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
-					tweakListOptions(&options)
+					tweakListOptions(&opts)
 				}
-				return client.ConfigV1().Consoles().Watch(context.TODO(), options)
+				return client.ConfigV1().Consoles().Watch(context.Background(), opts)
 			},
+			ListWithContextFunc: func(ctx context.Context, opts metav1.ListOptions) (runtime.Object, error) {
+				if tweakListOptions != nil {
+					tweakListOptions(&opts)
+				}
+				return client.ConfigV1().Consoles().List(ctx, opts)
+			},
+			WatchFuncWithContext: func(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
+				if tweakListOptions != nil {
+					tweakListOptions(&opts)
+				}
+				return client.ConfigV1().Consoles().Watch(ctx, opts)
+			},
+		}, client),
+		&apiconfigv1.Console{},
+		cache.SharedIndexInformerOptions{
+			ResyncPeriod: options.ResyncPeriod,
+			Indexers:     options.Indexers,
+			Identifier:   identifier,
 		},
-		&configv1.Console{},
-		resyncPeriod,
-		indexers,
-	)
+	))
 }
 
 func (f *consoleInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredConsoleInformer(client, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+	return NewTypedConsoleInformerWithOptions(client, internalinterfaces.InformerOptions{ResyncPeriod: resyncPeriod, Indexers: cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, InformerName: f.factory.InformerName(), TweakListOptions: f.tweakListOptions})
 }
 
 func (f *consoleInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&configv1.Console{}, f.defaultInformer)
+	return f.TypedInformer()
 }
 
-func (f *consoleInformer) Lister() v1.ConsoleLister {
-	return v1.NewConsoleLister(f.Informer().GetIndexer())
+func (f *consoleInformer) TypedInformer() ConsoleIndexInformer {
+	return cache.NewTypedSharedIndexInformer[*apiconfigv1.Console](f.factory.InformerFor(&apiconfigv1.Console{}, f.defaultInformer))
+}
+
+func (f *consoleInformer) Lister() configv1.ConsoleLister {
+	return configv1.NewConsoleLister(f.Informer().GetIndexer())
+}
+
+// ToTypedConsoleInformer converts an untyped informer into a TypedConsoleInformer.
+//
+// WARNING: this conversion is only safe if the informer handles objects of type
+// *Console. If that is not the case, calling type-safe methods of the returned
+// TypedConsoleInformer leads to runtime panics. A safer alternative is to pass
+// around a TypedConsoleInformer instances that was obtained from a
+// SharedInformerFactory.
+func ToTypedConsoleInformer(informer ConsoleInformer) TypedConsoleInformer {
+	if informer, ok := informer.(TypedConsoleInformer); ok {
+		return informer
+	}
+	return &consoleTypedInformerAdapter{informer}
+}
+
+type consoleTypedInformerAdapter struct {
+	ConsoleInformer
+}
+
+func (a *consoleTypedInformerAdapter) TypedInformer() ConsoleIndexInformer {
+	return cache.NewTypedSharedIndexInformer[*apiconfigv1.Console](a.Informer())
+}
+
+// ToConsoleIndexInformer converts an untyped informer into a ConsoleIndexInformer.
+//
+// WARNING: this conversion is only safe if the informer handles objects of type
+// *Console. If that is not the case, calling type-safe methods of the returned
+// ConsoleIndexInformer leads to runtime panics. A safer alternative is to pass
+// around a ConsoleIndexInformer instances that was obtained from a
+// SharedInformerFactory.
+func ToConsoleIndexInformer(informer cache.SharedIndexInformer) ConsoleIndexInformer {
+	if informer, ok := informer.(ConsoleIndexInformer); ok {
+		return informer
+	}
+	return cache.NewTypedSharedIndexInformer[*apiconfigv1.Console](informer)
 }

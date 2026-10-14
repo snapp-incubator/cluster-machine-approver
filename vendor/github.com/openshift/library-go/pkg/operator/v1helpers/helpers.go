@@ -1,12 +1,17 @@
 package v1helpers
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"os"
 	"sort"
 	"strings"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
+	configv1 "github.com/openshift/api/config/v1"
+	operatorv1 "github.com/openshift/api/operator/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -14,11 +19,12 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/client-go/util/retry"
+	"k8s.io/klog/v2"
+	"sigs.k8s.io/yaml"
+)
 
-	"github.com/ghodss/yaml"
-
-	configv1 "github.com/openshift/api/config/v1"
-	operatorv1 "github.com/openshift/api/operator/v1"
+const (
+	progressingConditionTimeout = 15 * time.Minute
 )
 
 // SetOperandVersion sets the new version and returns the previous value.
@@ -114,14 +120,25 @@ func IsOperatorConditionPresentAndEqual(conditions []operatorv1.OperatorConditio
 type UpdateOperatorSpecFunc func(spec *operatorv1.OperatorSpec) error
 
 // UpdateSpec applies the update funcs to the oldStatus and tries to update via the client.
-func UpdateSpec(client OperatorClient, updateFuncs ...UpdateOperatorSpecFunc) (*operatorv1.OperatorSpec, bool, error) {
+func UpdateSpec(ctx context.Context, client OperatorClient, updateFuncs ...UpdateOperatorSpecFunc) (*operatorv1.OperatorSpec, bool, error) {
 	updated := false
 	var operatorSpec *operatorv1.OperatorSpec
+	previousResourceVersion := ""
 	err := retry.RetryOnConflict(retry.DefaultBackoff, func() error {
 		oldSpec, _, resourceVersion, err := client.GetOperatorState()
 		if err != nil {
 			return err
 		}
+		if resourceVersion == previousResourceVersion {
+			// Lister is stale (e.g. after a conflict or restart); do a live GET to get the current resourceVersion.
+			listerResourceVersion := resourceVersion
+			oldSpec, _, resourceVersion, err = client.GetOperatorStateWithQuorum(ctx)
+			if err != nil {
+				return err
+			}
+			klog.V(2).Infof("lister was stale at resourceVersion=%v, live get showed resourceVersion=%v", listerResourceVersion, resourceVersion)
+		}
+		previousResourceVersion = resourceVersion
 
 		newSpec := oldSpec.DeepCopy()
 		for _, update := range updateFuncs {
@@ -134,7 +151,7 @@ func UpdateSpec(client OperatorClient, updateFuncs ...UpdateOperatorSpecFunc) (*
 			return nil
 		}
 
-		operatorSpec, _, err = client.UpdateOperatorSpec(resourceVersion, newSpec)
+		operatorSpec, _, err = client.UpdateOperatorSpec(ctx, resourceVersion, newSpec)
 		updated = err == nil
 		return err
 	})
@@ -142,7 +159,7 @@ func UpdateSpec(client OperatorClient, updateFuncs ...UpdateOperatorSpecFunc) (*
 	return operatorSpec, updated, err
 }
 
-// UpdateSpecConfigFn returns a func to update the config.
+// UpdateObservedConfigFn returns a func to update the config.
 func UpdateObservedConfigFn(config map[string]interface{}) UpdateOperatorSpecFunc {
 	return func(oldSpec *operatorv1.OperatorSpec) error {
 		oldSpec.ObservedConfig = runtime.RawExtension{Object: &unstructured.Unstructured{Object: config}}
@@ -154,14 +171,34 @@ func UpdateObservedConfigFn(config map[string]interface{}) UpdateOperatorSpecFun
 type UpdateStatusFunc func(status *operatorv1.OperatorStatus) error
 
 // UpdateStatus applies the update funcs to the oldStatus and tries to update via the client.
-func UpdateStatus(client OperatorClient, updateFuncs ...UpdateStatusFunc) (*operatorv1.OperatorStatus, bool, error) {
+func UpdateStatus(ctx context.Context, client OperatorClient, updateFuncs ...UpdateStatusFunc) (*operatorv1.OperatorStatus, bool, error) {
 	updated := false
 	var updatedOperatorStatus *operatorv1.OperatorStatus
+	numberOfAttempts := 0
+	previousResourceVersion := ""
 	err := retry.RetryOnConflict(retry.DefaultBackoff, func() error {
-		_, oldStatus, resourceVersion, err := client.GetOperatorState()
+		defer func() {
+			numberOfAttempts++
+		}()
+		var oldStatus *operatorv1.OperatorStatus
+		var resourceVersion string
+		var err error
+
+		// prefer lister if we haven't already failed.
+		_, oldStatus, resourceVersion, err = client.GetOperatorState()
 		if err != nil {
 			return err
 		}
+		if resourceVersion == previousResourceVersion {
+			listerResourceVersion := resourceVersion
+			// this indicates that we've had a conflict and the lister has not caught up, so do a live GET
+			_, oldStatus, resourceVersion, err = client.GetOperatorStateWithQuorum(ctx)
+			if err != nil {
+				return err
+			}
+			klog.V(2).Infof("lister was stale at resourceVersion=%v, live get showed resourceVersion=%v", listerResourceVersion, resourceVersion)
+		}
+		previousResourceVersion = resourceVersion
 
 		newStatus := oldStatus.DeepCopy()
 		for _, update := range updateFuncs {
@@ -175,8 +212,11 @@ func UpdateStatus(client OperatorClient, updateFuncs ...UpdateStatusFunc) (*oper
 			updatedOperatorStatus = newStatus
 			return nil
 		}
+		if klog.V(4).Enabled() {
+			klog.Infof("Operator status changed: %v", operatorStatusJSONPatchNoError(oldStatus, newStatus))
+		}
 
-		updatedOperatorStatus, err = client.UpdateOperatorStatus(resourceVersion, newStatus)
+		updatedOperatorStatus, err = client.UpdateOperatorStatus(ctx, resourceVersion, newStatus)
 		updated = err == nil
 		return err
 	})
@@ -184,7 +224,18 @@ func UpdateStatus(client OperatorClient, updateFuncs ...UpdateStatusFunc) (*oper
 	return updatedOperatorStatus, updated, err
 }
 
-// UpdateConditionFunc returns a func to update a condition.
+func operatorStatusJSONPatchNoError(original, modified *operatorv1.OperatorStatus) string {
+	if original == nil {
+		return "original object is nil"
+	}
+	if modified == nil {
+		return "modified object is nil"
+	}
+
+	return cmp.Diff(original, modified)
+}
+
+// UpdateConditionFn returns a func to update a condition.
 func UpdateConditionFn(cond operatorv1.OperatorCondition) UpdateStatusFunc {
 	return func(oldStatus *operatorv1.OperatorStatus) error {
 		SetOperatorCondition(&oldStatus.Conditions, cond)
@@ -192,18 +243,38 @@ func UpdateConditionFn(cond operatorv1.OperatorCondition) UpdateStatusFunc {
 	}
 }
 
-// UpdateStatusFunc is a func that mutates an operator status.
+// UpdateStaticPodStatusFunc is a func that mutates an operator status.
 type UpdateStaticPodStatusFunc func(status *operatorv1.StaticPodOperatorStatus) error
 
 // UpdateStaticPodStatus applies the update funcs to the oldStatus abd tries to update via the client.
-func UpdateStaticPodStatus(client StaticPodOperatorClient, updateFuncs ...UpdateStaticPodStatusFunc) (*operatorv1.StaticPodOperatorStatus, bool, error) {
+func UpdateStaticPodStatus(ctx context.Context, client StaticPodOperatorClient, updateFuncs ...UpdateStaticPodStatusFunc) (*operatorv1.StaticPodOperatorStatus, bool, error) {
 	updated := false
 	var updatedOperatorStatus *operatorv1.StaticPodOperatorStatus
+	numberOfAttempts := 0
+	previousResourceVersion := ""
 	err := retry.RetryOnConflict(retry.DefaultBackoff, func() error {
-		_, oldStatus, resourceVersion, err := client.GetStaticPodOperatorState()
+		defer func() {
+			numberOfAttempts++
+		}()
+		var oldStatus *operatorv1.StaticPodOperatorStatus
+		var resourceVersion string
+		var err error
+
+		// prefer lister if we haven't already failed.
+		_, oldStatus, resourceVersion, err = client.GetStaticPodOperatorState()
 		if err != nil {
 			return err
 		}
+		if resourceVersion == previousResourceVersion {
+			listerResourceVersion := resourceVersion
+			// this indicates that we've had a conflict and the lister has not caught up, so do a live GET
+			_, oldStatus, resourceVersion, err = client.GetStaticPodOperatorStateWithQuorum(ctx)
+			if err != nil {
+				return err
+			}
+			klog.V(2).Infof("lister was stale at resourceVersion=%v, live get showed resourceVersion=%v", listerResourceVersion, resourceVersion)
+		}
+		previousResourceVersion = resourceVersion
 
 		newStatus := oldStatus.DeepCopy()
 		for _, update := range updateFuncs {
@@ -217,13 +288,26 @@ func UpdateStaticPodStatus(client StaticPodOperatorClient, updateFuncs ...Update
 			updatedOperatorStatus = newStatus
 			return nil
 		}
+		if klog.V(4).Enabled() {
+			klog.Infof("Operator status changed: %v", staticPodOperatorStatusJSONPatchNoError(oldStatus, newStatus))
+		}
 
-		updatedOperatorStatus, err = client.UpdateStaticPodOperatorStatus(resourceVersion, newStatus)
+		updatedOperatorStatus, err = client.UpdateStaticPodOperatorStatus(ctx, resourceVersion, newStatus)
 		updated = err == nil
 		return err
 	})
 
 	return updatedOperatorStatus, updated, err
+}
+
+func staticPodOperatorStatusJSONPatchNoError(original, modified *operatorv1.StaticPodOperatorStatus) string {
+	if original == nil {
+		return "original object is nil"
+	}
+	if modified == nil {
+		return "modified object is nil"
+	}
+	return cmp.Diff(original, modified)
 }
 
 // UpdateStaticPodConditionFn returns a func to update a condition.
@@ -232,6 +316,40 @@ func UpdateStaticPodConditionFn(cond operatorv1.OperatorCondition) UpdateStaticP
 		SetOperatorCondition(&oldStatus.Conditions, cond)
 		return nil
 	}
+}
+
+// EnsureFinalizer adds a new finalizer to the operator CR, if it does not exists. No-op otherwise.
+// The finalizer name is computed from the controller name and operator name ($OPERATOR_NAME or os.Args[0])
+// It re-tries on conflicts.
+func EnsureFinalizer(ctx context.Context, client OperatorClientWithFinalizers, controllerName string) error {
+	finalizer := getFinalizerName(controllerName)
+	err := retry.RetryOnConflict(retry.DefaultBackoff, func() error {
+		return client.EnsureFinalizer(ctx, finalizer)
+	})
+	return err
+}
+
+// RemoveFinalizer removes a finalizer from the operator CR, if it is there. No-op otherwise.
+// The finalizer name is computed from the controller name and operator name ($OPERATOR_NAME or os.Args[0])
+// It re-tries on conflicts.
+func RemoveFinalizer(ctx context.Context, client OperatorClientWithFinalizers, controllerName string) error {
+	finalizer := getFinalizerName(controllerName)
+	err := retry.RetryOnConflict(retry.DefaultBackoff, func() error {
+		return client.RemoveFinalizer(ctx, finalizer)
+	})
+	return err
+}
+
+// getFinalizerName computes a nice finalizer name from controllerName and the operator name ($OPERATOR_NAME or os.Args[0]).
+func getFinalizerName(controllerName string) string {
+	return fmt.Sprintf("%s.operator.openshift.io/%s", getOperatorName(), controllerName)
+}
+
+func getOperatorName() string {
+	if name := os.Getenv("OPERATOR_NAME"); name != "" {
+		return name
+	}
+	return os.Args[0]
 }
 
 type aggregate []error
@@ -249,6 +367,10 @@ func NewMultiLineAggregate(errList []error) error {
 	if len(errs) == 0 {
 		return nil
 	}
+	// We sort errors to allow for consistent output for testing.
+	sort.SliceStable(errs, func(i, j int) bool {
+		return errs[i].Error() < errs[j].Error()
+	})
 	return aggregate(errs)
 }
 
@@ -346,4 +468,111 @@ func InjectObservedProxyIntoContainers(podSpec *corev1.PodSpec, containerNames [
 	}
 
 	return nil
+}
+
+func InjectTrustedCAIntoContainers(podSpec *corev1.PodSpec, configMapName string, containerNames []string) error {
+	podSpec.Volumes = append(podSpec.Volumes, corev1.Volume{
+		Name: "non-standard-root-system-trust-ca-bundle",
+		VolumeSource: corev1.VolumeSource{
+			ConfigMap: &corev1.ConfigMapVolumeSource{
+				LocalObjectReference: corev1.LocalObjectReference{
+					Name: configMapName,
+				},
+				Items: []corev1.KeyToPath{
+					{Key: "ca-bundle.crt", Path: "tls-ca-bundle.pem"},
+				},
+			},
+		},
+	})
+
+	for _, containerName := range containerNames {
+		for i := range podSpec.InitContainers {
+			if podSpec.InitContainers[i].Name == containerName {
+				podSpec.InitContainers[i].VolumeMounts = append(podSpec.InitContainers[i].VolumeMounts, corev1.VolumeMount{
+					Name:      "non-standard-root-system-trust-ca-bundle",
+					MountPath: "/etc/pki/ca-trust/extracted/pem",
+					ReadOnly:  true,
+				})
+			}
+		}
+		for i := range podSpec.Containers {
+			if podSpec.Containers[i].Name == containerName {
+				podSpec.Containers[i].VolumeMounts = append(podSpec.Containers[i].VolumeMounts, corev1.VolumeMount{
+					Name:      "non-standard-root-system-trust-ca-bundle",
+					MountPath: "/etc/pki/ca-trust/extracted/pem",
+					ReadOnly:  true,
+				})
+			}
+		}
+	}
+
+	return nil
+}
+
+func SetCondition(conditions *[]metav1.Condition, newCondition metav1.Condition) {
+	if conditions == nil {
+		conditions = &[]metav1.Condition{}
+	}
+	existingCondition := FindCondition(*conditions, newCondition.Type)
+	if existingCondition == nil {
+		newCondition.LastTransitionTime = metav1.NewTime(time.Now())
+		*conditions = append(*conditions, newCondition)
+		return
+	}
+
+	if existingCondition.Status != newCondition.Status {
+		existingCondition.Status = newCondition.Status
+		existingCondition.LastTransitionTime = metav1.NewTime(time.Now())
+	}
+
+	existingCondition.Reason = newCondition.Reason
+	existingCondition.Message = newCondition.Message
+}
+
+func RemoveCondition(conditions *[]metav1.Condition, conditionType string) {
+	if conditions == nil {
+		conditions = &[]metav1.Condition{}
+	}
+	newConditions := []metav1.Condition{}
+	for _, condition := range *conditions {
+		if condition.Type != conditionType {
+			newConditions = append(newConditions, condition)
+		}
+	}
+
+	*conditions = newConditions
+}
+
+func FindCondition(conditions []metav1.Condition, conditionType string) *metav1.Condition {
+	for i := range conditions {
+		if conditions[i].Type == conditionType {
+			return &conditions[i]
+		}
+	}
+
+	return nil
+}
+
+func IsConditionTrue(conditions []metav1.Condition, conditionType string) bool {
+	return IsConditionPresentAndEqual(conditions, conditionType, metav1.ConditionTrue)
+}
+
+func IsConditionFalse(conditions []metav1.Condition, conditionType string) bool {
+	return IsConditionPresentAndEqual(conditions, conditionType, metav1.ConditionFalse)
+}
+
+func IsConditionPresentAndEqual(conditions []metav1.Condition, conditionType string, status metav1.ConditionStatus) bool {
+	for _, condition := range conditions {
+		if condition.Type == conditionType {
+			return condition.Status == status
+		}
+	}
+	return false
+}
+
+// IsUpdatingTooLong determines if updating operands condition takes too long.
+// It returns true if the given condition was found and has been set to True longer than progressingConditionTimeout.
+func IsUpdatingTooLong(operatorStatus *operatorv1.OperatorStatus, progressingConditionType string) bool {
+	progressing := FindOperatorCondition(operatorStatus.Conditions, progressingConditionType)
+	return progressing != nil && progressing.Status == operatorv1.ConditionTrue && time.Now().After(progressing.LastTransitionTime.Add(progressingConditionTimeout))
 }

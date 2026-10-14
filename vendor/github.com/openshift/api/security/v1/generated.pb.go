@@ -8,702 +8,55 @@ import (
 
 	io "io"
 
-	proto "github.com/gogo/protobuf/proto"
 	k8s_io_api_core_v1 "k8s.io/api/core/v1"
-	v1 "k8s.io/api/core/v1"
+	v11 "k8s.io/api/core/v1"
 
-	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
-var _ = fmt.Errorf
-var _ = math.Inf
+func (m *AllowedFlexVolume) Reset() { *m = AllowedFlexVolume{} }
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+func (m *FSGroupStrategyOptions) Reset() { *m = FSGroupStrategyOptions{} }
 
-func (m *AllowedFlexVolume) Reset()      { *m = AllowedFlexVolume{} }
-func (*AllowedFlexVolume) ProtoMessage() {}
-func (*AllowedFlexVolume) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{0}
-}
-func (m *AllowedFlexVolume) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AllowedFlexVolume) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AllowedFlexVolume) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AllowedFlexVolume.Merge(m, src)
-}
-func (m *AllowedFlexVolume) XXX_Size() int {
-	return m.Size()
-}
-func (m *AllowedFlexVolume) XXX_DiscardUnknown() {
-	xxx_messageInfo_AllowedFlexVolume.DiscardUnknown(m)
-}
+func (m *IDRange) Reset() { *m = IDRange{} }
 
-var xxx_messageInfo_AllowedFlexVolume proto.InternalMessageInfo
+func (m *PodSecurityPolicyReview) Reset() { *m = PodSecurityPolicyReview{} }
 
-func (m *FSGroupStrategyOptions) Reset()      { *m = FSGroupStrategyOptions{} }
-func (*FSGroupStrategyOptions) ProtoMessage() {}
-func (*FSGroupStrategyOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{1}
-}
-func (m *FSGroupStrategyOptions) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *FSGroupStrategyOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *FSGroupStrategyOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FSGroupStrategyOptions.Merge(m, src)
-}
-func (m *FSGroupStrategyOptions) XXX_Size() int {
-	return m.Size()
-}
-func (m *FSGroupStrategyOptions) XXX_DiscardUnknown() {
-	xxx_messageInfo_FSGroupStrategyOptions.DiscardUnknown(m)
-}
+func (m *PodSecurityPolicyReviewSpec) Reset() { *m = PodSecurityPolicyReviewSpec{} }
 
-var xxx_messageInfo_FSGroupStrategyOptions proto.InternalMessageInfo
+func (m *PodSecurityPolicyReviewStatus) Reset() { *m = PodSecurityPolicyReviewStatus{} }
 
-func (m *IDRange) Reset()      { *m = IDRange{} }
-func (*IDRange) ProtoMessage() {}
-func (*IDRange) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{2}
-}
-func (m *IDRange) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *IDRange) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *IDRange) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_IDRange.Merge(m, src)
-}
-func (m *IDRange) XXX_Size() int {
-	return m.Size()
-}
-func (m *IDRange) XXX_DiscardUnknown() {
-	xxx_messageInfo_IDRange.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_IDRange proto.InternalMessageInfo
-
-func (m *PodSecurityPolicyReview) Reset()      { *m = PodSecurityPolicyReview{} }
-func (*PodSecurityPolicyReview) ProtoMessage() {}
-func (*PodSecurityPolicyReview) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{3}
-}
-func (m *PodSecurityPolicyReview) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicyReview) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicyReview) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicyReview.Merge(m, src)
-}
-func (m *PodSecurityPolicyReview) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicyReview) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicyReview.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PodSecurityPolicyReview proto.InternalMessageInfo
-
-func (m *PodSecurityPolicyReviewSpec) Reset()      { *m = PodSecurityPolicyReviewSpec{} }
-func (*PodSecurityPolicyReviewSpec) ProtoMessage() {}
-func (*PodSecurityPolicyReviewSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{4}
-}
-func (m *PodSecurityPolicyReviewSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicyReviewSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicyReviewSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicyReviewSpec.Merge(m, src)
-}
-func (m *PodSecurityPolicyReviewSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicyReviewSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicyReviewSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PodSecurityPolicyReviewSpec proto.InternalMessageInfo
-
-func (m *PodSecurityPolicyReviewStatus) Reset()      { *m = PodSecurityPolicyReviewStatus{} }
-func (*PodSecurityPolicyReviewStatus) ProtoMessage() {}
-func (*PodSecurityPolicyReviewStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{5}
-}
-func (m *PodSecurityPolicyReviewStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicyReviewStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicyReviewStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicyReviewStatus.Merge(m, src)
-}
-func (m *PodSecurityPolicyReviewStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicyReviewStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicyReviewStatus.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PodSecurityPolicyReviewStatus proto.InternalMessageInfo
-
-func (m *PodSecurityPolicySelfSubjectReview) Reset()      { *m = PodSecurityPolicySelfSubjectReview{} }
-func (*PodSecurityPolicySelfSubjectReview) ProtoMessage() {}
-func (*PodSecurityPolicySelfSubjectReview) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{6}
-}
-func (m *PodSecurityPolicySelfSubjectReview) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicySelfSubjectReview) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicySelfSubjectReview) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicySelfSubjectReview.Merge(m, src)
-}
-func (m *PodSecurityPolicySelfSubjectReview) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicySelfSubjectReview) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicySelfSubjectReview.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PodSecurityPolicySelfSubjectReview proto.InternalMessageInfo
+func (m *PodSecurityPolicySelfSubjectReview) Reset() { *m = PodSecurityPolicySelfSubjectReview{} }
 
 func (m *PodSecurityPolicySelfSubjectReviewSpec) Reset() {
 	*m = PodSecurityPolicySelfSubjectReviewSpec{}
 }
-func (*PodSecurityPolicySelfSubjectReviewSpec) ProtoMessage() {}
-func (*PodSecurityPolicySelfSubjectReviewSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{7}
-}
-func (m *PodSecurityPolicySelfSubjectReviewSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicySelfSubjectReviewSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicySelfSubjectReviewSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicySelfSubjectReviewSpec.Merge(m, src)
-}
-func (m *PodSecurityPolicySelfSubjectReviewSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicySelfSubjectReviewSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicySelfSubjectReviewSpec.DiscardUnknown(m)
-}
 
-var xxx_messageInfo_PodSecurityPolicySelfSubjectReviewSpec proto.InternalMessageInfo
+func (m *PodSecurityPolicySubjectReview) Reset() { *m = PodSecurityPolicySubjectReview{} }
 
-func (m *PodSecurityPolicySubjectReview) Reset()      { *m = PodSecurityPolicySubjectReview{} }
-func (*PodSecurityPolicySubjectReview) ProtoMessage() {}
-func (*PodSecurityPolicySubjectReview) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{8}
-}
-func (m *PodSecurityPolicySubjectReview) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicySubjectReview) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicySubjectReview) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicySubjectReview.Merge(m, src)
-}
-func (m *PodSecurityPolicySubjectReview) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicySubjectReview) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicySubjectReview.DiscardUnknown(m)
-}
+func (m *PodSecurityPolicySubjectReviewSpec) Reset() { *m = PodSecurityPolicySubjectReviewSpec{} }
 
-var xxx_messageInfo_PodSecurityPolicySubjectReview proto.InternalMessageInfo
+func (m *PodSecurityPolicySubjectReviewStatus) Reset() { *m = PodSecurityPolicySubjectReviewStatus{} }
 
-func (m *PodSecurityPolicySubjectReviewSpec) Reset()      { *m = PodSecurityPolicySubjectReviewSpec{} }
-func (*PodSecurityPolicySubjectReviewSpec) ProtoMessage() {}
-func (*PodSecurityPolicySubjectReviewSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{9}
-}
-func (m *PodSecurityPolicySubjectReviewSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicySubjectReviewSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicySubjectReviewSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicySubjectReviewSpec.Merge(m, src)
-}
-func (m *PodSecurityPolicySubjectReviewSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicySubjectReviewSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicySubjectReviewSpec.DiscardUnknown(m)
-}
+func (m *RangeAllocation) Reset() { *m = RangeAllocation{} }
 
-var xxx_messageInfo_PodSecurityPolicySubjectReviewSpec proto.InternalMessageInfo
+func (m *RangeAllocationList) Reset() { *m = RangeAllocationList{} }
 
-func (m *PodSecurityPolicySubjectReviewStatus) Reset()      { *m = PodSecurityPolicySubjectReviewStatus{} }
-func (*PodSecurityPolicySubjectReviewStatus) ProtoMessage() {}
-func (*PodSecurityPolicySubjectReviewStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{10}
-}
-func (m *PodSecurityPolicySubjectReviewStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PodSecurityPolicySubjectReviewStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *PodSecurityPolicySubjectReviewStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PodSecurityPolicySubjectReviewStatus.Merge(m, src)
-}
-func (m *PodSecurityPolicySubjectReviewStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *PodSecurityPolicySubjectReviewStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_PodSecurityPolicySubjectReviewStatus.DiscardUnknown(m)
-}
+func (m *RunAsUserStrategyOptions) Reset() { *m = RunAsUserStrategyOptions{} }
 
-var xxx_messageInfo_PodSecurityPolicySubjectReviewStatus proto.InternalMessageInfo
+func (m *SELinuxContextStrategyOptions) Reset() { *m = SELinuxContextStrategyOptions{} }
 
-func (m *RangeAllocation) Reset()      { *m = RangeAllocation{} }
-func (*RangeAllocation) ProtoMessage() {}
-func (*RangeAllocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{11}
-}
-func (m *RangeAllocation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RangeAllocation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *RangeAllocation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RangeAllocation.Merge(m, src)
-}
-func (m *RangeAllocation) XXX_Size() int {
-	return m.Size()
-}
-func (m *RangeAllocation) XXX_DiscardUnknown() {
-	xxx_messageInfo_RangeAllocation.DiscardUnknown(m)
-}
+func (m *SecurityContextConstraints) Reset() { *m = SecurityContextConstraints{} }
 
-var xxx_messageInfo_RangeAllocation proto.InternalMessageInfo
-
-func (m *RangeAllocationList) Reset()      { *m = RangeAllocationList{} }
-func (*RangeAllocationList) ProtoMessage() {}
-func (*RangeAllocationList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{12}
-}
-func (m *RangeAllocationList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RangeAllocationList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *RangeAllocationList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RangeAllocationList.Merge(m, src)
-}
-func (m *RangeAllocationList) XXX_Size() int {
-	return m.Size()
-}
-func (m *RangeAllocationList) XXX_DiscardUnknown() {
-	xxx_messageInfo_RangeAllocationList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RangeAllocationList proto.InternalMessageInfo
-
-func (m *RunAsUserStrategyOptions) Reset()      { *m = RunAsUserStrategyOptions{} }
-func (*RunAsUserStrategyOptions) ProtoMessage() {}
-func (*RunAsUserStrategyOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{13}
-}
-func (m *RunAsUserStrategyOptions) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RunAsUserStrategyOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *RunAsUserStrategyOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RunAsUserStrategyOptions.Merge(m, src)
-}
-func (m *RunAsUserStrategyOptions) XXX_Size() int {
-	return m.Size()
-}
-func (m *RunAsUserStrategyOptions) XXX_DiscardUnknown() {
-	xxx_messageInfo_RunAsUserStrategyOptions.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RunAsUserStrategyOptions proto.InternalMessageInfo
-
-func (m *SELinuxContextStrategyOptions) Reset()      { *m = SELinuxContextStrategyOptions{} }
-func (*SELinuxContextStrategyOptions) ProtoMessage() {}
-func (*SELinuxContextStrategyOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{14}
-}
-func (m *SELinuxContextStrategyOptions) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SELinuxContextStrategyOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SELinuxContextStrategyOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SELinuxContextStrategyOptions.Merge(m, src)
-}
-func (m *SELinuxContextStrategyOptions) XXX_Size() int {
-	return m.Size()
-}
-func (m *SELinuxContextStrategyOptions) XXX_DiscardUnknown() {
-	xxx_messageInfo_SELinuxContextStrategyOptions.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SELinuxContextStrategyOptions proto.InternalMessageInfo
-
-func (m *SecurityContextConstraints) Reset()      { *m = SecurityContextConstraints{} }
-func (*SecurityContextConstraints) ProtoMessage() {}
-func (*SecurityContextConstraints) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{15}
-}
-func (m *SecurityContextConstraints) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SecurityContextConstraints) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SecurityContextConstraints) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SecurityContextConstraints.Merge(m, src)
-}
-func (m *SecurityContextConstraints) XXX_Size() int {
-	return m.Size()
-}
-func (m *SecurityContextConstraints) XXX_DiscardUnknown() {
-	xxx_messageInfo_SecurityContextConstraints.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SecurityContextConstraints proto.InternalMessageInfo
-
-func (m *SecurityContextConstraintsList) Reset()      { *m = SecurityContextConstraintsList{} }
-func (*SecurityContextConstraintsList) ProtoMessage() {}
-func (*SecurityContextConstraintsList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{16}
-}
-func (m *SecurityContextConstraintsList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SecurityContextConstraintsList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SecurityContextConstraintsList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SecurityContextConstraintsList.Merge(m, src)
-}
-func (m *SecurityContextConstraintsList) XXX_Size() int {
-	return m.Size()
-}
-func (m *SecurityContextConstraintsList) XXX_DiscardUnknown() {
-	xxx_messageInfo_SecurityContextConstraintsList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SecurityContextConstraintsList proto.InternalMessageInfo
+func (m *SecurityContextConstraintsList) Reset() { *m = SecurityContextConstraintsList{} }
 
 func (m *ServiceAccountPodSecurityPolicyReviewStatus) Reset() {
 	*m = ServiceAccountPodSecurityPolicyReviewStatus{}
 }
-func (*ServiceAccountPodSecurityPolicyReviewStatus) ProtoMessage() {}
-func (*ServiceAccountPodSecurityPolicyReviewStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{17}
-}
-func (m *ServiceAccountPodSecurityPolicyReviewStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ServiceAccountPodSecurityPolicyReviewStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ServiceAccountPodSecurityPolicyReviewStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ServiceAccountPodSecurityPolicyReviewStatus.Merge(m, src)
-}
-func (m *ServiceAccountPodSecurityPolicyReviewStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *ServiceAccountPodSecurityPolicyReviewStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_ServiceAccountPodSecurityPolicyReviewStatus.DiscardUnknown(m)
-}
 
-var xxx_messageInfo_ServiceAccountPodSecurityPolicyReviewStatus proto.InternalMessageInfo
-
-func (m *SupplementalGroupsStrategyOptions) Reset()      { *m = SupplementalGroupsStrategyOptions{} }
-func (*SupplementalGroupsStrategyOptions) ProtoMessage() {}
-func (*SupplementalGroupsStrategyOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_af65d9655aa67551, []int{18}
-}
-func (m *SupplementalGroupsStrategyOptions) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SupplementalGroupsStrategyOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SupplementalGroupsStrategyOptions) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SupplementalGroupsStrategyOptions.Merge(m, src)
-}
-func (m *SupplementalGroupsStrategyOptions) XXX_Size() int {
-	return m.Size()
-}
-func (m *SupplementalGroupsStrategyOptions) XXX_DiscardUnknown() {
-	xxx_messageInfo_SupplementalGroupsStrategyOptions.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SupplementalGroupsStrategyOptions proto.InternalMessageInfo
-
-func init() {
-	proto.RegisterType((*AllowedFlexVolume)(nil), "github.com.openshift.api.security.v1.AllowedFlexVolume")
-	proto.RegisterType((*FSGroupStrategyOptions)(nil), "github.com.openshift.api.security.v1.FSGroupStrategyOptions")
-	proto.RegisterType((*IDRange)(nil), "github.com.openshift.api.security.v1.IDRange")
-	proto.RegisterType((*PodSecurityPolicyReview)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicyReview")
-	proto.RegisterType((*PodSecurityPolicyReviewSpec)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicyReviewSpec")
-	proto.RegisterType((*PodSecurityPolicyReviewStatus)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicyReviewStatus")
-	proto.RegisterType((*PodSecurityPolicySelfSubjectReview)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicySelfSubjectReview")
-	proto.RegisterType((*PodSecurityPolicySelfSubjectReviewSpec)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicySelfSubjectReviewSpec")
-	proto.RegisterType((*PodSecurityPolicySubjectReview)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicySubjectReview")
-	proto.RegisterType((*PodSecurityPolicySubjectReviewSpec)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicySubjectReviewSpec")
-	proto.RegisterType((*PodSecurityPolicySubjectReviewStatus)(nil), "github.com.openshift.api.security.v1.PodSecurityPolicySubjectReviewStatus")
-	proto.RegisterType((*RangeAllocation)(nil), "github.com.openshift.api.security.v1.RangeAllocation")
-	proto.RegisterType((*RangeAllocationList)(nil), "github.com.openshift.api.security.v1.RangeAllocationList")
-	proto.RegisterType((*RunAsUserStrategyOptions)(nil), "github.com.openshift.api.security.v1.RunAsUserStrategyOptions")
-	proto.RegisterType((*SELinuxContextStrategyOptions)(nil), "github.com.openshift.api.security.v1.SELinuxContextStrategyOptions")
-	proto.RegisterType((*SecurityContextConstraints)(nil), "github.com.openshift.api.security.v1.SecurityContextConstraints")
-	proto.RegisterType((*SecurityContextConstraintsList)(nil), "github.com.openshift.api.security.v1.SecurityContextConstraintsList")
-	proto.RegisterType((*ServiceAccountPodSecurityPolicyReviewStatus)(nil), "github.com.openshift.api.security.v1.ServiceAccountPodSecurityPolicyReviewStatus")
-	proto.RegisterType((*SupplementalGroupsStrategyOptions)(nil), "github.com.openshift.api.security.v1.SupplementalGroupsStrategyOptions")
-}
-
-func init() {
-	proto.RegisterFile("github.com/openshift/api/security/v1/generated.proto", fileDescriptor_af65d9655aa67551)
-}
-
-var fileDescriptor_af65d9655aa67551 = []byte{
-	// 1748 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xcc, 0x58, 0xcd, 0x6f, 0x1c, 0x49,
-	0x15, 0x77, 0x7b, 0xfc, 0x35, 0x65, 0xc7, 0x1f, 0x65, 0xc7, 0xe9, 0x35, 0xeb, 0x19, 0xd3, 0x0e,
-	0x2b, 0x0b, 0xd8, 0x19, 0x1c, 0x2d, 0x6c, 0xd0, 0xb2, 0xd1, 0x4e, 0x7b, 0xd6, 0x59, 0x23, 0x27,
-	0x99, 0xad, 0x59, 0x47, 0x28, 0x8a, 0x10, 0xe5, 0x9e, 0x9a, 0x71, 0xc5, 0xfd, 0x45, 0x57, 0xf5,
-	0xc4, 0x23, 0x2e, 0x91, 0xb8, 0x70, 0x44, 0xe2, 0x8a, 0x38, 0xc3, 0x3f, 0xc0, 0x05, 0x01, 0xd7,
-	0x48, 0x20, 0x91, 0x13, 0xca, 0x69, 0x44, 0x06, 0x71, 0xe2, 0xc8, 0x2d, 0x27, 0x54, 0x35, 0x35,
-	0x1f, 0xdd, 0xd3, 0x3d, 0x9e, 0x84, 0x24, 0xe2, 0x36, 0xfd, 0x3e, 0x7e, 0xbf, 0xf7, 0x5e, 0xbf,
-	0x7e, 0xf5, 0x6a, 0xc0, 0x47, 0x0d, 0xca, 0xcf, 0xc2, 0xd3, 0x82, 0xe5, 0x39, 0x45, 0xcf, 0x27,
-	0x2e, 0x3b, 0xa3, 0x75, 0x5e, 0xc4, 0x3e, 0x2d, 0x32, 0x62, 0x85, 0x01, 0xe5, 0xad, 0x62, 0x73,
-	0xbf, 0xd8, 0x20, 0x2e, 0x09, 0x30, 0x27, 0xb5, 0x82, 0x1f, 0x78, 0xdc, 0x83, 0xd7, 0x07, 0x5e,
-	0x85, 0xbe, 0x57, 0x01, 0xfb, 0xb4, 0xd0, 0xf3, 0x2a, 0x34, 0xf7, 0xb7, 0x3e, 0x1c, 0xc2, 0x6e,
-	0x78, 0x0d, 0xaf, 0x28, 0x9d, 0x4f, 0xc3, 0xba, 0x7c, 0x92, 0x0f, 0xf2, 0x57, 0x17, 0x74, 0xcb,
-	0x38, 0xbf, 0xc9, 0x0a, 0xd4, 0x93, 0xe4, 0x96, 0x17, 0x90, 0x04, 0xe2, 0xad, 0x8f, 0x06, 0x36,
-	0x0e, 0xb6, 0xce, 0xa8, 0x4b, 0x82, 0x56, 0xd1, 0x3f, 0x6f, 0x08, 0x01, 0x2b, 0x3a, 0x84, 0xe3,
-	0x24, 0xaf, 0xef, 0xa5, 0x79, 0x05, 0xa1, 0xcb, 0xa9, 0x43, 0x8a, 0xcc, 0x3a, 0x23, 0x0e, 0x8e,
-	0xfb, 0x19, 0x9f, 0x80, 0xb5, 0x92, 0x6d, 0x7b, 0x8f, 0x49, 0xed, 0xd0, 0x26, 0x17, 0xf7, 0x3d,
-	0x3b, 0x74, 0x08, 0xfc, 0x00, 0xcc, 0xd5, 0x02, 0xda, 0x24, 0x81, 0xae, 0xed, 0x68, 0x7b, 0x59,
-	0x73, 0xf9, 0x69, 0x3b, 0x3f, 0xd5, 0x69, 0xe7, 0xe7, 0xca, 0x52, 0x8a, 0x94, 0xd6, 0xf8, 0xad,
-	0x06, 0x36, 0x0f, 0xab, 0xb7, 0x03, 0x2f, 0xf4, 0xab, 0x5c, 0xa0, 0x36, 0x5a, 0xf7, 0x7c, 0x4e,
-	0x3d, 0x97, 0xc1, 0x8f, 0xc1, 0x0c, 0x6f, 0xf9, 0x44, 0x01, 0xec, 0x2a, 0x80, 0x99, 0xaf, 0x5a,
-	0x3e, 0x79, 0xd9, 0xce, 0xaf, 0xc7, 0xbc, 0x84, 0x18, 0x49, 0x07, 0x78, 0x02, 0xe6, 0x02, 0xec,
-	0x36, 0x08, 0xd3, 0xa7, 0x77, 0x32, 0x7b, 0x8b, 0x37, 0x3e, 0x2c, 0x4c, 0xf2, 0x22, 0x0a, 0x47,
-	0x65, 0x24, 0xbc, 0x06, 0xa1, 0xca, 0x47, 0x86, 0x14, 0x98, 0x71, 0x1b, 0xcc, 0x2b, 0x13, 0xb8,
-	0x0d, 0x32, 0x0e, 0x75, 0x65, 0x64, 0x19, 0x73, 0x51, 0xd9, 0x67, 0xee, 0x50, 0x17, 0x09, 0xb9,
-	0x54, 0xe3, 0x0b, 0x7d, 0x3a, 0xa6, 0xc6, 0x17, 0x48, 0xc8, 0x8d, 0x7f, 0x6b, 0xe0, 0x5a, 0xc5,
-	0xab, 0x55, 0x15, 0x77, 0xc5, 0xb3, 0xa9, 0xd5, 0x42, 0xa4, 0x49, 0xc9, 0x63, 0x68, 0x81, 0x19,
-	0xe6, 0x13, 0x4b, 0x42, 0x2f, 0xde, 0x28, 0x4d, 0x16, 0x79, 0x0a, 0x58, 0xd5, 0x27, 0x96, 0xb9,
-	0xd4, 0xab, 0x9b, 0x78, 0x42, 0x12, 0x1c, 0x9e, 0x83, 0x39, 0xc6, 0x31, 0x0f, 0x99, 0x0c, 0x71,
-	0xf1, 0xc6, 0xc1, 0xff, 0x46, 0x23, 0xa1, 0x06, 0x65, 0xeb, 0x3e, 0x23, 0x45, 0x61, 0xfc, 0x41,
-	0x03, 0x5f, 0x1b, 0x13, 0x20, 0xfc, 0x12, 0x2c, 0x70, 0xe2, 0xf8, 0x36, 0xe6, 0x44, 0x65, 0xbd,
-	0x5b, 0xe8, 0x76, 0xa2, 0x0c, 0x40, 0xf4, 0xb8, 0x22, 0xff, 0x4a, 0x99, 0xc9, 0xbc, 0x56, 0x15,
-	0xdd, 0x42, 0x4f, 0x8a, 0xfa, 0x30, 0xf0, 0x08, 0xac, 0x33, 0x12, 0x34, 0xa9, 0x45, 0x4a, 0x96,
-	0xe5, 0x85, 0x2e, 0xbf, 0x8b, 0x1d, 0xd5, 0x0d, 0x59, 0xf3, 0x5a, 0xa7, 0x9d, 0x5f, 0xaf, 0x8e,
-	0xaa, 0x51, 0x92, 0x8f, 0xf1, 0x17, 0x0d, 0x6c, 0x8f, 0xcd, 0x1b, 0xfe, 0x4e, 0x03, 0x9b, 0xb8,
-	0xdb, 0xff, 0x51, 0x54, 0xa6, 0x6b, 0xb2, 0xfd, 0xbe, 0x9c, 0xac, 0xba, 0x51, 0xe7, 0xf1, 0xb5,
-	0xce, 0xa9, 0xe4, 0x37, 0x4b, 0x89, 0xc4, 0x28, 0x25, 0x20, 0xe3, 0x17, 0xd3, 0xc0, 0x18, 0x41,
-	0xae, 0x12, 0xbb, 0x5e, 0x0d, 0x4f, 0x1f, 0x11, 0x8b, 0xab, 0x26, 0x74, 0x23, 0x4d, 0x78, 0xfc,
-	0x9a, 0xdd, 0x31, 0x82, 0x9b, 0xda, 0x8f, 0x41, 0xac, 0x1f, 0x7f, 0xf8, 0xba, 0x8c, 0x11, 0xb6,
-	0xf1, 0x6d, 0xf9, 0x33, 0xf0, 0xc1, 0x64, 0x11, 0xbf, 0x85, 0x06, 0x35, 0x9e, 0x4c, 0x83, 0xdc,
-	0xf8, 0xe8, 0xe1, 0xa3, 0xc8, 0x3b, 0xf8, 0xe2, 0x8d, 0x54, 0xe4, 0xff, 0xa9, 0xfe, 0x7f, 0xd4,
-	0x92, 0x5a, 0xf1, 0x1d, 0x14, 0x1f, 0xee, 0x80, 0x99, 0x90, 0x91, 0x40, 0xe6, 0x9a, 0x1d, 0xd4,
-	0xe3, 0x84, 0x91, 0x00, 0x49, 0x0d, 0x34, 0xc0, 0x5c, 0x43, 0x9c, 0x2d, 0x4c, 0xcf, 0xc8, 0x91,
-	0x01, 0x44, 0xfc, 0xf2, 0xb4, 0x61, 0x48, 0x69, 0x8c, 0xff, 0x68, 0xe0, 0xfa, 0x24, 0x05, 0x80,
-	0x15, 0x90, 0x55, 0x5f, 0xa3, 0xd9, 0x1a, 0x97, 0xc2, 0x3d, 0xe5, 0x5a, 0x27, 0x01, 0x71, 0x2d,
-	0x62, 0x5e, 0xe9, 0xb4, 0xf3, 0xd9, 0x52, 0xcf, 0x13, 0x0d, 0x40, 0xc4, 0xd9, 0x1a, 0x10, 0xcc,
-	0x3c, 0x57, 0xa5, 0x30, 0x38, 0xb0, 0xa4, 0x14, 0x29, 0x6d, 0xa4, 0x76, 0x99, 0x37, 0xd3, 0xb8,
-	0xbf, 0xd7, 0xc0, 0x8a, 0x3c, 0x02, 0x45, 0x60, 0x16, 0x16, 0x07, 0x35, 0xfc, 0x09, 0x58, 0x10,
-	0x2b, 0x45, 0x0d, 0x73, 0xac, 0xf2, 0xfb, 0xce, 0x10, 0x4d, 0x7f, 0x95, 0x28, 0xf8, 0xe7, 0x0d,
-	0x21, 0x60, 0x05, 0x61, 0x3d, 0xc8, 0xf8, 0x0e, 0xe1, 0xd8, 0x84, 0x8a, 0x13, 0x0c, 0x64, 0xa8,
-	0x8f, 0x0a, 0x77, 0xc1, 0xac, 0x3c, 0x83, 0x55, 0xbe, 0x57, 0x94, 0xf1, 0xac, 0x8c, 0x04, 0x75,
-	0x75, 0xf0, 0x7d, 0x30, 0x23, 0x43, 0x10, 0x99, 0x2e, 0x99, 0x0b, 0xe2, 0x95, 0x96, 0x31, 0xc7,
-	0x48, 0x4a, 0x8d, 0xbf, 0x69, 0x60, 0x3d, 0x16, 0xf8, 0x31, 0x65, 0x1c, 0x3e, 0x1c, 0x09, 0xbe,
-	0x30, 0x59, 0xf0, 0xc2, 0x5b, 0x86, 0xde, 0x2f, 0x57, 0x4f, 0x32, 0x14, 0xf8, 0x03, 0x30, 0x4b,
-	0x39, 0x71, 0x7a, 0x8b, 0xc8, 0x77, 0x27, 0xfb, 0xae, 0x62, 0x71, 0x0e, 0xf2, 0x3d, 0x12, 0x58,
-	0xa8, 0x0b, 0x69, 0xfc, 0x5d, 0x03, 0x3a, 0x0a, 0xdd, 0x12, 0x13, 0x8d, 0x1b, 0xdf, 0x9d, 0xbe,
-	0x1f, 0xd9, 0x9d, 0xbe, 0x11, 0xdb, 0x9d, 0xae, 0x8e, 0xf8, 0x0d, 0x6d, 0x4f, 0xef, 0x81, 0x4c,
-	0x48, 0x6b, 0x6a, 0x79, 0x99, 0x17, 0x8b, 0xcb, 0xc9, 0x51, 0x19, 0x09, 0x19, 0xdc, 0x07, 0x8b,
-	0x21, 0xad, 0xc9, 0xf0, 0xee, 0x50, 0x57, 0x56, 0x3a, 0x63, 0xae, 0x74, 0xda, 0xf9, 0xc5, 0x13,
-	0xb5, 0x19, 0x89, 0x15, 0x68, 0xd8, 0x26, 0xe2, 0x82, 0x2f, 0xf4, 0x99, 0x04, 0x17, 0x7c, 0x81,
-	0x86, 0x6d, 0x8c, 0x3f, 0x6b, 0x60, 0xbb, 0xfa, 0xf9, 0x31, 0x75, 0xc3, 0x8b, 0x03, 0xcf, 0xe5,
-	0xe4, 0x82, 0xc7, 0xb3, 0xbb, 0x15, 0xc9, 0xee, 0x9b, 0xb1, 0xec, 0xb6, 0x92, 0x9d, 0x87, 0x52,
-	0xfc, 0x31, 0x58, 0x66, 0x44, 0xda, 0x28, 0x44, 0x35, 0xf7, 0x8c, 0xa4, 0xcf, 0x43, 0xa1, 0x29,
-	0x4b, 0x13, 0x76, 0xda, 0xf9, 0xe5, 0xa8, 0x0c, 0xc5, 0xd0, 0x8c, 0x5f, 0xaf, 0x81, 0xad, 0xde,
-	0x60, 0x50, 0x51, 0x1c, 0x78, 0x2e, 0xe3, 0x01, 0xa6, 0x2e, 0x67, 0xef, 0xe0, 0x83, 0xd9, 0x03,
-	0x0b, 0x7e, 0x40, 0x3d, 0xc1, 0x2f, 0x53, 0x9b, 0x35, 0x97, 0x44, 0x87, 0x56, 0x94, 0x0c, 0xf5,
-	0xb5, 0xf0, 0x21, 0xd0, 0xe5, 0x60, 0xa9, 0x04, 0xb4, 0x49, 0x6d, 0xd2, 0x20, 0x35, 0x11, 0x30,
-	0x16, 0x01, 0xc8, 0xf7, 0xbb, 0x60, 0xee, 0x28, 0x26, 0xbd, 0x94, 0x62, 0x87, 0x52, 0x11, 0x20,
-	0x03, 0x9b, 0x35, 0x52, 0xc7, 0xa1, 0xcd, 0x4b, 0xb5, 0xda, 0x01, 0xf6, 0xf1, 0x29, 0xb5, 0x29,
-	0xa7, 0x84, 0xe9, 0x33, 0x72, 0xb0, 0x7e, 0x22, 0x76, 0x98, 0x72, 0xa2, 0xc5, 0xcb, 0x76, 0x7e,
-	0x7b, 0xf4, 0xaa, 0x53, 0xe8, 0x9b, 0xb4, 0x50, 0x0a, 0x34, 0x6c, 0x01, 0x3d, 0x20, 0x3f, 0x0d,
-	0x69, 0x40, 0x6a, 0xe5, 0xc0, 0xf3, 0x23, 0xb4, 0xb3, 0x92, 0xf6, 0x53, 0x91, 0x0e, 0x4a, 0xb1,
-	0xb9, 0x9c, 0x38, 0x15, 0x1e, 0x3e, 0x02, 0xeb, 0x6a, 0x4c, 0x47, 0x58, 0xe7, 0x24, 0xeb, 0x4d,
-	0xb1, 0x78, 0x96, 0x46, 0xd5, 0x97, 0x13, 0x26, 0x81, 0xf6, 0xdf, 0xdc, 0x17, 0x1e, 0xe3, 0x65,
-	0x1a, 0x74, 0xef, 0x5d, 0x15, 0x3b, 0x6c, 0x50, 0x57, 0x9f, 0x4f, 0x78, 0x73, 0x09, 0x76, 0x28,
-	0x15, 0x01, 0x16, 0xc1, 0x7c, 0x53, 0x3e, 0x33, 0x7d, 0x41, 0x46, 0x7f, 0xb5, 0xd3, 0xce, 0xcf,
-	0x77, 0x4d, 0x44, 0xc4, 0x73, 0x87, 0x55, 0xf9, 0x41, 0xf5, 0xac, 0xe0, 0xcf, 0x35, 0x00, 0x71,
-	0xfc, 0x1a, 0xc8, 0xf4, 0xab, 0x72, 0xf0, 0x7d, 0x3c, 0xd9, 0xe0, 0x1b, 0xb9, 0x46, 0x9a, 0x5b,
-	0x2a, 0x05, 0x38, 0xa2, 0x62, 0x28, 0x81, 0x0e, 0x96, 0xc1, 0x6a, 0x3f, 0xa5, 0xbb, 0x84, 0x3f,
-	0xf6, 0x82, 0x73, 0x3d, 0x2b, 0x8b, 0xa1, 0x2b, 0xa4, 0xd5, 0x52, 0x4c, 0x8f, 0x46, 0x3c, 0xe0,
-	0x2d, 0xb0, 0xdc, 0x97, 0x55, 0xbc, 0x80, 0x33, 0x1d, 0x48, 0x8c, 0x4d, 0x85, 0xb1, 0x5c, 0x8a,
-	0x68, 0x51, 0xcc, 0x1a, 0xde, 0x04, 0x4b, 0x03, 0xc9, 0x51, 0x59, 0x5f, 0x94, 0xde, 0x1b, 0xca,
-	0x7b, 0xa9, 0x34, 0xa4, 0x43, 0x11, 0xcb, 0x88, 0xe7, 0x51, 0xe5, 0x40, 0x5f, 0x4a, 0xf1, 0x3c,
-	0xaa, 0x1c, 0xa0, 0x88, 0x25, 0x74, 0x40, 0xbe, 0xf7, 0x3d, 0x44, 0xbe, 0xc6, 0xcf, 0x99, 0x85,
-	0x6d, 0x79, 0x8e, 0xe8, 0x9b, 0x12, 0x6c, 0xb7, 0xd3, 0xce, 0xe7, 0xcb, 0xe3, 0x4d, 0xd1, 0x65,
-	0x58, 0xf0, 0x47, 0xf1, 0xb9, 0x31, 0xc4, 0x73, 0x4d, 0xf2, 0xbc, 0x3f, 0x3a, 0x33, 0x86, 0x08,
-	0x52, 0xbd, 0x45, 0x23, 0xf5, 0xe6, 0xa9, 0x9a, 0x9d, 0xfa, 0x95, 0x57, 0xb9, 0xa5, 0x8e, 0x3d,
-	0x3a, 0x06, 0xaf, 0x30, 0x6a, 0x86, 0x62, 0x94, 0xd0, 0x03, 0xd9, 0xa0, 0x77, 0x48, 0xea, 0xcb,
-	0x92, 0xff, 0xd6, 0x84, 0xa7, 0x77, 0xca, 0x99, 0x6c, 0xae, 0x29, 0xea, 0x6c, 0xdf, 0x02, 0x0d,
-	0x38, 0xe0, 0xaf, 0x34, 0x00, 0x59, 0xe8, 0xfb, 0x36, 0x71, 0x88, 0xcb, 0xb1, 0xdd, 0x5d, 0x37,
-	0xf5, 0x15, 0x49, 0x7d, 0x7b, 0xc2, 0xd4, 0x47, 0xfc, 0xe3, 0x31, 0xf4, 0xbf, 0xa7, 0x51, 0x53,
-	0x94, 0x40, 0x0f, 0x1b, 0x60, 0xbe, 0xce, 0xe4, 0x6f, 0x7d, 0x55, 0x46, 0xf2, 0x83, 0xc9, 0x22,
-	0x49, 0xfe, 0x4b, 0xc7, 0x5c, 0x51, 0xf4, 0xf3, 0x4a, 0x8f, 0x7a, 0xe8, 0xf0, 0x3e, 0xd8, 0x0c,
-	0x08, 0xae, 0xdd, 0x73, 0xed, 0x16, 0xf2, 0x3c, 0x7e, 0x48, 0x6d, 0xc2, 0x5a, 0x8c, 0x13, 0x47,
-	0x5f, 0x93, 0xdd, 0xd4, 0xbf, 0xf1, 0xa2, 0x44, 0x2b, 0x94, 0xe2, 0x0d, 0xf3, 0x60, 0x56, 0xac,
-	0xf4, 0x4c, 0x87, 0x72, 0x8a, 0x65, 0xc5, 0x1a, 0x25, 0xea, 0xcd, 0x50, 0x57, 0x3e, 0xb4, 0xeb,
-	0xaf, 0xa7, 0xed, 0xfa, 0xf0, 0x53, 0xb0, 0xc2, 0x88, 0x65, 0x79, 0x8e, 0x5f, 0x09, 0xbc, 0xba,
-	0x00, 0xd7, 0x37, 0xa4, 0xf1, 0x7a, 0xa7, 0x9d, 0x5f, 0xa9, 0x46, 0x55, 0x28, 0x6e, 0x0b, 0x8f,
-	0xc1, 0x86, 0x1a, 0x55, 0x27, 0x2e, 0xc3, 0x75, 0x52, 0x6d, 0x31, 0x8b, 0xdb, 0x4c, 0xd7, 0x25,
-	0x86, 0xde, 0x69, 0xe7, 0x37, 0x4a, 0x09, 0x7a, 0x94, 0xe8, 0x05, 0x3f, 0x03, 0xab, 0x75, 0x2f,
-	0x38, 0xa5, 0xb5, 0x1a, 0x71, 0x7b, 0x48, 0xef, 0x49, 0xa4, 0x0d, 0x31, 0xde, 0x0e, 0x63, 0x3a,
-	0x34, 0x62, 0x6d, 0xfc, 0x4b, 0x03, 0xb9, 0xf4, 0xf5, 0xe4, 0x1d, 0xac, 0xc5, 0x24, 0xba, 0x16,
-	0x7f, 0x36, 0xe9, 0x1f, 0x24, 0x69, 0x21, 0xa7, 0x6c, 0xc8, 0xbf, 0x99, 0x06, 0xdf, 0x7a, 0x85,
-	0x7f, 0x55, 0xe0, 0x5f, 0x35, 0x70, 0xdd, 0x9f, 0xe0, 0x4a, 0xa7, 0x2a, 0xf2, 0x26, 0x6f, 0xc9,
-	0xdf, 0x56, 0x09, 0x4c, 0x74, 0xa5, 0x44, 0x13, 0x45, 0x29, 0xee, 0xb9, 0x2e, 0x76, 0x48, 0xfc,
-	0x9e, 0x7b, 0x17, 0x3b, 0x04, 0x49, 0x8d, 0xf1, 0x27, 0x0d, 0x7c, 0xfd, 0xd2, 0x99, 0x01, 0xcd,
-	0xc8, 0xb6, 0x5d, 0x88, 0x6d, 0xdb, 0xb9, 0x74, 0x80, 0xb7, 0xfe, 0x97, 0xac, 0xb9, 0xf7, 0xf4,
-	0x45, 0x6e, 0xea, 0xd9, 0x8b, 0xdc, 0xd4, 0xf3, 0x17, 0xb9, 0xa9, 0x27, 0x9d, 0x9c, 0xf6, 0xb4,
-	0x93, 0xd3, 0x9e, 0x75, 0x72, 0xda, 0xf3, 0x4e, 0x4e, 0xfb, 0x47, 0x27, 0xa7, 0xfd, 0xf2, 0x9f,
-	0xb9, 0xa9, 0x07, 0xd3, 0xcd, 0xfd, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x93, 0x11, 0x3a, 0xff,
-	0xc2, 0x17, 0x00, 0x00,
-}
+func (m *SupplementalGroupsStrategyOptions) Reset() { *m = SupplementalGroupsStrategyOptions{} }
 
 func (m *AllowedFlexVolume) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -824,6 +177,16 @@ func (m *PodSecurityPolicyReview) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
+	{
+		size, err := m.ObjectMeta.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
 	{
 		size, err := m.Status.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -947,6 +310,16 @@ func (m *PodSecurityPolicySelfSubjectReview) MarshalToSizedBuffer(dAtA []byte) (
 	var l int
 	_ = l
 	{
+		size, err := m.ObjectMeta.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	{
 		size, err := m.Status.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
 			return 0, err
@@ -1022,6 +395,16 @@ func (m *PodSecurityPolicySubjectReview) MarshalToSizedBuffer(dAtA []byte) (int,
 	_ = i
 	var l int
 	_ = l
+	{
+		size, err := m.ObjectMeta.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintGenerated(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
 	{
 		size, err := m.Status.MarshalToSizedBuffer(dAtA[:i])
 		if err != nil {
@@ -1337,6 +720,13 @@ func (m *SecurityContextConstraints) MarshalToSizedBuffer(dAtA []byte) (int, err
 	_ = i
 	var l int
 	_ = l
+	i -= len(m.UserNamespaceLevel)
+	copy(dAtA[i:], m.UserNamespaceLevel)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.UserNamespaceLevel)))
+	i--
+	dAtA[i] = 0x1
+	i--
+	dAtA[i] = 0xd2
 	if len(m.ForbiddenSysctls) > 0 {
 		for iNdEx := len(m.ForbiddenSysctls) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.ForbiddenSysctls[iNdEx])
@@ -1773,6 +1163,8 @@ func (m *PodSecurityPolicyReview) Size() (n int) {
 	n += 1 + l + sovGenerated(uint64(l))
 	l = m.Status.Size()
 	n += 1 + l + sovGenerated(uint64(l))
+	l = m.ObjectMeta.Size()
+	n += 1 + l + sovGenerated(uint64(l))
 	return n
 }
 
@@ -1818,6 +1210,8 @@ func (m *PodSecurityPolicySelfSubjectReview) Size() (n int) {
 	n += 1 + l + sovGenerated(uint64(l))
 	l = m.Status.Size()
 	n += 1 + l + sovGenerated(uint64(l))
+	l = m.ObjectMeta.Size()
+	n += 1 + l + sovGenerated(uint64(l))
 	return n
 }
 
@@ -1841,6 +1235,8 @@ func (m *PodSecurityPolicySubjectReview) Size() (n int) {
 	l = m.Spec.Size()
 	n += 1 + l + sovGenerated(uint64(l))
 	l = m.Status.Size()
+	n += 1 + l + sovGenerated(uint64(l))
+	l = m.ObjectMeta.Size()
 	n += 1 + l + sovGenerated(uint64(l))
 	return n
 }
@@ -2042,6 +1438,8 @@ func (m *SecurityContextConstraints) Size() (n int) {
 			n += 2 + l + sovGenerated(uint64(l))
 		}
 	}
+	l = len(m.UserNamespaceLevel)
+	n += 2 + l + sovGenerated(uint64(l))
 	return n
 }
 
@@ -2142,6 +1540,7 @@ func (this *PodSecurityPolicyReview) String() string {
 	s := strings.Join([]string{`&PodSecurityPolicyReview{`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "PodSecurityPolicyReviewSpec", "PodSecurityPolicyReviewSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "PodSecurityPolicyReviewStatus", "PodSecurityPolicyReviewStatus", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2151,7 +1550,7 @@ func (this *PodSecurityPolicyReviewSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PodSecurityPolicyReviewSpec{`,
-		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v1.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
+		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v11.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
 		`ServiceAccountNames:` + fmt.Sprintf("%v", this.ServiceAccountNames) + `,`,
 		`}`,
 	}, "")
@@ -2179,6 +1578,7 @@ func (this *PodSecurityPolicySelfSubjectReview) String() string {
 	s := strings.Join([]string{`&PodSecurityPolicySelfSubjectReview{`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "PodSecurityPolicySelfSubjectReviewSpec", "PodSecurityPolicySelfSubjectReviewSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "PodSecurityPolicySubjectReviewStatus", "PodSecurityPolicySubjectReviewStatus", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2188,7 +1588,7 @@ func (this *PodSecurityPolicySelfSubjectReviewSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PodSecurityPolicySelfSubjectReviewSpec{`,
-		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v1.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
+		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v11.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2200,6 +1600,7 @@ func (this *PodSecurityPolicySubjectReview) String() string {
 	s := strings.Join([]string{`&PodSecurityPolicySubjectReview{`,
 		`Spec:` + strings.Replace(strings.Replace(this.Spec.String(), "PodSecurityPolicySubjectReviewSpec", "PodSecurityPolicySubjectReviewSpec", 1), `&`, ``, 1) + `,`,
 		`Status:` + strings.Replace(strings.Replace(this.Status.String(), "PodSecurityPolicySubjectReviewStatus", "PodSecurityPolicySubjectReviewStatus", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2209,7 +1610,7 @@ func (this *PodSecurityPolicySubjectReviewSpec) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PodSecurityPolicySubjectReviewSpec{`,
-		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v1.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
+		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v11.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
 		`User:` + fmt.Sprintf("%v", this.User) + `,`,
 		`Groups:` + fmt.Sprintf("%v", this.Groups) + `,`,
 		`}`,
@@ -2221,9 +1622,9 @@ func (this *PodSecurityPolicySubjectReviewStatus) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&PodSecurityPolicySubjectReviewStatus{`,
-		`AllowedBy:` + strings.Replace(fmt.Sprintf("%v", this.AllowedBy), "ObjectReference", "v1.ObjectReference", 1) + `,`,
+		`AllowedBy:` + strings.Replace(fmt.Sprintf("%v", this.AllowedBy), "ObjectReference", "v11.ObjectReference", 1) + `,`,
 		`Reason:` + fmt.Sprintf("%v", this.Reason) + `,`,
-		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v1.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
+		`Template:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Template), "PodTemplateSpec", "v11.PodTemplateSpec", 1), `&`, ``, 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2233,7 +1634,7 @@ func (this *RangeAllocation) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&RangeAllocation{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Range:` + fmt.Sprintf("%v", this.Range) + `,`,
 		`Data:` + valueToStringGenerated(this.Data) + `,`,
 		`}`,
@@ -2250,7 +1651,7 @@ func (this *RangeAllocationList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&RangeAllocationList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -2275,7 +1676,7 @@ func (this *SELinuxContextStrategyOptions) String() string {
 	}
 	s := strings.Join([]string{`&SELinuxContextStrategyOptions{`,
 		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
-		`SELinuxOptions:` + strings.Replace(fmt.Sprintf("%v", this.SELinuxOptions), "SELinuxOptions", "v1.SELinuxOptions", 1) + `,`,
+		`SELinuxOptions:` + strings.Replace(fmt.Sprintf("%v", this.SELinuxOptions), "SELinuxOptions", "v11.SELinuxOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2290,7 +1691,7 @@ func (this *SecurityContextConstraints) String() string {
 	}
 	repeatedStringForAllowedFlexVolumes += "}"
 	s := strings.Join([]string{`&SecurityContextConstraints{`,
-		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v11.ObjectMeta", 1), `&`, ``, 1) + `,`,
+		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`Priority:` + valueToStringGenerated(this.Priority) + `,`,
 		`AllowPrivilegedContainer:` + fmt.Sprintf("%v", this.AllowPrivilegedContainer) + `,`,
 		`DefaultAddCapabilities:` + fmt.Sprintf("%v", this.DefaultAddCapabilities) + `,`,
@@ -2315,6 +1716,7 @@ func (this *SecurityContextConstraints) String() string {
 		`AllowPrivilegeEscalation:` + valueToStringGenerated(this.AllowPrivilegeEscalation) + `,`,
 		`AllowedUnsafeSysctls:` + fmt.Sprintf("%v", this.AllowedUnsafeSysctls) + `,`,
 		`ForbiddenSysctls:` + fmt.Sprintf("%v", this.ForbiddenSysctls) + `,`,
+		`UserNamespaceLevel:` + fmt.Sprintf("%v", this.UserNamespaceLevel) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2329,7 +1731,7 @@ func (this *SecurityContextConstraintsList) String() string {
 	}
 	repeatedStringForItems += "}"
 	s := strings.Join([]string{`&SecurityContextConstraintsList{`,
-		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v11.ListMeta", 1), `&`, ``, 1) + `,`,
+		`ListMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ListMeta), "ListMeta", "v1.ListMeta", 1), `&`, ``, 1) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
 		`}`,
 	}, "")
@@ -2751,6 +2153,39 @@ func (m *PodSecurityPolicyReview) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectMeta", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ObjectMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -3066,6 +2501,39 @@ func (m *PodSecurityPolicySelfSubjectReview) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectMeta", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ObjectMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -3262,6 +2730,39 @@ func (m *PodSecurityPolicySubjectReview) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if err := m.Status.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ObjectMeta", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ObjectMeta.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3492,7 +2993,7 @@ func (m *PodSecurityPolicySubjectReviewStatus) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.AllowedBy == nil {
-				m.AllowedBy = &v1.ObjectReference{}
+				m.AllowedBy = &v11.ObjectReference{}
 			}
 			if err := m.AllowedBy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4083,7 +3584,7 @@ func (m *SELinuxContextStrategyOptions) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.SELinuxOptions == nil {
-				m.SELinuxOptions = &v1.SELinuxOptions{}
+				m.SELinuxOptions = &v11.SELinuxOptions{}
 			}
 			if err := m.SELinuxOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4827,6 +4328,38 @@ func (m *SecurityContextConstraints) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ForbiddenSysctls = append(m.ForbiddenSysctls, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 26:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserNamespaceLevel", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UserNamespaceLevel = NamespaceLevelType(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -22,6 +22,7 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
+	"k8s.io/utils/clock"
 )
 
 const (
@@ -243,10 +244,10 @@ func (c *statusController) getOrCreateClusterOperator() (*osconfigv1.ClusterOper
 	return co, nil
 }
 
-//syncStatus applies the new condition to the mao ClusterOperator object.
+// syncStatus applies the new condition to the mao ClusterOperator object.
 func (c *statusController) syncStatus(co *osconfigv1.ClusterOperator, conds []osconfigv1.ClusterOperatorStatusCondition) error {
 	for _, c := range conds {
-		v1helpers.SetStatusCondition(&co.Status.Conditions, c)
+		v1helpers.SetStatusCondition(&co.Status.Conditions, c, clock.RealClock{})
 	}
 
 	if !equality.Semantic.DeepEqual(co.Status.RelatedObjects, relatedObjects) {

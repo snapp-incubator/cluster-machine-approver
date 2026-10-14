@@ -30,7 +30,7 @@ func (DelegatedAuthorization) SwaggerDoc() map[string]string {
 }
 
 var map_GenerationHistory = map[string]string{
-	"":               "GenerationHistory keeps track of the generation for a given resource so that decisions about forced updated can be made.",
+	"":               "GenerationHistory keeps track of the generation for a given resource so that decisions about forced updated can be made. DEPRECATED: Use fields in v1.GenerationStatus instead",
 	"group":          "group is the group of the thing you're tracking",
 	"resource":       "resource is the resource type of the thing you're tracking",
 	"namespace":      "namespace is where the thing you're tracking is",
@@ -43,8 +43,8 @@ func (GenerationHistory) SwaggerDoc() map[string]string {
 }
 
 var map_GenericOperatorConfig = map[string]string{
-	"":               "GenericOperatorConfig provides information to configure an operator",
-	"servingInfo":    "ServingInfo is the HTTP serving information for the controller's endpoints",
+	"":               "GenericOperatorConfig provides information to configure an operator\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"servingInfo":    "servingInfo is the HTTP serving information for the controller's endpoints",
 	"leaderElection": "leaderElection provides information to elect a leader. Only override this if you have a specific need",
 	"authentication": "authentication allows configuration of authentication for the endpoints",
 	"authorization":  "authorization allows configuration of authentication for the endpoints",
@@ -55,7 +55,7 @@ func (GenericOperatorConfig) SwaggerDoc() map[string]string {
 }
 
 var map_LoggingConfig = map[string]string{
-	"":        "LoggingConfig holds information about configuring logging",
+	"":        "LoggingConfig holds information about configuring logging DEPRECATED: Use v1.LogLevel instead",
 	"level":   "level is passed to glog.",
 	"vmodule": "vmodule is passed to glog.",
 }
@@ -65,7 +65,7 @@ func (LoggingConfig) SwaggerDoc() map[string]string {
 }
 
 var map_NodeStatus = map[string]string{
-	"":                               "NodeStatus provides information about the current state of a particular node managed by this operator.",
+	"":                               "NodeStatus provides information about the current state of a particular node managed by this operator. Deprecated: Use v1.NodeStatus instead",
 	"nodeName":                       "nodeName is the name of the node",
 	"currentDeploymentGeneration":    "currentDeploymentGeneration is the generation of the most recently successful deployment",
 	"targetDeploymentGeneration":     "targetDeploymentGeneration is the generation of the deployment we're trying to apply",
@@ -78,7 +78,7 @@ func (NodeStatus) SwaggerDoc() map[string]string {
 }
 
 var map_OperatorCondition = map[string]string{
-	"": "OperatorCondition is just the standard condition fields.",
+	"": "OperatorCondition is just the standard condition fields. DEPRECATED: Use v1.OperatorCondition instead",
 }
 
 func (OperatorCondition) SwaggerDoc() map[string]string {
@@ -86,7 +86,7 @@ func (OperatorCondition) SwaggerDoc() map[string]string {
 }
 
 var map_OperatorSpec = map[string]string{
-	"":                "OperatorSpec contains common fields for an operator to need.  It is intended to be anonymous included inside of the Spec struct for you particular operator.",
+	"":                "OperatorSpec contains common fields for an operator to need.  It is intended to be anonymous included inside of the Spec struct for you particular operator. DEPRECATED: Use v1.OperatorSpec instead",
 	"managementState": "managementState indicates whether and how the operator should manage the component",
 	"imagePullSpec":   "imagePullSpec is the image to use for the component.",
 	"imagePullPolicy": "imagePullPolicy specifies the image pull policy. One of Always, Never, IfNotPresent. Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.",
@@ -99,7 +99,7 @@ func (OperatorSpec) SwaggerDoc() map[string]string {
 }
 
 var map_OperatorStatus = map[string]string{
-	"":                           "OperatorStatus contains common fields for an operator to need.  It is intended to be anonymous included inside of the Status struct for you particular operator.",
+	"":                           "OperatorStatus contains common fields for an operator to need.  It is intended to be anonymous included inside of the Status struct for you particular operator. DEPRECATED: Use v1.OperatorStatus instead",
 	"observedGeneration":         "observedGeneration is the last generation change you've dealt with",
 	"conditions":                 "conditions is a list of conditions and their status",
 	"state":                      "state indicates what the operator has observed to be its current operational status.",
@@ -113,7 +113,7 @@ func (OperatorStatus) SwaggerDoc() map[string]string {
 }
 
 var map_StaticPodOperatorStatus = map[string]string{
-	"":                                    "StaticPodOperatorStatus is status for controllers that manage static pods.  There are different needs because individual node status must be tracked.",
+	"":                                    "StaticPodOperatorStatus is status for controllers that manage static pods.  There are different needs because individual node status must be tracked. DEPRECATED: Use v1.StaticPodOperatorStatus instead",
 	"latestAvailableDeploymentGeneration": "latestAvailableDeploymentGeneration is the deploymentID of the most recent deployment",
 	"nodeStatuses":                        "nodeStatuses track the deployment values and errors across individual nodes",
 }
@@ -123,7 +123,7 @@ func (StaticPodOperatorStatus) SwaggerDoc() map[string]string {
 }
 
 var map_VersionAvailability = map[string]string{
-	"":                "VersionAvailability gives information about the synchronization and operational status of a particular version of the component",
+	"":                "VersionAvailability gives information about the synchronization and operational status of a particular version of the component DEPRECATED: Use fields in v1.OperatorStatus instead",
 	"version":         "version is the level this availability applies to",
 	"updatedReplicas": "updatedReplicas indicates how many replicas are at the desired state",
 	"readyReplicas":   "readyReplicas indicates how many replicas are ready and at the desired state",
@@ -135,9 +135,188 @@ func (VersionAvailability) SwaggerDoc() map[string]string {
 	return map_VersionAvailability
 }
 
+var map_ClusterAPI = map[string]string{
+	"":         "ClusterAPI provides configuration for the capi-operator.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec is the specification of the desired behavior of the capi-operator.",
+	"status":   "status defines the observed status of the capi-operator.",
+}
+
+func (ClusterAPI) SwaggerDoc() map[string]string {
+	return map_ClusterAPI
+}
+
+var map_ClusterAPIInstallerComponent = map[string]string{
+	"":     "ClusterAPIInstallerComponent defines a component which will be installed by this revision.",
+	"name": "name is the human-readable name of the component. The value has no effect, and will not be set if the component does not define a name in its manifests. If set it must consist of alphanumeric characters, or '-', and may not exceed 255 characters.",
+}
+
+func (ClusterAPIInstallerComponent) SwaggerDoc() map[string]string {
+	return map_ClusterAPIInstallerComponent
+}
+
+var map_ClusterAPIInstallerComponentImage = map[string]string{
+	"":        "ClusterAPIInstallerComponentImage defines an image source for a component.",
+	"ref":     "ref is an image reference to the image containing the component manifests. The reference must be a valid image digest reference in the format host[:port][/namespace]/name@sha256:<digest>. The digest must be 64 characters long, and consist only of lowercase hexadecimal characters, a-f and 0-9. The length of the field must be between 1 to 447 characters.",
+	"profile": "profile is the name of a profile to use from the image.\n\nA profile name may be up to 255 characters long. It must consist of alphanumeric characters, '-', or '_'.",
+}
+
+func (ClusterAPIInstallerComponentImage) SwaggerDoc() map[string]string {
+	return map_ClusterAPIInstallerComponentImage
+}
+
+var map_ClusterAPIInstallerComponentSource = map[string]string{
+	"":      "ClusterAPIInstallerComponentSource defines the source of a component which will be installed by this revision.",
+	"type":  "type is the source type of the component. The only valid value is Image. When set to Image, the image field must be set and will define an image source for the component.",
+	"image": "image defines an image source for a component. The image must contain a /capi-operator-installer directory containing the component manifests.",
+}
+
+func (ClusterAPIInstallerComponentSource) SwaggerDoc() map[string]string {
+	return map_ClusterAPIInstallerComponentSource
+}
+
+var map_ClusterAPIInstallerRevision = map[string]string{
+	"name":                               "name is the name of a revision.",
+	"revision":                           "revision is a monotonically increasing number that is assigned to a revision.",
+	"contentID":                          "contentID uniquely identifies the content of this revision. The contentID must be between 1 and 255 characters long.",
+	"unmanagedCustomResourceDefinitions": "unmanagedCustomResourceDefinitions is a list of the names of ClusterResourceDefinition (CRD) objects which are included in this revision, but which should not be installed or updated. If not set, all CRDs in the revision will be managed by the CAPI operator.",
+	"manifestSubstitutions":              "manifestSubstitutions is a list of envsubst style substitutions which will be applied to manifests in the revision during rendering. If defined it must not be empty, and may not contain more than 32 items. Each manifest substitution must have a unique key.",
+	"components":                         "components is a list of components which will be installed by this revision. Components will be installed in the order they are listed. If omitted no components will be installed.\n\nThe maximum number of components is 32.",
+}
+
+func (ClusterAPIInstallerRevision) SwaggerDoc() map[string]string {
+	return map_ClusterAPIInstallerRevision
+}
+
+var map_ClusterAPIInstallerRevisionManifestSubstitution = map[string]string{
+	"":      "ClusterAPIInstallerRevisionManifestSubstitution defines an envsubst style substitution which will be applied to manifests in a revision during rendering.",
+	"key":   "key is the name of the envsubst variable to substitute. It must be a valid envsubst variable name, consisting of letters, digits, and underscores, and must start with a letter or underscore. The key must not be empty, and must not exceed 255 characters.",
+	"value": "value is the value to substitute for the envsubst variable. It may be empty, in which case the variable will be substituted with an empty string. The value must not exceed 4096 characters.",
+}
+
+func (ClusterAPIInstallerRevisionManifestSubstitution) SwaggerDoc() map[string]string {
+	return map_ClusterAPIInstallerRevisionManifestSubstitution
+}
+
+var map_ClusterAPIList = map[string]string{
+	"":         "ClusterAPIList contains a list of ClusterAPI configurations\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"items":    "items contains the items",
+}
+
+func (ClusterAPIList) SwaggerDoc() map[string]string {
+	return map_ClusterAPIList
+}
+
+var map_ClusterAPISpec = map[string]string{
+	"":                                   "ClusterAPISpec defines the desired configuration of the capi-operator. The spec is required but we deliberately allow it to be empty.",
+	"unmanagedCustomResourceDefinitions": "unmanagedCustomResourceDefinitions is a list of ClusterResourceDefinition (CRD) names that should not be managed by the capi-operator installer controller. This allows external actors to own specific CRDs while capi-operator manages others.\n\nEach CRD name must be a valid DNS-1123 subdomain consisting of lowercase alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character, with a maximum length of 253 characters. CRD names must contain at least two '.' characters. Example: \"clusters.cluster.x-k8s.io\"\n\nItems cannot be removed from this list once added.\n\nThe maximum number of unmanagedCustomResourceDefinitions is 128.",
+}
+
+func (ClusterAPISpec) SwaggerDoc() map[string]string {
+	return map_ClusterAPISpec
+}
+
+var map_ClusterAPIStatus = map[string]string{
+	"":                           "ClusterAPIStatus describes the current state of the capi-operator.",
+	"currentRevision":            "currentRevision is the name of the most recently fully applied revision. It is written by the installer controller. If it is absent, it indicates that no revision has been fully applied yet. If set, currentRevision must correspond to an entry in the revisions list.",
+	"desiredRevision":            "desiredRevision is the name of the desired revision. It is written by the revision controller. It must be set to the name of the entry in the revisions list with the highest revision number.",
+	"revisions":                  "revisions is a list of all currently active revisions. A revision is active until the installer controller updates currentRevision to a later revision. It is written by the revision controller.\n\nThe maximum number of revisions is 16. All revisions must have a unique name. All revisions must have a unique revision number. When adding a revision, the revision number must be greater than the highest revision number in the list. Revisions are immutable, although they can be deleted.",
+	"observedRevisionGeneration": "observedRevisionGeneration is the generation of the ClusterAPI object that was last observed by the revision controller. If specified it must be greater than or equal to 1, and less than 2^53. It may not decrease or be unset once set.",
+}
+
+func (ClusterAPIStatus) SwaggerDoc() map[string]string {
+	return map_ClusterAPIStatus
+}
+
+var map_ClusterVersionOperator = map[string]string{
+	"":         "ClusterVersionOperator holds cluster-wide information about the Cluster Version Operator.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec is the specification of the desired behavior of the Cluster Version Operator.",
+	"status":   "status is the most recently observed status of the Cluster Version Operator.",
+}
+
+func (ClusterVersionOperator) SwaggerDoc() map[string]string {
+	return map_ClusterVersionOperator
+}
+
+var map_ClusterVersionOperatorList = map[string]string{
+	"":         "ClusterVersionOperatorList is a collection of ClusterVersionOperators.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"items":    "items is a list of ClusterVersionOperators.",
+}
+
+func (ClusterVersionOperatorList) SwaggerDoc() map[string]string {
+	return map_ClusterVersionOperatorList
+}
+
+var map_ClusterVersionOperatorSpec = map[string]string{
+	"":                 "ClusterVersionOperatorSpec is the specification of the desired behavior of the Cluster Version Operator.",
+	"operatorLogLevel": "operatorLogLevel is an intent based logging for the operator itself.  It does not give fine grained control, but it is a simple way to manage coarse grained logging choices that operators have to interpret for themselves.\n\nValid values are: \"Normal\", \"Debug\", \"Trace\", \"TraceAll\". Defaults to \"Normal\".",
+}
+
+func (ClusterVersionOperatorSpec) SwaggerDoc() map[string]string {
+	return map_ClusterVersionOperatorSpec
+}
+
+var map_ClusterVersionOperatorStatus = map[string]string{
+	"":                   "ClusterVersionOperatorStatus defines the observed status of the Cluster Version Operator.",
+	"observedGeneration": "observedGeneration represents the most recent generation observed by the operator and specifies the version of the spec field currently being synced.",
+}
+
+func (ClusterVersionOperatorStatus) SwaggerDoc() map[string]string {
+	return map_ClusterVersionOperatorStatus
+}
+
+var map_BackupJobReference = map[string]string{
+	"":          "BackupJobReference holds a reference to the batch/v1 Job created to run the etcd backup",
+	"namespace": "namespace is the namespace of the Job. this is always expected to be \"openshift-etcd\" since the user provided PVC is also required to be in \"openshift-etcd\" Required",
+	"name":      "name is the name of the Job. Required",
+}
+
+func (BackupJobReference) SwaggerDoc() map[string]string {
+	return map_BackupJobReference
+}
+
+var map_EtcdBackup = map[string]string{
+	"":       "\n\n# EtcdBackup provides configuration options and status for a one-time backup attempt of the etcd cluster\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"spec":   "spec holds user settable values for configuration",
+	"status": "status holds observed values from the cluster. They may not be overridden.",
+}
+
+func (EtcdBackup) SwaggerDoc() map[string]string {
+	return map_EtcdBackup
+}
+
+var map_EtcdBackupList = map[string]string{
+	"": "EtcdBackupList is a collection of items\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+}
+
+func (EtcdBackupList) SwaggerDoc() map[string]string {
+	return map_EtcdBackupList
+}
+
+var map_EtcdBackupSpec = map[string]string{
+	"pvcName": "pvcName specifies the name of the PersistentVolumeClaim (PVC) which binds a PersistentVolume where the etcd backup file would be saved The PVC itself must always be created in the \"openshift-etcd\" namespace If the PVC is left unspecified \"\" then the platform will choose a reasonable default location to save the backup. In the future this would be backups saved across the control-plane master nodes.",
+}
+
+func (EtcdBackupSpec) SwaggerDoc() map[string]string {
+	return map_EtcdBackupSpec
+}
+
+var map_EtcdBackupStatus = map[string]string{
+	"conditions": "conditions provide details on the status of the etcd backup job.",
+	"backupJob":  "backupJob is the reference to the Job that executes the backup. Optional",
+}
+
+func (EtcdBackupStatus) SwaggerDoc() map[string]string {
+	return map_EtcdBackupStatus
+}
+
 var map_ImageContentSourcePolicy = map[string]string{
-	"":     "ImageContentSourcePolicy holds cluster-wide information about how to handle registry mirror rules. When multiple policies are defined, the outcome of the behavior is defined on each field.",
-	"spec": "spec holds user settable values for configuration",
+	"":         "ImageContentSourcePolicy holds cluster-wide information about how to handle registry mirror rules. When multiple policies are defined, the outcome of the behavior is defined on each field.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec holds user settable values for configuration",
 }
 
 func (ImageContentSourcePolicy) SwaggerDoc() map[string]string {
@@ -145,7 +324,8 @@ func (ImageContentSourcePolicy) SwaggerDoc() map[string]string {
 }
 
 var map_ImageContentSourcePolicyList = map[string]string{
-	"": "ImageContentSourcePolicyList lists the items in the ImageContentSourcePolicy CRD.",
+	"":         "ImageContentSourcePolicyList lists the items in the ImageContentSourcePolicy CRD.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
 }
 
 func (ImageContentSourcePolicyList) SwaggerDoc() map[string]string {
@@ -169,6 +349,76 @@ var map_RepositoryDigestMirrors = map[string]string{
 
 func (RepositoryDigestMirrors) SwaggerDoc() map[string]string {
 	return map_RepositoryDigestMirrors
+}
+
+var map_GatewayAPIIngressConfig = map[string]string{
+	"":               "GatewayAPIIngressConfig holds configuration for Gateway API integration in the Cluster Ingress Operator.",
+	"managementMode": "managementMode specifies how the Cluster Ingress Operator manages Gateway API Custom Resource Definitions (CRDs), the OpenShift Gateway API implementation, and its Gateway API controllers.\n\nAllowed values are \"Managed\" and \"Unmanaged\".\n\nWhen omitted or set to \"Managed\", the ingress operator installs, owns, and upgrades the Gateway API CRDs, protects them with a Validating Admission Policy, and deploys the OpenShift Gateway API implementation and its Gateway API controllers.\n\nWhen set to \"Unmanaged\", the ingress operator does not install or manage Gateway API CRDs and does not deploy the OpenShift Gateway API implementation or its Gateway API controllers. The cluster administrator or a third-party product is responsible for providing their own CRDs and Gateway controller. The ingress operator reports observational status only.",
+}
+
+func (GatewayAPIIngressConfig) SwaggerDoc() map[string]string {
+	return map_GatewayAPIIngressConfig
+}
+
+var map_Ingress = map[string]string{
+	"":         "Ingress contains configuration options specific to the Ingress Operator itself, including how it manages Gateway API integration.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec holds user settable values for configuration.",
+	"status":   "status holds observed values from the cluster.",
+}
+
+func (Ingress) SwaggerDoc() map[string]string {
+	return map_Ingress
+}
+
+var map_IngressList = map[string]string{
+	"":         "IngressList is a collection of Ingresses.\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"items":    "items is a list of Ingresses.",
+}
+
+func (IngressList) SwaggerDoc() map[string]string {
+	return map_IngressList
+}
+
+var map_IngressSpec = map[string]string{
+	"":           "IngressSpec is the specification of the desired behavior of the Ingress Operator.",
+	"gatewayAPI": "gatewayAPI holds configuration for Gateway API integration, including how the ingress operator manages Gateway API CRDs, the OpenShift Gateway API implementation, and its Gateway API controllers.",
+}
+
+func (IngressSpec) SwaggerDoc() map[string]string {
+	return map_IngressSpec
+}
+
+var map_IngressStatus = map[string]string{
+	"":                   "IngressStatus defines the observed status of the Ingress Operator.",
+	"conditions":         "conditions is a list of conditions and their status.\n\nGateway API CRD management conditions are reported here with the \"GatewayAPI\" prefix:\n\n* \"GatewayAPICRDsManaged\" indicates whether the ingress operator is actively\n  managing Gateway API CRDs.\n* \"GatewayAPICRDsPresent\" indicates whether Gateway API CRDs exist on the\n  cluster.\n* \"GatewayAPICRDsCompliant\" indicates whether the installed CRDs match the\n  version expected by this ingress operator release.",
+	"observedGeneration": "observedGeneration represents the most recent generation observed by the operator and specifies the version of the spec field currently being synced.\n\nWhen omitted, the operator has not yet observed the resource.",
+}
+
+func (IngressStatus) SwaggerDoc() map[string]string {
+	return map_IngressStatus
+}
+
+var map_OLM = map[string]string{
+	"":         "OLM provides information to configure an operator to manage the OLM controllers\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec holds user settable values for configuration",
+	"status":   "status holds observed values from the cluster. They may not be overridden.",
+}
+
+func (OLM) SwaggerDoc() map[string]string {
+	return map_OLM
+}
+
+var map_OLMList = map[string]string{
+	"":         "OLMList is a collection of items\n\nCompatibility level 4: No compatibility is provided, the API can change at any point for any reason. These capabilities should not be used by applications needing long term support.",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"items":    "items contains the items",
+}
+
+func (OLMList) SwaggerDoc() map[string]string {
+	return map_OLMList
 }
 
 // AUTO-GENERATED FUNCTIONS END HERE

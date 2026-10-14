@@ -25,9 +25,7 @@ import (
 // Interface provides access to all the informers in this group version.
 type Interface interface {
 	// PodDisruptionBudgets returns a PodDisruptionBudgetInformer.
-	PodDisruptionBudgets() PodDisruptionBudgetInformer
-	// PodSecurityPolicies returns a PodSecurityPolicyInformer.
-	PodSecurityPolicies() PodSecurityPolicyInformer
+	PodDisruptionBudgets() TypedPodDisruptionBudgetInformer
 }
 
 type version struct {
@@ -41,12 +39,7 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
 }
 
-// PodDisruptionBudgets returns a PodDisruptionBudgetInformer.
-func (v *version) PodDisruptionBudgets() PodDisruptionBudgetInformer {
+// PodDisruptionBudgets returns a TypedPodDisruptionBudgetInformer.
+func (v *version) PodDisruptionBudgets() TypedPodDisruptionBudgetInformer {
 	return &podDisruptionBudgetInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
-}
-
-// PodSecurityPolicies returns a PodSecurityPolicyInformer.
-func (v *version) PodSecurityPolicies() PodSecurityPolicyInformer {
-	return &podSecurityPolicyInformer{factory: v.factory, tweakListOptions: v.tweakListOptions}
 }

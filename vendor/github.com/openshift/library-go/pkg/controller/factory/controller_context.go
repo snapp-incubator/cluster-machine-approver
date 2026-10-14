@@ -45,7 +45,7 @@ func (c syncContext) Recorder() events.Recorder {
 }
 
 // eventHandler provides default event handler that is added to an informers passed to controller factory.
-func (c syncContext) eventHandler(queueKeyFunc ObjectQueueKeyFunc, filter EventFilterFunc) cache.ResourceEventHandler {
+func (c syncContext) eventHandler(queueKeysFunc ObjectQueueKeysFunc, filter EventFilterFunc) cache.ResourceEventHandler {
 	resourceEventHandler := cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
 			runtimeObj, ok := obj.(runtime.Object)
@@ -53,7 +53,7 @@ func (c syncContext) eventHandler(queueKeyFunc ObjectQueueKeyFunc, filter EventF
 				utilruntime.HandleError(fmt.Errorf("added object %+v is not runtime Object", obj))
 				return
 			}
-			c.Queue().Add(queueKeyFunc(runtimeObj))
+			c.enqueueKeys(queueKeysFunc(runtimeObj)...)
 		},
 		UpdateFunc: func(old, new interface{}) {
 			runtimeObj, ok := new.(runtime.Object)
@@ -61,19 +61,20 @@ func (c syncContext) eventHandler(queueKeyFunc ObjectQueueKeyFunc, filter EventF
 				utilruntime.HandleError(fmt.Errorf("updated object %+v is not runtime Object", runtimeObj))
 				return
 			}
-			c.Queue().Add(queueKeyFunc(runtimeObj))
+			c.enqueueKeys(queueKeysFunc(runtimeObj)...)
 		},
 		DeleteFunc: func(obj interface{}) {
 			runtimeObj, ok := obj.(runtime.Object)
 			if !ok {
 				if tombstone, ok := obj.(cache.DeletedFinalStateUnknown); ok {
-					c.Queue().Add(queueKeyFunc(tombstone.Obj.(runtime.Object)))
+					c.enqueueKeys(queueKeysFunc(tombstone.Obj.(runtime.Object))...)
+
 					return
 				}
 				utilruntime.HandleError(fmt.Errorf("updated object %+v is not runtime Object", runtimeObj))
 				return
 			}
-			c.Queue().Add(queueKeyFunc(runtimeObj))
+			c.enqueueKeys(queueKeysFunc(runtimeObj)...)
 		},
 	}
 	if filter == nil {
@@ -85,11 +86,18 @@ func (c syncContext) eventHandler(queueKeyFunc ObjectQueueKeyFunc, filter EventF
 	}
 }
 
+func (c syncContext) enqueueKeys(keys ...string) {
+	for _, qKey := range keys {
+		c.queue.Add(qKey)
+	}
+}
+
 // namespaceChecker returns a function which returns true if an inpuut obj
 // (or its tombstone) is a namespace  and it matches a name of any namespaces
 // that we are interested in
 func namespaceChecker(interestingNamespaces []string) func(obj interface{}) bool {
-	interestingNamespacesSet := sets.NewString(interestingNamespaces...)
+	// This is used for quick lookups in informers
+	interestingNamespacesSet := sets.New(interestingNamespaces...)
 
 	return func(obj interface{}) bool {
 		ns, ok := obj.(*corev1.Namespace)

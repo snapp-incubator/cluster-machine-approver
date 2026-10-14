@@ -7,1275 +7,92 @@ import (
 	fmt "fmt"
 
 	io "io"
+	"sort"
 
-	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	k8s_io_api_core_v1 "k8s.io/api/core/v1"
 	v11 "k8s.io/api/core/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
-var _ = fmt.Errorf
-var _ = math.Inf
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
-
-func (m *DockerImageReference) Reset()      { *m = DockerImageReference{} }
-func (*DockerImageReference) ProtoMessage() {}
-func (*DockerImageReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{0}
-}
-func (m *DockerImageReference) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DockerImageReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *DockerImageReference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DockerImageReference.Merge(m, src)
-}
-func (m *DockerImageReference) XXX_Size() int {
-	return m.Size()
-}
-func (m *DockerImageReference) XXX_DiscardUnknown() {
-	xxx_messageInfo_DockerImageReference.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DockerImageReference proto.InternalMessageInfo
-
-func (m *Image) Reset()      { *m = Image{} }
-func (*Image) ProtoMessage() {}
-func (*Image) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{1}
-}
-func (m *Image) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Image) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *Image) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Image.Merge(m, src)
-}
-func (m *Image) XXX_Size() int {
-	return m.Size()
-}
-func (m *Image) XXX_DiscardUnknown() {
-	xxx_messageInfo_Image.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Image proto.InternalMessageInfo
-
-func (m *ImageBlobReferences) Reset()      { *m = ImageBlobReferences{} }
-func (*ImageBlobReferences) ProtoMessage() {}
-func (*ImageBlobReferences) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{2}
-}
-func (m *ImageBlobReferences) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageBlobReferences) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageBlobReferences) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageBlobReferences.Merge(m, src)
-}
-func (m *ImageBlobReferences) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageBlobReferences) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageBlobReferences.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageBlobReferences proto.InternalMessageInfo
-
-func (m *ImageImportSpec) Reset()      { *m = ImageImportSpec{} }
-func (*ImageImportSpec) ProtoMessage() {}
-func (*ImageImportSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{3}
-}
-func (m *ImageImportSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageImportSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageImportSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageImportSpec.Merge(m, src)
-}
-func (m *ImageImportSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageImportSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageImportSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageImportSpec proto.InternalMessageInfo
-
-func (m *ImageImportStatus) Reset()      { *m = ImageImportStatus{} }
-func (*ImageImportStatus) ProtoMessage() {}
-func (*ImageImportStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{4}
-}
-func (m *ImageImportStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageImportStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageImportStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageImportStatus.Merge(m, src)
-}
-func (m *ImageImportStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageImportStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageImportStatus.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageImportStatus proto.InternalMessageInfo
-
-func (m *ImageLayer) Reset()      { *m = ImageLayer{} }
-func (*ImageLayer) ProtoMessage() {}
-func (*ImageLayer) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{5}
-}
-func (m *ImageLayer) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageLayer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageLayer) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageLayer.Merge(m, src)
-}
-func (m *ImageLayer) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageLayer) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageLayer.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageLayer proto.InternalMessageInfo
-
-func (m *ImageLayerData) Reset()      { *m = ImageLayerData{} }
-func (*ImageLayerData) ProtoMessage() {}
-func (*ImageLayerData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{6}
-}
-func (m *ImageLayerData) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageLayerData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageLayerData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageLayerData.Merge(m, src)
-}
-func (m *ImageLayerData) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageLayerData) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageLayerData.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageLayerData proto.InternalMessageInfo
-
-func (m *ImageList) Reset()      { *m = ImageList{} }
-func (*ImageList) ProtoMessage() {}
-func (*ImageList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{7}
-}
-func (m *ImageList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageList.Merge(m, src)
-}
-func (m *ImageList) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageList) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageList proto.InternalMessageInfo
-
-func (m *ImageLookupPolicy) Reset()      { *m = ImageLookupPolicy{} }
-func (*ImageLookupPolicy) ProtoMessage() {}
-func (*ImageLookupPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{8}
-}
-func (m *ImageLookupPolicy) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageLookupPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageLookupPolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageLookupPolicy.Merge(m, src)
-}
-func (m *ImageLookupPolicy) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageLookupPolicy) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageLookupPolicy.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageLookupPolicy proto.InternalMessageInfo
-
-func (m *ImageSignature) Reset()      { *m = ImageSignature{} }
-func (*ImageSignature) ProtoMessage() {}
-func (*ImageSignature) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{9}
-}
-func (m *ImageSignature) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageSignature) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageSignature) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageSignature.Merge(m, src)
-}
-func (m *ImageSignature) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageSignature) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageSignature.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageSignature proto.InternalMessageInfo
-
-func (m *ImageStream) Reset()      { *m = ImageStream{} }
-func (*ImageStream) ProtoMessage() {}
-func (*ImageStream) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{10}
-}
-func (m *ImageStream) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStream) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStream) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStream.Merge(m, src)
-}
-func (m *ImageStream) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStream) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStream.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStream proto.InternalMessageInfo
-
-func (m *ImageStreamImage) Reset()      { *m = ImageStreamImage{} }
-func (*ImageStreamImage) ProtoMessage() {}
-func (*ImageStreamImage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{11}
-}
-func (m *ImageStreamImage) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamImage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamImage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamImage.Merge(m, src)
-}
-func (m *ImageStreamImage) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamImage) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamImage.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamImage proto.InternalMessageInfo
-
-func (m *ImageStreamImport) Reset()      { *m = ImageStreamImport{} }
-func (*ImageStreamImport) ProtoMessage() {}
-func (*ImageStreamImport) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{12}
-}
-func (m *ImageStreamImport) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamImport) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamImport) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamImport.Merge(m, src)
-}
-func (m *ImageStreamImport) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamImport) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamImport.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamImport proto.InternalMessageInfo
-
-func (m *ImageStreamImportSpec) Reset()      { *m = ImageStreamImportSpec{} }
-func (*ImageStreamImportSpec) ProtoMessage() {}
-func (*ImageStreamImportSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{13}
-}
-func (m *ImageStreamImportSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamImportSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamImportSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamImportSpec.Merge(m, src)
-}
-func (m *ImageStreamImportSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamImportSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamImportSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamImportSpec proto.InternalMessageInfo
-
-func (m *ImageStreamImportStatus) Reset()      { *m = ImageStreamImportStatus{} }
-func (*ImageStreamImportStatus) ProtoMessage() {}
-func (*ImageStreamImportStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{14}
-}
-func (m *ImageStreamImportStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamImportStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamImportStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamImportStatus.Merge(m, src)
-}
-func (m *ImageStreamImportStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamImportStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamImportStatus.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamImportStatus proto.InternalMessageInfo
-
-func (m *ImageStreamLayers) Reset()      { *m = ImageStreamLayers{} }
-func (*ImageStreamLayers) ProtoMessage() {}
-func (*ImageStreamLayers) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{15}
-}
-func (m *ImageStreamLayers) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamLayers) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamLayers) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamLayers.Merge(m, src)
-}
-func (m *ImageStreamLayers) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamLayers) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamLayers.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamLayers proto.InternalMessageInfo
-
-func (m *ImageStreamList) Reset()      { *m = ImageStreamList{} }
-func (*ImageStreamList) ProtoMessage() {}
-func (*ImageStreamList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{16}
-}
-func (m *ImageStreamList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamList.Merge(m, src)
-}
-func (m *ImageStreamList) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamList) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamList proto.InternalMessageInfo
-
-func (m *ImageStreamMapping) Reset()      { *m = ImageStreamMapping{} }
-func (*ImageStreamMapping) ProtoMessage() {}
-func (*ImageStreamMapping) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{17}
-}
-func (m *ImageStreamMapping) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamMapping) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamMapping) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamMapping.Merge(m, src)
-}
-func (m *ImageStreamMapping) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamMapping) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamMapping.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamMapping proto.InternalMessageInfo
-
-func (m *ImageStreamSpec) Reset()      { *m = ImageStreamSpec{} }
-func (*ImageStreamSpec) ProtoMessage() {}
-func (*ImageStreamSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{18}
-}
-func (m *ImageStreamSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamSpec.Merge(m, src)
-}
-func (m *ImageStreamSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamSpec proto.InternalMessageInfo
-
-func (m *ImageStreamStatus) Reset()      { *m = ImageStreamStatus{} }
-func (*ImageStreamStatus) ProtoMessage() {}
-func (*ImageStreamStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{19}
-}
-func (m *ImageStreamStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamStatus.Merge(m, src)
-}
-func (m *ImageStreamStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamStatus.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamStatus proto.InternalMessageInfo
-
-func (m *ImageStreamTag) Reset()      { *m = ImageStreamTag{} }
-func (*ImageStreamTag) ProtoMessage() {}
-func (*ImageStreamTag) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{20}
-}
-func (m *ImageStreamTag) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamTag) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamTag) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamTag.Merge(m, src)
-}
-func (m *ImageStreamTag) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamTag) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamTag.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamTag proto.InternalMessageInfo
-
-func (m *ImageStreamTagList) Reset()      { *m = ImageStreamTagList{} }
-func (*ImageStreamTagList) ProtoMessage() {}
-func (*ImageStreamTagList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{21}
-}
-func (m *ImageStreamTagList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageStreamTagList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageStreamTagList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageStreamTagList.Merge(m, src)
-}
-func (m *ImageStreamTagList) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageStreamTagList) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageStreamTagList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageStreamTagList proto.InternalMessageInfo
-
-func (m *ImageTag) Reset()      { *m = ImageTag{} }
-func (*ImageTag) ProtoMessage() {}
-func (*ImageTag) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{22}
-}
-func (m *ImageTag) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageTag) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageTag) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageTag.Merge(m, src)
-}
-func (m *ImageTag) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageTag) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageTag.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageTag proto.InternalMessageInfo
-
-func (m *ImageTagList) Reset()      { *m = ImageTagList{} }
-func (*ImageTagList) ProtoMessage() {}
-func (*ImageTagList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{23}
-}
-func (m *ImageTagList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ImageTagList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ImageTagList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ImageTagList.Merge(m, src)
-}
-func (m *ImageTagList) XXX_Size() int {
-	return m.Size()
-}
-func (m *ImageTagList) XXX_DiscardUnknown() {
-	xxx_messageInfo_ImageTagList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ImageTagList proto.InternalMessageInfo
-
-func (m *NamedTagEventList) Reset()      { *m = NamedTagEventList{} }
-func (*NamedTagEventList) ProtoMessage() {}
-func (*NamedTagEventList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{24}
-}
-func (m *NamedTagEventList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *NamedTagEventList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *NamedTagEventList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NamedTagEventList.Merge(m, src)
-}
-func (m *NamedTagEventList) XXX_Size() int {
-	return m.Size()
-}
-func (m *NamedTagEventList) XXX_DiscardUnknown() {
-	xxx_messageInfo_NamedTagEventList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_NamedTagEventList proto.InternalMessageInfo
-
-func (m *RepositoryImportSpec) Reset()      { *m = RepositoryImportSpec{} }
-func (*RepositoryImportSpec) ProtoMessage() {}
-func (*RepositoryImportSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{25}
-}
-func (m *RepositoryImportSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RepositoryImportSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *RepositoryImportSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RepositoryImportSpec.Merge(m, src)
-}
-func (m *RepositoryImportSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *RepositoryImportSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_RepositoryImportSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RepositoryImportSpec proto.InternalMessageInfo
-
-func (m *RepositoryImportStatus) Reset()      { *m = RepositoryImportStatus{} }
-func (*RepositoryImportStatus) ProtoMessage() {}
-func (*RepositoryImportStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{26}
-}
-func (m *RepositoryImportStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RepositoryImportStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *RepositoryImportStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RepositoryImportStatus.Merge(m, src)
-}
-func (m *RepositoryImportStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *RepositoryImportStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_RepositoryImportStatus.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RepositoryImportStatus proto.InternalMessageInfo
-
-func (m *SecretList) Reset()      { *m = SecretList{} }
-func (*SecretList) ProtoMessage() {}
-func (*SecretList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{27}
-}
-func (m *SecretList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SecretList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SecretList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SecretList.Merge(m, src)
-}
-func (m *SecretList) XXX_Size() int {
-	return m.Size()
-}
-func (m *SecretList) XXX_DiscardUnknown() {
-	xxx_messageInfo_SecretList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SecretList proto.InternalMessageInfo
-
-func (m *SignatureCondition) Reset()      { *m = SignatureCondition{} }
-func (*SignatureCondition) ProtoMessage() {}
-func (*SignatureCondition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{28}
-}
-func (m *SignatureCondition) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SignatureCondition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SignatureCondition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignatureCondition.Merge(m, src)
-}
-func (m *SignatureCondition) XXX_Size() int {
-	return m.Size()
-}
-func (m *SignatureCondition) XXX_DiscardUnknown() {
-	xxx_messageInfo_SignatureCondition.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SignatureCondition proto.InternalMessageInfo
-
-func (m *SignatureGenericEntity) Reset()      { *m = SignatureGenericEntity{} }
-func (*SignatureGenericEntity) ProtoMessage() {}
-func (*SignatureGenericEntity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{29}
-}
-func (m *SignatureGenericEntity) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SignatureGenericEntity) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SignatureGenericEntity) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignatureGenericEntity.Merge(m, src)
-}
-func (m *SignatureGenericEntity) XXX_Size() int {
-	return m.Size()
-}
-func (m *SignatureGenericEntity) XXX_DiscardUnknown() {
-	xxx_messageInfo_SignatureGenericEntity.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SignatureGenericEntity proto.InternalMessageInfo
-
-func (m *SignatureIssuer) Reset()      { *m = SignatureIssuer{} }
-func (*SignatureIssuer) ProtoMessage() {}
-func (*SignatureIssuer) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{30}
-}
-func (m *SignatureIssuer) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SignatureIssuer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SignatureIssuer) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignatureIssuer.Merge(m, src)
-}
-func (m *SignatureIssuer) XXX_Size() int {
-	return m.Size()
-}
-func (m *SignatureIssuer) XXX_DiscardUnknown() {
-	xxx_messageInfo_SignatureIssuer.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SignatureIssuer proto.InternalMessageInfo
-
-func (m *SignatureSubject) Reset()      { *m = SignatureSubject{} }
-func (*SignatureSubject) ProtoMessage() {}
-func (*SignatureSubject) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{31}
-}
-func (m *SignatureSubject) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SignatureSubject) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SignatureSubject) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignatureSubject.Merge(m, src)
-}
-func (m *SignatureSubject) XXX_Size() int {
-	return m.Size()
-}
-func (m *SignatureSubject) XXX_DiscardUnknown() {
-	xxx_messageInfo_SignatureSubject.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SignatureSubject proto.InternalMessageInfo
-
-func (m *TagEvent) Reset()      { *m = TagEvent{} }
-func (*TagEvent) ProtoMessage() {}
-func (*TagEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{32}
-}
-func (m *TagEvent) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TagEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *TagEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TagEvent.Merge(m, src)
-}
-func (m *TagEvent) XXX_Size() int {
-	return m.Size()
-}
-func (m *TagEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_TagEvent.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TagEvent proto.InternalMessageInfo
-
-func (m *TagEventCondition) Reset()      { *m = TagEventCondition{} }
-func (*TagEventCondition) ProtoMessage() {}
-func (*TagEventCondition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{33}
-}
-func (m *TagEventCondition) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TagEventCondition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *TagEventCondition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TagEventCondition.Merge(m, src)
-}
-func (m *TagEventCondition) XXX_Size() int {
-	return m.Size()
-}
-func (m *TagEventCondition) XXX_DiscardUnknown() {
-	xxx_messageInfo_TagEventCondition.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TagEventCondition proto.InternalMessageInfo
-
-func (m *TagImportPolicy) Reset()      { *m = TagImportPolicy{} }
-func (*TagImportPolicy) ProtoMessage() {}
-func (*TagImportPolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{34}
-}
-func (m *TagImportPolicy) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TagImportPolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *TagImportPolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TagImportPolicy.Merge(m, src)
-}
-func (m *TagImportPolicy) XXX_Size() int {
-	return m.Size()
-}
-func (m *TagImportPolicy) XXX_DiscardUnknown() {
-	xxx_messageInfo_TagImportPolicy.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TagImportPolicy proto.InternalMessageInfo
-
-func (m *TagReference) Reset()      { *m = TagReference{} }
-func (*TagReference) ProtoMessage() {}
-func (*TagReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{35}
-}
-func (m *TagReference) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TagReference) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *TagReference) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TagReference.Merge(m, src)
-}
-func (m *TagReference) XXX_Size() int {
-	return m.Size()
-}
-func (m *TagReference) XXX_DiscardUnknown() {
-	xxx_messageInfo_TagReference.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TagReference proto.InternalMessageInfo
-
-func (m *TagReferencePolicy) Reset()      { *m = TagReferencePolicy{} }
-func (*TagReferencePolicy) ProtoMessage() {}
-func (*TagReferencePolicy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_650a0b34f65fde60, []int{36}
-}
-func (m *TagReferencePolicy) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *TagReferencePolicy) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *TagReferencePolicy) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TagReferencePolicy.Merge(m, src)
-}
-func (m *TagReferencePolicy) XXX_Size() int {
-	return m.Size()
-}
-func (m *TagReferencePolicy) XXX_DiscardUnknown() {
-	xxx_messageInfo_TagReferencePolicy.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_TagReferencePolicy proto.InternalMessageInfo
-
-func init() {
-	proto.RegisterType((*DockerImageReference)(nil), "github.com.openshift.api.image.v1.DockerImageReference")
-	proto.RegisterType((*Image)(nil), "github.com.openshift.api.image.v1.Image")
-	proto.RegisterType((*ImageBlobReferences)(nil), "github.com.openshift.api.image.v1.ImageBlobReferences")
-	proto.RegisterType((*ImageImportSpec)(nil), "github.com.openshift.api.image.v1.ImageImportSpec")
-	proto.RegisterType((*ImageImportStatus)(nil), "github.com.openshift.api.image.v1.ImageImportStatus")
-	proto.RegisterType((*ImageLayer)(nil), "github.com.openshift.api.image.v1.ImageLayer")
-	proto.RegisterType((*ImageLayerData)(nil), "github.com.openshift.api.image.v1.ImageLayerData")
-	proto.RegisterType((*ImageList)(nil), "github.com.openshift.api.image.v1.ImageList")
-	proto.RegisterType((*ImageLookupPolicy)(nil), "github.com.openshift.api.image.v1.ImageLookupPolicy")
-	proto.RegisterType((*ImageSignature)(nil), "github.com.openshift.api.image.v1.ImageSignature")
-	proto.RegisterMapType((map[string]string)(nil), "github.com.openshift.api.image.v1.ImageSignature.SignedClaimsEntry")
-	proto.RegisterType((*ImageStream)(nil), "github.com.openshift.api.image.v1.ImageStream")
-	proto.RegisterType((*ImageStreamImage)(nil), "github.com.openshift.api.image.v1.ImageStreamImage")
-	proto.RegisterType((*ImageStreamImport)(nil), "github.com.openshift.api.image.v1.ImageStreamImport")
-	proto.RegisterType((*ImageStreamImportSpec)(nil), "github.com.openshift.api.image.v1.ImageStreamImportSpec")
-	proto.RegisterType((*ImageStreamImportStatus)(nil), "github.com.openshift.api.image.v1.ImageStreamImportStatus")
-	proto.RegisterType((*ImageStreamLayers)(nil), "github.com.openshift.api.image.v1.ImageStreamLayers")
-	proto.RegisterMapType((map[string]ImageLayerData)(nil), "github.com.openshift.api.image.v1.ImageStreamLayers.BlobsEntry")
-	proto.RegisterMapType((map[string]ImageBlobReferences)(nil), "github.com.openshift.api.image.v1.ImageStreamLayers.ImagesEntry")
-	proto.RegisterType((*ImageStreamList)(nil), "github.com.openshift.api.image.v1.ImageStreamList")
-	proto.RegisterType((*ImageStreamMapping)(nil), "github.com.openshift.api.image.v1.ImageStreamMapping")
-	proto.RegisterType((*ImageStreamSpec)(nil), "github.com.openshift.api.image.v1.ImageStreamSpec")
-	proto.RegisterType((*ImageStreamStatus)(nil), "github.com.openshift.api.image.v1.ImageStreamStatus")
-	proto.RegisterType((*ImageStreamTag)(nil), "github.com.openshift.api.image.v1.ImageStreamTag")
-	proto.RegisterType((*ImageStreamTagList)(nil), "github.com.openshift.api.image.v1.ImageStreamTagList")
-	proto.RegisterType((*ImageTag)(nil), "github.com.openshift.api.image.v1.ImageTag")
-	proto.RegisterType((*ImageTagList)(nil), "github.com.openshift.api.image.v1.ImageTagList")
-	proto.RegisterType((*NamedTagEventList)(nil), "github.com.openshift.api.image.v1.NamedTagEventList")
-	proto.RegisterType((*RepositoryImportSpec)(nil), "github.com.openshift.api.image.v1.RepositoryImportSpec")
-	proto.RegisterType((*RepositoryImportStatus)(nil), "github.com.openshift.api.image.v1.RepositoryImportStatus")
-	proto.RegisterType((*SecretList)(nil), "github.com.openshift.api.image.v1.SecretList")
-	proto.RegisterType((*SignatureCondition)(nil), "github.com.openshift.api.image.v1.SignatureCondition")
-	proto.RegisterType((*SignatureGenericEntity)(nil), "github.com.openshift.api.image.v1.SignatureGenericEntity")
-	proto.RegisterType((*SignatureIssuer)(nil), "github.com.openshift.api.image.v1.SignatureIssuer")
-	proto.RegisterType((*SignatureSubject)(nil), "github.com.openshift.api.image.v1.SignatureSubject")
-	proto.RegisterType((*TagEvent)(nil), "github.com.openshift.api.image.v1.TagEvent")
-	proto.RegisterType((*TagEventCondition)(nil), "github.com.openshift.api.image.v1.TagEventCondition")
-	proto.RegisterType((*TagImportPolicy)(nil), "github.com.openshift.api.image.v1.TagImportPolicy")
-	proto.RegisterType((*TagReference)(nil), "github.com.openshift.api.image.v1.TagReference")
-	proto.RegisterMapType((map[string]string)(nil), "github.com.openshift.api.image.v1.TagReference.AnnotationsEntry")
-	proto.RegisterType((*TagReferencePolicy)(nil), "github.com.openshift.api.image.v1.TagReferencePolicy")
-}
-
-func init() {
-	proto.RegisterFile("github.com/openshift/api/image/v1/generated.proto", fileDescriptor_650a0b34f65fde60)
-}
-
-var fileDescriptor_650a0b34f65fde60 = []byte{
-	// 2527 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x5a, 0x4d, 0x6c, 0x1c, 0x49,
-	0xf5, 0x4f, 0xcf, 0x97, 0xc7, 0xcf, 0x13, 0x3b, 0xae, 0xc4, 0xd9, 0xd9, 0x49, 0xd6, 0xf6, 0x76,
-	0xfe, 0x89, 0xf2, 0x87, 0xec, 0x0c, 0x36, 0xd9, 0xc5, 0x09, 0x12, 0xd9, 0x4c, 0x26, 0x44, 0x03,
-	0xf6, 0xc6, 0x5b, 0x1e, 0x22, 0x14, 0x05, 0x89, 0x72, 0x4f, 0xb9, 0xdd, 0x78, 0xa6, 0x7b, 0xe8,
-	0xee, 0xf1, 0xae, 0x23, 0x90, 0x38, 0xa0, 0xd5, 0x1e, 0x38, 0xc0, 0x89, 0xc3, 0x1e, 0xd1, 0x0a,
-	0x21, 0x8e, 0x08, 0xc4, 0x89, 0x0b, 0x20, 0x45, 0x5c, 0x58, 0x2d, 0x97, 0xbd, 0x60, 0x6d, 0x06,
-	0xce, 0xdc, 0xb8, 0xec, 0x09, 0x55, 0x75, 0x75, 0x77, 0x75, 0x4f, 0x8f, 0xdd, 0x63, 0xe2, 0x01,
-	0x6e, 0xd3, 0x55, 0xef, 0xfd, 0xde, 0xab, 0xf7, 0xaa, 0xde, 0x47, 0xd5, 0xc0, 0x8a, 0x6e, 0xb8,
-	0xbb, 0xfd, 0xed, 0xaa, 0x66, 0x75, 0x6b, 0x56, 0x8f, 0x9a, 0xce, 0xae, 0xb1, 0xe3, 0xd6, 0x48,
-	0xcf, 0xa8, 0x19, 0x5d, 0xa2, 0xd3, 0xda, 0xfe, 0x4a, 0x4d, 0xa7, 0x26, 0xb5, 0x89, 0x4b, 0xdb,
-	0xd5, 0x9e, 0x6d, 0xb9, 0x16, 0x7a, 0x35, 0x64, 0xa9, 0x06, 0x2c, 0x55, 0xd2, 0x33, 0xaa, 0x9c,
-	0xa5, 0xba, 0xbf, 0x52, 0x79, 0x4d, 0x42, 0xd5, 0x2d, 0xdd, 0xaa, 0x71, 0xce, 0xed, 0xfe, 0x0e,
-	0xff, 0xe2, 0x1f, 0xfc, 0x97, 0x87, 0x58, 0x51, 0xf7, 0xd6, 0x9c, 0xaa, 0x61, 0x71, 0xb1, 0x9a,
-	0x65, 0x27, 0x49, 0xad, 0xdc, 0x0c, 0x69, 0xba, 0x44, 0xdb, 0x35, 0x4c, 0x6a, 0x1f, 0xd4, 0x7a,
-	0x7b, 0x3a, 0x1b, 0x70, 0x6a, 0x5d, 0xea, 0x92, 0x24, 0xae, 0xda, 0x28, 0x2e, 0xbb, 0x6f, 0xba,
-	0x46, 0x97, 0x0e, 0x31, 0xbc, 0x71, 0x1c, 0x83, 0xa3, 0xed, 0xd2, 0x2e, 0x89, 0xf3, 0xa9, 0x1f,
-	0x2b, 0x70, 0xa1, 0x61, 0x69, 0x7b, 0xd4, 0x6e, 0x32, 0x23, 0x60, 0xba, 0x43, 0x6d, 0x6a, 0x6a,
-	0x14, 0xdd, 0x80, 0xa2, 0x4d, 0x75, 0xc3, 0x71, 0xed, 0x83, 0xb2, 0xb2, 0xac, 0x5c, 0x9f, 0xae,
-	0x9f, 0x7b, 0x76, 0xb8, 0x74, 0x66, 0x70, 0xb8, 0x54, 0xc4, 0x62, 0x1c, 0x07, 0x14, 0xa8, 0x06,
-	0xd3, 0x26, 0xe9, 0x52, 0xa7, 0x47, 0x34, 0x5a, 0xce, 0x70, 0xf2, 0x79, 0x41, 0x3e, 0xfd, 0x96,
-	0x3f, 0x81, 0x43, 0x1a, 0xb4, 0x0c, 0x39, 0xf6, 0x51, 0xce, 0x72, 0xda, 0x92, 0xa0, 0xcd, 0x31,
-	0x5a, 0xcc, 0x67, 0xd0, 0x2b, 0x90, 0x75, 0x89, 0x5e, 0xce, 0x71, 0x82, 0x19, 0x41, 0x90, 0x6d,
-	0x11, 0x1d, 0xb3, 0x71, 0x54, 0x81, 0x8c, 0xd1, 0x28, 0xe7, 0xf9, 0x2c, 0x88, 0xd9, 0x4c, 0xb3,
-	0x81, 0x33, 0x46, 0x43, 0xfd, 0xf3, 0x14, 0xe4, 0xf9, 0x72, 0xd0, 0xb7, 0xa1, 0xc8, 0x4c, 0xdc,
-	0x26, 0x2e, 0xe1, 0xab, 0x98, 0x59, 0xfd, 0x42, 0xd5, 0xb3, 0x54, 0x55, 0xb6, 0x54, 0xb5, 0xb7,
-	0xa7, 0xb3, 0x01, 0xa7, 0xca, 0xa8, 0xab, 0xfb, 0x2b, 0xd5, 0x87, 0xdb, 0xdf, 0xa1, 0x9a, 0xbb,
-	0x41, 0x5d, 0x52, 0x47, 0x02, 0x1d, 0xc2, 0x31, 0x1c, 0xa0, 0xa2, 0x4d, 0xb8, 0xd0, 0x4e, 0xb0,
-	0x9f, 0x30, 0xc2, 0x65, 0xc1, 0x9b, 0x68, 0x63, 0x9c, 0xc8, 0x89, 0xbe, 0x07, 0xe7, 0xa5, 0xf1,
-	0x0d, 0x5f, 0xfd, 0x2c, 0x57, 0xff, 0xb5, 0x91, 0xea, 0x0b, 0x47, 0x57, 0x31, 0x79, 0xe7, 0xfe,
-	0xbb, 0x2e, 0x35, 0x1d, 0xc3, 0x32, 0xeb, 0x97, 0x84, 0xfc, 0xf3, 0x8d, 0x61, 0x44, 0x9c, 0x24,
-	0x06, 0x6d, 0x43, 0x25, 0x61, 0xf8, 0x11, 0xb5, 0x19, 0x9e, 0xf0, 0x86, 0x2a, 0x50, 0x2b, 0x8d,
-	0x91, 0x94, 0xf8, 0x08, 0x14, 0xb4, 0x11, 0x5d, 0x21, 0x31, 0x8d, 0x1d, 0xea, 0xb8, 0xc2, 0x99,
-	0x89, 0x2a, 0x0b, 0x12, 0x9c, 0xc4, 0x87, 0xf6, 0x61, 0x5e, 0x1a, 0x5e, 0x27, 0x07, 0xd4, 0x76,
-	0xca, 0x85, 0xe5, 0x2c, 0x37, 0xd7, 0xb1, 0x87, 0xbe, 0x1a, 0x72, 0xd5, 0x5f, 0x16, 0xb2, 0xe7,
-	0x1b, 0x71, 0x3c, 0x3c, 0x2c, 0x02, 0x51, 0x00, 0xc7, 0xd0, 0x4d, 0xe2, 0xf6, 0x6d, 0xea, 0x94,
-	0xa7, 0xb8, 0xc0, 0x95, 0xb4, 0x02, 0xb7, 0x7c, 0xce, 0x70, 0x7f, 0x05, 0x43, 0x0e, 0x96, 0x80,
-	0xd1, 0x43, 0x58, 0x90, 0x64, 0x87, 0x44, 0xe5, 0xe2, 0x72, 0xf6, 0x7a, 0xa9, 0xfe, 0xf2, 0xe0,
-	0x70, 0x69, 0xa1, 0x91, 0x44, 0x80, 0x93, 0xf9, 0xd0, 0x2e, 0x5c, 0x4e, 0x30, 0xe3, 0x06, 0x6d,
-	0x1b, 0xa4, 0x75, 0xd0, 0xa3, 0xe5, 0x69, 0xee, 0x87, 0xff, 0x13, 0x6a, 0x5d, 0x6e, 0x1c, 0x41,
-	0x8b, 0x8f, 0x44, 0x42, 0x0f, 0x22, 0x9e, 0xb9, 0x67, 0x99, 0x3b, 0x86, 0x5e, 0x06, 0x0e, 0x9f,
-	0x64, 0x6a, 0x8f, 0x00, 0x0f, 0xf3, 0xa8, 0x3f, 0x55, 0xe0, 0x3c, 0xff, 0xae, 0x77, 0xac, 0xed,
-	0xe0, 0xa8, 0x38, 0x68, 0x0d, 0x4a, 0xdc, 0xac, 0x1b, 0x86, 0xe3, 0x18, 0xa6, 0xce, 0x0f, 0x49,
-	0xb1, 0x7e, 0x41, 0x60, 0x97, 0x9a, 0xd2, 0x1c, 0x8e, 0x50, 0x22, 0x15, 0x0a, 0x1d, 0x6f, 0xa7,
-	0x28, 0xcb, 0x59, 0x16, 0x43, 0x06, 0x87, 0x4b, 0x05, 0xe1, 0x6b, 0x31, 0xc3, 0x68, 0x34, 0x4f,
-	0x67, 0xef, 0x34, 0x73, 0x1a, 0xa1, 0xa4, 0x98, 0x51, 0xff, 0x98, 0x85, 0x39, 0x2e, 0xa6, 0xd9,
-	0xed, 0x59, 0xb6, 0xbb, 0xd5, 0xa3, 0x1a, 0xba, 0x0f, 0xb9, 0x1d, 0xdb, 0xea, 0x8a, 0x88, 0x73,
-	0x45, 0x3a, 0xb2, 0x55, 0x96, 0x26, 0xc2, 0xf8, 0x12, 0xac, 0x24, 0x8c, 0x80, 0x5f, 0xb5, 0xad,
-	0x2e, 0xe6, 0xec, 0xe8, 0x4d, 0xc8, 0xb8, 0x16, 0x17, 0x3d, 0xb3, 0x7a, 0x3d, 0x09, 0x64, 0xdd,
-	0xd2, 0x48, 0x27, 0x8e, 0x54, 0x60, 0x81, 0xb0, 0x65, 0xe1, 0x8c, 0x6b, 0xa1, 0x0e, 0x33, 0x0f,
-	0x53, 0x6b, 0xd3, 0xea, 0x18, 0xda, 0x81, 0x88, 0x21, 0xab, 0x29, 0xf6, 0x68, 0x8b, 0xe8, 0x4d,
-	0x89, 0x53, 0x36, 0x69, 0x38, 0x8a, 0x23, 0xe8, 0xe8, 0x5d, 0x98, 0xb3, 0x7d, 0x35, 0x84, 0xc0,
-	0x3c, 0x17, 0xf8, 0x7a, 0x3a, 0x81, 0x38, 0xca, 0x5c, 0x7f, 0x49, 0xc8, 0x9c, 0x8b, 0x4d, 0xe0,
-	0xb8, 0x18, 0x74, 0x17, 0xe6, 0x0c, 0x53, 0xeb, 0xf4, 0xdb, 0x61, 0x30, 0xc9, 0xf1, 0x9d, 0x10,
-	0x40, 0x34, 0xa3, 0xd3, 0x38, 0x4e, 0xaf, 0xfe, 0x45, 0x81, 0x79, 0xd9, 0x8f, 0x2e, 0x71, 0xfb,
-	0x0e, 0x6a, 0x41, 0xc1, 0xe1, 0xbf, 0x84, 0x2f, 0x6f, 0xa4, 0xcb, 0x1e, 0x1e, 0x77, 0x7d, 0x56,
-	0x48, 0x2f, 0x78, 0xdf, 0x58, 0x60, 0xa1, 0x26, 0xe4, 0xf9, 0xba, 0x03, 0xdf, 0xa6, 0x8c, 0x19,
-	0xf5, 0xe9, 0xc1, 0xe1, 0x92, 0x97, 0xd9, 0xb0, 0x87, 0xe0, 0x67, 0xc9, 0x6c, 0x72, 0x96, 0x54,
-	0xdf, 0x53, 0x00, 0xc2, 0x90, 0x15, 0x64, 0x5d, 0x65, 0x64, 0xd6, 0xbd, 0x0a, 0x39, 0xc7, 0x78,
-	0xea, 0x69, 0x96, 0x0d, 0x73, 0x38, 0x67, 0xdf, 0x32, 0x9e, 0x52, 0xcc, 0xa7, 0x59, 0xbe, 0xef,
-	0x06, 0xf1, 0x22, 0x1b, 0xcd, 0xf7, 0x61, 0x70, 0x08, 0x69, 0xd4, 0x36, 0xcc, 0x86, 0x7a, 0x34,
-	0x58, 0xa2, 0x79, 0x55, 0x48, 0x52, 0xb8, 0xa4, 0xb3, 0xc7, 0x4a, 0xc9, 0xa4, 0x90, 0xf2, 0x5b,
-	0x05, 0xa6, 0x3d, 0x31, 0x86, 0xe3, 0xa2, 0x27, 0x43, 0xc9, 0xbf, 0x9a, 0xce, 0x7d, 0x8c, 0x9b,
-	0xa7, 0xfe, 0xa0, 0xe4, 0xf1, 0x47, 0xa4, 0xc4, 0xbf, 0x01, 0x79, 0xc3, 0xa5, 0x5d, 0xa7, 0x9c,
-	0xe1, 0x81, 0x3f, 0xbd, 0x13, 0xcf, 0x0a, 0xd0, 0x7c, 0x93, 0xb1, 0x63, 0x0f, 0x45, 0x5d, 0x13,
-	0xdb, 0x6f, 0xdd, 0xb2, 0xf6, 0xfa, 0x3d, 0xb1, 0xaf, 0xaf, 0x40, 0xbe, 0xc3, 0xce, 0xb8, 0x88,
-	0x6b, 0x01, 0x27, 0x3f, 0xf8, 0xd8, 0x9b, 0x53, 0x7f, 0x55, 0x10, 0xb6, 0x0d, 0x42, 0xfc, 0x04,
-	0xca, 0x9e, 0x65, 0xc8, 0xb9, 0xa1, 0x57, 0x82, 0x9d, 0xc4, 0x1d, 0xc2, 0x67, 0xd0, 0x55, 0x98,
-	0xd2, 0x2c, 0xd3, 0xa5, 0xa6, 0xcb, 0xb5, 0x2f, 0xd5, 0x67, 0x06, 0x87, 0x4b, 0x53, 0xf7, 0xbc,
-	0x21, 0xec, 0xcf, 0x21, 0x03, 0x40, 0xb3, 0xcc, 0xb6, 0xe1, 0x1a, 0x96, 0xe9, 0x94, 0x73, 0xdc,
-	0x96, 0x69, 0xe2, 0x45, 0xb0, 0xd8, 0x7b, 0x3e, 0x77, 0xa8, 0x71, 0x30, 0xe4, 0x60, 0x09, 0x1c,
-	0x7d, 0x19, 0xce, 0x72, 0xf6, 0x66, 0x9b, 0x9a, 0xae, 0xe1, 0x1e, 0x88, 0x82, 0x63, 0x41, 0xb0,
-	0x9d, 0x6d, 0xca, 0x93, 0x38, 0x4a, 0x8b, 0xbe, 0x0f, 0x25, 0x96, 0x93, 0x69, 0xfb, 0x5e, 0x87,
-	0x18, 0x5d, 0xbf, 0xbe, 0xb8, 0x37, 0x76, 0xba, 0xe7, 0x8a, 0xfb, 0x28, 0xf7, 0x4d, 0xd7, 0x96,
-	0x62, 0xab, 0x3c, 0x85, 0x23, 0xe2, 0xd0, 0xdb, 0x30, 0xa5, 0xd9, 0x94, 0x15, 0xee, 0xe5, 0x29,
-	0xee, 0xd0, 0xcf, 0xa5, 0x73, 0x68, 0xcb, 0xe8, 0x52, 0x61, 0x79, 0x8f, 0x1d, 0xfb, 0x38, 0xec,
-	0x78, 0x18, 0x8e, 0xd3, 0xa7, 0xed, 0xfa, 0x41, 0xb9, 0x98, 0x3a, 0x31, 0x04, 0x0b, 0x69, 0x32,
-	0x5e, 0xbb, 0x5e, 0x62, 0xc7, 0xa3, 0x29, 0x70, 0x70, 0x80, 0x88, 0xbe, 0xe5, 0xa3, 0xb7, 0x2c,
-	0x5e, 0x50, 0xcc, 0xac, 0x7e, 0x71, 0x1c, 0xf4, 0xad, 0x3e, 0xdf, 0x75, 0x32, 0x7c, 0xcb, 0xc2,
-	0x01, 0x64, 0xe5, 0x0e, 0xcc, 0x0f, 0x19, 0x12, 0x9d, 0x83, 0xec, 0x1e, 0x15, 0xed, 0x0a, 0x66,
-	0x3f, 0xd1, 0x05, 0xc8, 0xef, 0x93, 0x4e, 0x5f, 0xec, 0x53, 0xec, 0x7d, 0xdc, 0xce, 0xac, 0x29,
-	0xea, 0xcf, 0x32, 0x30, 0xe3, 0x79, 0xc6, 0xb5, 0x29, 0xe9, 0x4e, 0xe0, 0xc8, 0xb4, 0x20, 0xe7,
-	0xf4, 0xa8, 0x26, 0x82, 0xfe, 0x6a, 0xea, 0x9d, 0xc3, 0xf5, 0x63, 0x75, 0x45, 0x78, 0xcc, 0xd8,
-	0x17, 0xe6, 0x68, 0xe8, 0x49, 0x90, 0xa1, 0xbc, 0xe4, 0x7e, 0x73, 0x4c, 0xdc, 0x23, 0x33, 0x95,
-	0xfa, 0x7b, 0x05, 0xce, 0x49, 0xd4, 0x93, 0x6a, 0xaa, 0x36, 0x4e, 0x9a, 0x20, 0xc3, 0xd8, 0x2a,
-	0x25, 0x49, 0xf5, 0xd7, 0x19, 0x11, 0x5c, 0xfd, 0x55, 0xb0, 0x0c, 0x3f, 0x81, 0x65, 0x3c, 0x8e,
-	0x78, 0x7c, 0x6d, 0x3c, 0xcf, 0x84, 0xf5, 0x64, 0xa2, 0xdf, 0xb7, 0x63, 0x7e, 0xbf, 0x7d, 0x22,
-	0xf4, 0xa3, 0xbd, 0xff, 0xc3, 0x0c, 0x2c, 0x24, 0x6a, 0x84, 0xae, 0x41, 0xc1, 0x2b, 0xfd, 0xb8,
-	0xe5, 0x8a, 0x21, 0x82, 0x47, 0x83, 0xc5, 0x2c, 0xd2, 0x01, 0x6c, 0xda, 0xb3, 0x1c, 0xc3, 0xb5,
-	0xec, 0x03, 0x61, 0x87, 0x2f, 0xa5, 0xd0, 0x14, 0x07, 0x4c, 0x92, 0x19, 0x66, 0x99, 0xa1, 0xc3,
-	0x19, 0x2c, 0x41, 0xa3, 0xc7, 0x4c, 0x21, 0xa2, 0x53, 0x66, 0x8e, 0xec, 0x38, 0xc7, 0x4b, 0xc6,
-	0x0f, 0x17, 0xc1, 0x90, 0xb0, 0x40, 0x54, 0x7f, 0x93, 0x81, 0x97, 0x46, 0x98, 0x0e, 0xe1, 0x88,
-	0x21, 0x58, 0x85, 0x31, 0x96, 0x1b, 0xbc, 0x96, 0x22, 0x66, 0x34, 0x23, 0xc1, 0x68, 0xb7, 0x4e,
-	0x62, 0x34, 0xe1, 0xdd, 0x23, 0xcc, 0xf6, 0x24, 0x66, 0xb6, 0x9b, 0x63, 0x9a, 0x2d, 0xb6, 0x7f,
-	0x62, 0x86, 0xfb, 0x30, 0x17, 0x39, 0x77, 0xa2, 0x6d, 0x3e, 0xfd, 0x73, 0xd7, 0x86, 0xfc, 0x76,
-	0xc7, 0xda, 0xf6, 0x4b, 0xb3, 0x3b, 0xe3, 0xf9, 0xc4, 0x53, 0xb3, 0xca, 0x3a, 0x4d, 0x91, 0xa0,
-	0x83, 0xa8, 0xc2, 0xc7, 0xb0, 0x07, 0x8e, 0x76, 0x63, 0xb6, 0x7b, 0xf3, 0x44, 0x62, 0x3c, 0x93,
-	0x79, 0x72, 0x46, 0xd8, 0xb1, 0xb2, 0x07, 0x10, 0x6a, 0x93, 0x90, 0xe5, 0x1e, 0xc8, 0x59, 0x6e,
-	0x8c, 0x3b, 0x88, 0xa0, 0x18, 0x97, 0x12, 0x63, 0xe5, 0xbb, 0x22, 0x2f, 0x8e, 0x94, 0xb6, 0x1e,
-	0x95, 0xf6, 0x46, 0xea, 0xe0, 0x1c, 0x69, 0xdd, 0xe5, 0x5c, 0xfc, 0x07, 0x45, 0xf4, 0xd0, 0xc2,
-	0x32, 0xa7, 0x5f, 0xbc, 0x6f, 0x45, 0x8b, 0xf7, 0x71, 0x4f, 0x6d, 0x72, 0x09, 0xff, 0x77, 0x05,
-	0x90, 0x44, 0xb5, 0x41, 0x7a, 0x3d, 0xc3, 0xd4, 0xff, 0xe7, 0xd2, 0xe5, 0x71, 0x3d, 0xe5, 0x2f,
-	0x32, 0x11, 0x6f, 0xf1, 0x7c, 0x60, 0x42, 0xa9, 0x23, 0x35, 0x2e, 0xe3, 0xd6, 0x22, 0x72, 0xd3,
-	0x13, 0x96, 0xc3, 0xf2, 0x28, 0x8e, 0xe0, 0xa3, 0xad, 0xc8, 0x9d, 0x58, 0x18, 0xdc, 0x44, 0x67,
-	0xfb, 0x8a, 0x80, 0x58, 0x68, 0x24, 0x11, 0xe1, 0x64, 0x5e, 0xf4, 0x36, 0xe4, 0x5c, 0xa2, 0xfb,
-	0x7b, 0xa2, 0x36, 0xe6, 0xa5, 0x85, 0xd4, 0x04, 0x11, 0xdd, 0xc1, 0x1c, 0x4a, 0xfd, 0x79, 0xb4,
-	0xf2, 0x10, 0x49, 0xe3, 0x54, 0xb4, 0xa7, 0x70, 0xa9, 0xd7, 0xdf, 0xee, 0x18, 0x5a, 0x22, 0x97,
-	0xf0, 0xe6, 0x15, 0x01, 0x7d, 0x69, 0x73, 0x34, 0x29, 0x3e, 0x0a, 0x07, 0x3d, 0x8a, 0x18, 0x29,
-	0x8d, 0x87, 0xdf, 0x22, 0x5d, 0xda, 0x6e, 0x11, 0xfd, 0xfe, 0x3e, 0x35, 0x5d, 0x76, 0x16, 0x13,
-	0x2d, 0xf5, 0x41, 0xce, 0xef, 0x62, 0xb9, 0xa5, 0x5a, 0x64, 0x12, 0x07, 0xe7, 0x6b, 0xde, 0x4e,
-	0xf7, 0x8e, 0xcd, 0xd8, 0x0e, 0x9f, 0x8a, 0x3c, 0x48, 0xac, 0x02, 0x88, 0xc7, 0x15, 0xc3, 0x32,
-	0xb9, 0xb9, 0xb3, 0xa1, 0xf4, 0x07, 0xc1, 0x0c, 0x96, 0xa8, 0x86, 0x8e, 0x4d, 0xe1, 0x94, 0x8f,
-	0xcd, 0x6e, 0x42, 0xb3, 0x7d, 0x33, 0xdd, 0xb2, 0xb9, 0xf7, 0xd2, 0xf7, 0xda, 0x41, 0x48, 0xca,
-	0xbf, 0x90, 0x0a, 0xfe, 0x4f, 0xd1, 0xd0, 0xda, 0x22, 0xfa, 0x04, 0x92, 0xc4, 0xa3, 0x68, 0x92,
-	0x58, 0x19, 0x2f, 0x49, 0xb4, 0x88, 0x3e, 0x22, 0x4f, 0x7c, 0x9a, 0x81, 0x22, 0x27, 0x9c, 0xcc,
-	0x26, 0xdf, 0x88, 0x74, 0x21, 0x63, 0xef, 0xf2, 0x62, 0xac, 0xf1, 0xf8, 0xe6, 0x09, 0x1a, 0xce,
-	0xe1, 0x10, 0x00, 0x47, 0x5d, 0x8b, 0xe6, 0xfe, 0xdd, 0x6b, 0x51, 0xf5, 0x77, 0x0a, 0x94, 0x7c,
-	0x13, 0x4f, 0x60, 0xa7, 0x6c, 0x46, 0x77, 0xca, 0xe7, 0xd3, 0x6a, 0x3e, 0x7a, 0x8f, 0xfc, 0x43,
-	0x81, 0xf9, 0x21, 0xab, 0xf9, 0x99, 0x59, 0x19, 0xf1, 0x26, 0x7a, 0x02, 0x35, 0x7c, 0xf8, 0x64,
-	0x35, 0x62, 0x01, 0x23, 0x7b, 0x7a, 0x01, 0x43, 0x7d, 0x3f, 0x0b, 0x17, 0x92, 0xba, 0xbe, 0x17,
-	0xf5, 0x98, 0x12, 0x7f, 0x0a, 0xc9, 0x4c, 0xfa, 0x29, 0x24, 0xf7, 0x1f, 0x7b, 0x0a, 0xc9, 0x8e,
-	0xf9, 0x14, 0xf2, 0x7e, 0x06, 0x2e, 0x26, 0xf7, 0x92, 0xa7, 0xf4, 0x1e, 0x12, 0x76, 0xa1, 0x99,
-	0x17, 0xdf, 0x85, 0xa2, 0xdb, 0x30, 0x4b, 0xda, 0xde, 0x36, 0x23, 0x1d, 0x56, 0x71, 0xf0, 0x7d,
-	0x3c, 0x5d, 0x47, 0x83, 0xc3, 0xa5, 0xd9, 0xbb, 0x91, 0x19, 0x1c, 0xa3, 0x54, 0x7f, 0xa9, 0x00,
-	0x6c, 0x51, 0xcd, 0xa6, 0xee, 0x04, 0xa2, 0xc8, 0x9d, 0xe8, 0xf1, 0xad, 0x24, 0x6d, 0x75, 0x4f,
-	0x99, 0x11, 0x41, 0xe3, 0xe3, 0x2c, 0xa0, 0xe1, 0x7b, 0x71, 0x74, 0x5b, 0xdc, 0xd5, 0x7b, 0x61,
-	0xe3, 0x9a, 0x7c, 0x57, 0xff, 0xd9, 0xe1, 0xd2, 0xc5, 0x61, 0x0e, 0xe9, 0x16, 0x7f, 0x3d, 0x70,
-	0xb8, 0x77, 0xd3, 0x7f, 0x33, 0xea, 0xc2, 0xcf, 0x0e, 0x97, 0x12, 0xfe, 0x04, 0x53, 0x0d, 0x90,
-	0x62, 0x8e, 0xd6, 0xe1, 0x6c, 0x87, 0x38, 0xee, 0xa6, 0x6d, 0x6d, 0xd3, 0x96, 0x21, 0xfe, 0xfe,
-	0x31, 0xde, 0x5d, 0x76, 0x70, 0x5b, 0xbf, 0x2e, 0x03, 0xe1, 0x28, 0x2e, 0xda, 0x07, 0xc4, 0x06,
-	0x5a, 0x36, 0x31, 0x1d, 0x6f, 0x49, 0x4c, 0x5a, 0x6e, 0x6c, 0x69, 0x15, 0x21, 0x0d, 0xad, 0x0f,
-	0xa1, 0xe1, 0x04, 0x09, 0xe8, 0x1a, 0x14, 0x6c, 0x4a, 0x1c, 0xcb, 0x14, 0x6f, 0x0b, 0xc1, 0x9e,
-	0xc4, 0x7c, 0x14, 0x8b, 0x59, 0xf4, 0xff, 0x30, 0xd5, 0xa5, 0x8e, 0xc3, 0x92, 0x5d, 0x81, 0x13,
-	0xce, 0x09, 0xc2, 0xa9, 0x0d, 0x6f, 0x18, 0xfb, 0xf3, 0xea, 0x7b, 0x0a, 0x84, 0x2e, 0xe2, 0x75,
-	0xa4, 0xa1, 0xdd, 0xf7, 0xde, 0x24, 0xd6, 0xa0, 0x64, 0xd9, 0x3a, 0x31, 0x8d, 0xa7, 0x5e, 0xd1,
-	0xe9, 0x39, 0x38, 0x88, 0x4f, 0x0f, 0xa5, 0x39, 0x1c, 0xa1, 0x64, 0xc5, 0xaa, 0x66, 0x75, 0xbb,
-	0x96, 0xc9, 0x72, 0x8c, 0x70, 0xad, 0x14, 0xa1, 0xfd, 0x19, 0x2c, 0x51, 0xa9, 0x1f, 0x2a, 0x30,
-	0x17, 0xbb, 0xfd, 0x47, 0x3f, 0x51, 0xe0, 0xa2, 0x93, 0xa8, 0x9c, 0x38, 0x1f, 0xb7, 0xc6, 0xb9,
-	0xf4, 0x8f, 0x00, 0xd4, 0x17, 0x85, 0x3e, 0x23, 0x56, 0x8f, 0x47, 0x08, 0x56, 0xff, 0xaa, 0xc0,
-	0xb9, 0xf8, 0x3b, 0xc2, 0x7f, 0xa3, 0xa2, 0xe8, 0x75, 0x98, 0xf1, 0x3a, 0xad, 0xaf, 0xd3, 0x83,
-	0x66, 0x43, 0x78, 0xe1, 0xbc, 0x00, 0x9b, 0xd9, 0x0c, 0xa7, 0xb0, 0x4c, 0xa7, 0xfe, 0x28, 0x03,
-	0x45, 0x3f, 0xbf, 0xa2, 0x6f, 0x84, 0xef, 0x42, 0xca, 0xd8, 0xbb, 0x3b, 0xd8, 0x74, 0x43, 0x6f,
-	0x43, 0x2f, 0xfe, 0x5f, 0x4d, 0x57, 0xfc, 0xe2, 0xce, 0x6b, 0x44, 0x93, 0x6f, 0x1e, 0xa2, 0x3d,
-	0x54, 0x2e, 0x4d, 0x0f, 0xa5, 0x7e, 0x90, 0x85, 0xf9, 0xa1, 0x72, 0x03, 0xdd, 0x8a, 0xc4, 0xbc,
-	0xab, 0xb1, 0x98, 0xb7, 0x30, 0xc4, 0x70, 0x6a, 0x21, 0x2f, 0x39, 0x12, 0x65, 0x27, 0x18, 0x89,
-	0x72, 0x69, 0x23, 0x51, 0xfe, 0xe8, 0x48, 0x14, 0xf3, 0x4e, 0x21, 0x95, 0x77, 0x7a, 0x30, 0x17,
-	0xab, 0x9f, 0xd0, 0x0d, 0x28, 0x1a, 0xa6, 0x43, 0xb5, 0xbe, 0x4d, 0xc5, 0xeb, 0x41, 0x90, 0x14,
-	0x9b, 0x62, 0x1c, 0x07, 0x14, 0xa8, 0x06, 0xd3, 0x8e, 0xb6, 0x4b, 0xdb, 0xfd, 0x0e, 0x6d, 0x73,
-	0x87, 0x14, 0xc3, 0xff, 0x00, 0x6c, 0xf9, 0x13, 0x38, 0xa4, 0x51, 0xff, 0x99, 0x83, 0x92, 0x5c,
-	0x41, 0xa5, 0xf8, 0xd3, 0xc3, 0x3b, 0x30, 0x43, 0x4c, 0xd3, 0x72, 0x89, 0x57, 0xe6, 0x66, 0x52,
-	0x5f, 0xe7, 0xca, 0x72, 0xaa, 0x77, 0x43, 0x08, 0xef, 0x3a, 0x37, 0x38, 0xca, 0xd2, 0x0c, 0x96,
-	0x25, 0xa1, 0xbb, 0xa2, 0xb6, 0xcd, 0xa6, 0xaf, 0x6d, 0x8b, 0xb1, 0xba, 0xb6, 0x06, 0xd3, 0x41,
-	0x09, 0x28, 0xfe, 0xf4, 0x12, 0xd8, 0x27, 0x3c, 0x93, 0x21, 0x0d, 0xaa, 0x46, 0xbc, 0x98, 0xe7,
-	0x5e, 0x9c, 0x3d, 0xe2, 0x8e, 0x22, 0x5e, 0x38, 0x17, 0x26, 0x5d, 0x38, 0x4f, 0x4d, 0xa4, 0x70,
-	0xae, 0x7c, 0x05, 0xce, 0xc5, 0x3d, 0x38, 0xd6, 0x83, 0xf2, 0x26, 0xa0, 0x61, 0xf9, 0xc7, 0xd5,
-	0x5e, 0xc3, 0x1c, 0x61, 0x20, 0xaa, 0x5f, 0x7f, 0xf6, 0x7c, 0xf1, 0xcc, 0x47, 0xcf, 0x17, 0xcf,
-	0x7c, 0xf2, 0x7c, 0xf1, 0xcc, 0x0f, 0x06, 0x8b, 0xca, 0xb3, 0xc1, 0xa2, 0xf2, 0xd1, 0x60, 0x51,
-	0xf9, 0x64, 0xb0, 0xa8, 0x7c, 0x3a, 0x58, 0x54, 0x7e, 0xfc, 0xb7, 0xc5, 0x33, 0x8f, 0x33, 0xfb,
-	0x2b, 0xff, 0x0a, 0x00, 0x00, 0xff, 0xff, 0xee, 0x69, 0x81, 0xbe, 0x0e, 0x2d, 0x00, 0x00,
-}
+func (m *DockerImageReference) Reset() { *m = DockerImageReference{} }
+
+func (m *Image) Reset() { *m = Image{} }
+
+func (m *ImageBlobReferences) Reset() { *m = ImageBlobReferences{} }
+
+func (m *ImageImportSpec) Reset() { *m = ImageImportSpec{} }
+
+func (m *ImageImportStatus) Reset() { *m = ImageImportStatus{} }
+
+func (m *ImageLayer) Reset() { *m = ImageLayer{} }
+
+func (m *ImageLayerData) Reset() { *m = ImageLayerData{} }
+
+func (m *ImageList) Reset() { *m = ImageList{} }
+
+func (m *ImageLookupPolicy) Reset() { *m = ImageLookupPolicy{} }
+
+func (m *ImageManifest) Reset() { *m = ImageManifest{} }
+
+func (m *ImageSignature) Reset() { *m = ImageSignature{} }
+
+func (m *ImageStream) Reset() { *m = ImageStream{} }
+
+func (m *ImageStreamImage) Reset() { *m = ImageStreamImage{} }
+
+func (m *ImageStreamImport) Reset() { *m = ImageStreamImport{} }
+
+func (m *ImageStreamImportSpec) Reset() { *m = ImageStreamImportSpec{} }
+
+func (m *ImageStreamImportStatus) Reset() { *m = ImageStreamImportStatus{} }
+
+func (m *ImageStreamLayers) Reset() { *m = ImageStreamLayers{} }
+
+func (m *ImageStreamList) Reset() { *m = ImageStreamList{} }
+
+func (m *ImageStreamMapping) Reset() { *m = ImageStreamMapping{} }
+
+func (m *ImageStreamSpec) Reset() { *m = ImageStreamSpec{} }
+
+func (m *ImageStreamStatus) Reset() { *m = ImageStreamStatus{} }
+
+func (m *ImageStreamTag) Reset() { *m = ImageStreamTag{} }
+
+func (m *ImageStreamTagList) Reset() { *m = ImageStreamTagList{} }
+
+func (m *ImageTag) Reset() { *m = ImageTag{} }
+
+func (m *ImageTagList) Reset() { *m = ImageTagList{} }
+
+func (m *NamedTagEventList) Reset() { *m = NamedTagEventList{} }
+
+func (m *RepositoryImportSpec) Reset() { *m = RepositoryImportSpec{} }
+
+func (m *RepositoryImportStatus) Reset() { *m = RepositoryImportStatus{} }
+
+func (m *SecretList) Reset() { *m = SecretList{} }
+
+func (m *SignatureCondition) Reset() { *m = SignatureCondition{} }
+
+func (m *SignatureGenericEntity) Reset() { *m = SignatureGenericEntity{} }
+
+func (m *SignatureIssuer) Reset() { *m = SignatureIssuer{} }
+
+func (m *SignatureSubject) Reset() { *m = SignatureSubject{} }
+
+func (m *TagEvent) Reset() { *m = TagEvent{} }
+
+func (m *TagEventCondition) Reset() { *m = TagEventCondition{} }
+
+func (m *TagImportPolicy) Reset() { *m = TagImportPolicy{} }
+
+func (m *TagReference) Reset() { *m = TagReference{} }
+
+func (m *TagReferencePolicy) Reset() { *m = TagReferencePolicy{} }
 
 func (m *DockerImageReference) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -1345,6 +162,20 @@ func (m *Image) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.DockerImageManifests) > 0 {
+		for iNdEx := len(m.DockerImageManifests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DockerImageManifests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenerated(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x5a
+		}
+	}
 	i -= len(m.DockerImageConfig)
 	copy(dAtA[i:], m.DockerImageConfig)
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.DockerImageConfig)))
@@ -1450,6 +281,15 @@ func (m *ImageBlobReferences) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Manifests) > 0 {
+		for iNdEx := len(m.Manifests) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Manifests[iNdEx])
+			copy(dAtA[i:], m.Manifests[iNdEx])
+			i = encodeVarintGenerated(dAtA, i, uint64(len(m.Manifests[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	i--
 	if m.ImageMissing {
 		dAtA[i] = 1
@@ -1570,6 +410,20 @@ func (m *ImageImportStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Manifests) > 0 {
+		for iNdEx := len(m.Manifests) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Manifests[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintGenerated(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
 	i -= len(m.Tag)
 	copy(dAtA[i:], m.Tag)
 	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Tag)))
@@ -1747,6 +601,57 @@ func (m *ImageLookupPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ImageManifest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ImageManifest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImageManifest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	i -= len(m.Variant)
+	copy(dAtA[i:], m.Variant)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Variant)))
+	i--
+	dAtA[i] = 0x32
+	i -= len(m.OS)
+	copy(dAtA[i:], m.OS)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.OS)))
+	i--
+	dAtA[i] = 0x2a
+	i -= len(m.Architecture)
+	copy(dAtA[i:], m.Architecture)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Architecture)))
+	i--
+	dAtA[i] = 0x22
+	i = encodeVarintGenerated(dAtA, i, uint64(m.ManifestSize))
+	i--
+	dAtA[i] = 0x18
+	i -= len(m.MediaType)
+	copy(dAtA[i:], m.MediaType)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.MediaType)))
+	i--
+	dAtA[i] = 0x12
+	i -= len(m.Digest)
+	copy(dAtA[i:], m.Digest)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.Digest)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
 func (m *ImageSignature) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1808,7 +713,7 @@ func (m *ImageSignature) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		for k := range m.SignedClaims {
 			keysForSignedClaims = append(keysForSignedClaims, string(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Strings(keysForSignedClaims)
+		sort.Strings(keysForSignedClaims)
 		for iNdEx := len(keysForSignedClaims) - 1; iNdEx >= 0; iNdEx-- {
 			v := m.SignedClaims[string(keysForSignedClaims[iNdEx])]
 			baseI := i
@@ -2163,7 +1068,7 @@ func (m *ImageStreamLayers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		for k := range m.Images {
 			keysForImages = append(keysForImages, string(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Strings(keysForImages)
+		sort.Strings(keysForImages)
 		for iNdEx := len(keysForImages) - 1; iNdEx >= 0; iNdEx-- {
 			v := m.Images[string(keysForImages[iNdEx])]
 			baseI := i
@@ -2192,7 +1097,7 @@ func (m *ImageStreamLayers) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		for k := range m.Blobs {
 			keysForBlobs = append(keysForBlobs, string(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Strings(keysForBlobs)
+		sort.Strings(keysForBlobs)
 		for iNdEx := len(keysForBlobs) - 1; iNdEx >= 0; iNdEx-- {
 			v := m.Blobs[string(keysForBlobs[iNdEx])]
 			baseI := i
@@ -3177,6 +2082,11 @@ func (m *TagImportPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	i -= len(m.ImportMode)
+	copy(dAtA[i:], m.ImportMode)
+	i = encodeVarintGenerated(dAtA, i, uint64(len(m.ImportMode)))
+	i--
+	dAtA[i] = 0x1a
 	i--
 	if m.Scheduled {
 		dAtA[i] = 1
@@ -3266,7 +2176,7 @@ func (m *TagReference) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		for k := range m.Annotations {
 			keysForAnnotations = append(keysForAnnotations, string(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotations)
+		sort.Strings(keysForAnnotations)
 		for iNdEx := len(keysForAnnotations) - 1; iNdEx >= 0; iNdEx-- {
 			v := m.Annotations[string(keysForAnnotations[iNdEx])]
 			baseI := i
@@ -3389,6 +2299,12 @@ func (m *Image) Size() (n int) {
 	n += 1 + l + sovGenerated(uint64(l))
 	l = len(m.DockerImageConfig)
 	n += 1 + l + sovGenerated(uint64(l))
+	if len(m.DockerImageManifests) > 0 {
+		for _, e := range m.DockerImageManifests {
+			l = e.Size()
+			n += 1 + l + sovGenerated(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -3409,6 +2325,12 @@ func (m *ImageBlobReferences) Size() (n int) {
 		n += 1 + l + sovGenerated(uint64(l))
 	}
 	n += 2
+	if len(m.Manifests) > 0 {
+		for _, s := range m.Manifests {
+			l = len(s)
+			n += 1 + l + sovGenerated(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -3446,6 +2368,12 @@ func (m *ImageImportStatus) Size() (n int) {
 	}
 	l = len(m.Tag)
 	n += 1 + l + sovGenerated(uint64(l))
+	if len(m.Manifests) > 0 {
+		for _, e := range m.Manifests {
+			l = e.Size()
+			n += 1 + l + sovGenerated(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -3501,6 +2429,26 @@ func (m *ImageLookupPolicy) Size() (n int) {
 	var l int
 	_ = l
 	n += 2
+	return n
+}
+
+func (m *ImageManifest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Digest)
+	n += 1 + l + sovGenerated(uint64(l))
+	l = len(m.MediaType)
+	n += 1 + l + sovGenerated(uint64(l))
+	n += 1 + sovGenerated(uint64(m.ManifestSize))
+	l = len(m.Architecture)
+	n += 1 + l + sovGenerated(uint64(l))
+	l = len(m.OS)
+	n += 1 + l + sovGenerated(uint64(l))
+	l = len(m.Variant)
+	n += 1 + l + sovGenerated(uint64(l))
 	return n
 }
 
@@ -3998,6 +2946,8 @@ func (m *TagImportPolicy) Size() (n int) {
 	_ = l
 	n += 2
 	n += 2
+	l = len(m.ImportMode)
+	n += 1 + l + sovGenerated(uint64(l))
 	return n
 }
 
@@ -4077,6 +3027,11 @@ func (this *Image) String() string {
 		repeatedStringForSignatures += strings.Replace(strings.Replace(f.String(), "ImageSignature", "ImageSignature", 1), `&`, ``, 1) + ","
 	}
 	repeatedStringForSignatures += "}"
+	repeatedStringForDockerImageManifests := "[]ImageManifest{"
+	for _, f := range this.DockerImageManifests {
+		repeatedStringForDockerImageManifests += strings.Replace(strings.Replace(f.String(), "ImageManifest", "ImageManifest", 1), `&`, ``, 1) + ","
+	}
+	repeatedStringForDockerImageManifests += "}"
 	s := strings.Join([]string{`&Image{`,
 		`ObjectMeta:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.ObjectMeta), "ObjectMeta", "v1.ObjectMeta", 1), `&`, ``, 1) + `,`,
 		`DockerImageReference:` + fmt.Sprintf("%v", this.DockerImageReference) + `,`,
@@ -4088,6 +3043,7 @@ func (this *Image) String() string {
 		`DockerImageSignatures:` + fmt.Sprintf("%v", this.DockerImageSignatures) + `,`,
 		`DockerImageManifestMediaType:` + fmt.Sprintf("%v", this.DockerImageManifestMediaType) + `,`,
 		`DockerImageConfig:` + fmt.Sprintf("%v", this.DockerImageConfig) + `,`,
+		`DockerImageManifests:` + repeatedStringForDockerImageManifests + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4100,6 +3056,7 @@ func (this *ImageBlobReferences) String() string {
 		`Layers:` + fmt.Sprintf("%v", this.Layers) + `,`,
 		`Config:` + valueToStringGenerated(this.Config) + `,`,
 		`ImageMissing:` + fmt.Sprintf("%v", this.ImageMissing) + `,`,
+		`Manifests:` + fmt.Sprintf("%v", this.Manifests) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4122,10 +3079,16 @@ func (this *ImageImportStatus) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForManifests := "[]Image{"
+	for _, f := range this.Manifests {
+		repeatedStringForManifests += strings.Replace(strings.Replace(f.String(), "Image", "Image", 1), `&`, ``, 1) + ","
+	}
+	repeatedStringForManifests += "}"
 	s := strings.Join([]string{`&ImageImportStatus{`,
 		`Status:` + strings.Replace(strings.Replace(fmt.Sprintf("%v", this.Status), "Status", "v1.Status", 1), `&`, ``, 1) + `,`,
 		`Image:` + strings.Replace(this.Image.String(), "Image", "Image", 1) + `,`,
 		`Tag:` + fmt.Sprintf("%v", this.Tag) + `,`,
+		`Manifests:` + repeatedStringForManifests + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4179,6 +3142,21 @@ func (this *ImageLookupPolicy) String() string {
 	}, "")
 	return s
 }
+func (this *ImageManifest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ImageManifest{`,
+		`Digest:` + fmt.Sprintf("%v", this.Digest) + `,`,
+		`MediaType:` + fmt.Sprintf("%v", this.MediaType) + `,`,
+		`ManifestSize:` + fmt.Sprintf("%v", this.ManifestSize) + `,`,
+		`Architecture:` + fmt.Sprintf("%v", this.Architecture) + `,`,
+		`OS:` + fmt.Sprintf("%v", this.OS) + `,`,
+		`Variant:` + fmt.Sprintf("%v", this.Variant) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ImageSignature) String() string {
 	if this == nil {
 		return "nil"
@@ -4192,7 +3170,7 @@ func (this *ImageSignature) String() string {
 	for k := range this.SignedClaims {
 		keysForSignedClaims = append(keysForSignedClaims, k)
 	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForSignedClaims)
+	sort.Strings(keysForSignedClaims)
 	mapStringForSignedClaims := "map[string]string{"
 	for _, k := range keysForSignedClaims {
 		mapStringForSignedClaims += fmt.Sprintf("%v: %v,", k, this.SignedClaims[k])
@@ -4289,7 +3267,7 @@ func (this *ImageStreamLayers) String() string {
 	for k := range this.Blobs {
 		keysForBlobs = append(keysForBlobs, k)
 	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForBlobs)
+	sort.Strings(keysForBlobs)
 	mapStringForBlobs := "map[string]ImageLayerData{"
 	for _, k := range keysForBlobs {
 		mapStringForBlobs += fmt.Sprintf("%v: %v,", k, this.Blobs[k])
@@ -4299,7 +3277,7 @@ func (this *ImageStreamLayers) String() string {
 	for k := range this.Images {
 		keysForImages = append(keysForImages, k)
 	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForImages)
+	sort.Strings(keysForImages)
 	mapStringForImages := "map[string]ImageBlobReferences{"
 	for _, k := range keysForImages {
 		mapStringForImages += fmt.Sprintf("%v: %v,", k, this.Images[k])
@@ -4590,6 +3568,7 @@ func (this *TagImportPolicy) String() string {
 	s := strings.Join([]string{`&TagImportPolicy{`,
 		`Insecure:` + fmt.Sprintf("%v", this.Insecure) + `,`,
 		`Scheduled:` + fmt.Sprintf("%v", this.Scheduled) + `,`,
+		`ImportMode:` + fmt.Sprintf("%v", this.ImportMode) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4602,7 +3581,7 @@ func (this *TagReference) String() string {
 	for k := range this.Annotations {
 		keysForAnnotations = append(keysForAnnotations, k)
 	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotations)
+	sort.Strings(keysForAnnotations)
 	mapStringForAnnotations := "map[string]string{"
 	for _, k := range keysForAnnotations {
 		mapStringForAnnotations += fmt.Sprintf("%v: %v,", k, this.Annotations[k])
@@ -5203,6 +4182,40 @@ func (m *Image) Unmarshal(dAtA []byte) error {
 			}
 			m.DockerImageConfig = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DockerImageManifests", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DockerImageManifests = append(m.DockerImageManifests, ImageManifest{})
+			if err := m.DockerImageManifests[len(m.DockerImageManifests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -5338,6 +4351,38 @@ func (m *ImageBlobReferences) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.ImageMissing = bool(v != 0)
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Manifests", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Manifests = append(m.Manifests, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -5693,6 +4738,40 @@ func (m *ImageImportStatus) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Tag = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Manifests", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Manifests = append(m.Manifests, Image{})
+			if err := m.Manifests[len(m.Manifests)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6116,6 +5195,235 @@ func (m *ImageLookupPolicy) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Local = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipGenerated(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ImageManifest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowGenerated
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ImageManifest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ImageManifest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Digest", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Digest = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MediaType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MediaType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ManifestSize", wireType)
+			}
+			m.ManifestSize = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ManifestSize |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Architecture", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Architecture = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OS", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OS = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Variant", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Variant = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])
@@ -10469,6 +9777,38 @@ func (m *TagImportPolicy) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Scheduled = bool(v != 0)
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ImportMode", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowGenerated
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthGenerated
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ImportMode = ImportModeType(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipGenerated(dAtA[iNdEx:])

@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 /*
 Copyright 2019 The Kubernetes Authors.
@@ -22,7 +22,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-func getProcessStart() (float64, error) {
+func GetProcessStart() (float64, error) {
 	processHandle := windows.CurrentProcess()
 
 	var creationTime, exitTime, kernelTime, userTime windows.Filetime

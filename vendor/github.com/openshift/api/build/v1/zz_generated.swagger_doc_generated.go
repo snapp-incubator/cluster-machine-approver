@@ -12,7 +12,8 @@ package v1
 
 // AUTO-GENERATED FUNCTIONS START HERE
 var map_BinaryBuildRequestOptions = map[string]string{
-	"":                        "BinaryBuildRequestOptions are the options required to fully speficy a binary build request",
+	"":                        "BinaryBuildRequestOptions are the options required to fully speficy a binary build request\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
+	"metadata":                "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
 	"asFile":                  "asFile determines if the binary should be created as a file within the source rather than extracted as an archive",
 	"revision.commit":         "revision.commit is the value identifying a specific commit",
 	"revision.message":        "revision.message is the description of a specific commit",
@@ -44,9 +45,10 @@ func (BitbucketWebHookCause) SwaggerDoc() map[string]string {
 }
 
 var map_Build = map[string]string{
-	"":       "Build encapsulates the inputs needed to produce a new deployable image, as well as the status of the execution and a reference to the Pod which executed the build.",
-	"spec":   "spec is all the inputs used to execute the build.",
-	"status": "status is the current status of the build.",
+	"":         "Build encapsulates the inputs needed to produce a new deployable image, as well as the status of the execution and a reference to the Pod which executed the build.\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec is all the inputs used to execute the build.",
+	"status":   "status is the current status of the build.",
 }
 
 func (Build) SwaggerDoc() map[string]string {
@@ -55,8 +57,8 @@ func (Build) SwaggerDoc() map[string]string {
 
 var map_BuildCondition = map[string]string{
 	"":                   "BuildCondition describes the state of a build at a certain point.",
-	"type":               "Type of build condition.",
-	"status":             "Status of the condition, one of True, False, Unknown.",
+	"type":               "type of build condition.",
+	"status":             "status of the condition, one of True, False, Unknown.",
 	"lastUpdateTime":     "The last time this condition was updated.",
 	"lastTransitionTime": "The last time the condition transitioned from one status to another.",
 	"reason":             "The reason for the condition's last transition.",
@@ -68,9 +70,10 @@ func (BuildCondition) SwaggerDoc() map[string]string {
 }
 
 var map_BuildConfig = map[string]string{
-	"":       "Build configurations define a build process for new container images. There are three types of builds possible - a container image build using a Dockerfile, a Source-to-Image build that uses a specially prepared base image that accepts source code that it can make runnable, and a custom build that can run // arbitrary container images as a base and accept the build parameters. Builds run on the cluster and on completion are pushed to the container image registry specified in the \"output\" section. A build can be triggered via a webhook, when the base image changes, or when a user manually requests a new build be // created.\n\nEach build created by a build configuration is numbered and refers back to its parent configuration. Multiple builds can be triggered at once. Builds that do not have \"output\" set can be used to test code or run a verification build.",
-	"spec":   "spec holds all the input necessary to produce a new build, and the conditions when to trigger them.",
-	"status": "status holds any relevant information about a build config",
+	"":         "Build configurations define a build process for new container images. There are three types of builds possible - a container image build using a Dockerfile, a Source-to-Image build that uses a specially prepared base image that accepts source code that it can make runnable, and a custom build that can run // arbitrary container images as a base and accept the build parameters. Builds run on the cluster and on completion are pushed to the container image registry specified in the \"output\" section. A build can be triggered via a webhook, when the base image changes, or when a user manually requests a new build be // created.\n\nEach build created by a build configuration is numbered and refers back to its parent configuration. Multiple builds can be triggered at once. Builds that do not have \"output\" set can be used to test code or run a verification build.\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
+	"metadata": "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"spec":     "spec holds all the input necessary to produce a new build, and the conditions when to trigger them.",
+	"status":   "status holds any relevant information about a build config",
 }
 
 func (BuildConfig) SwaggerDoc() map[string]string {
@@ -78,8 +81,9 @@ func (BuildConfig) SwaggerDoc() map[string]string {
 }
 
 var map_BuildConfigList = map[string]string{
-	"":      "BuildConfigList is a collection of BuildConfigs.",
-	"items": "items is a list of build configs",
+	"":         "BuildConfigList is a collection of BuildConfigs.\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"items":    "items is a list of build configs",
 }
 
 func (BuildConfigList) SwaggerDoc() map[string]string {
@@ -89,7 +93,7 @@ func (BuildConfigList) SwaggerDoc() map[string]string {
 var map_BuildConfigSpec = map[string]string{
 	"":                             "BuildConfigSpec describes when and how builds are created",
 	"triggers":                     "triggers determine how new Builds can be launched from a BuildConfig. If no triggers are defined, a new build can only occur as a result of an explicit client build creation.",
-	"runPolicy":                    "RunPolicy describes how the new build created from this build configuration will be scheduled for execution. This is optional, if not specified we default to \"Serial\".",
+	"runPolicy":                    "runPolicy describes how the new build created from this build configuration will be scheduled for execution. This is optional, if not specified we default to \"Serial\".",
 	"successfulBuildsHistoryLimit": "successfulBuildsHistoryLimit is the number of old successful builds to retain. When a BuildConfig is created, the 5 most recent successful builds are retained unless this value is set. If removed after the BuildConfig has been created, all successful builds are retained.",
 	"failedBuildsHistoryLimit":     "failedBuildsHistoryLimit is the number of old failed builds to retain. When a BuildConfig is created, the 5 most recent failed builds are retained unless this value is set. If removed after the BuildConfig has been created, all failed builds are retained.",
 }
@@ -101,7 +105,7 @@ func (BuildConfigSpec) SwaggerDoc() map[string]string {
 var map_BuildConfigStatus = map[string]string{
 	"":                    "BuildConfigStatus contains current state of the build config object.",
 	"lastVersion":         "lastVersion is used to inform about number of last triggered build.",
-	"imageChangeTriggers": "ImageChangeTriggers is used to capture the runtime state of any ImageChangeTrigger specified in the BuildConfigSpec, including the value reconciled by the OpenShift APIServer for the lastTriggeredImageID.  There will be a single entry in this array for each entry in the BuildConfigSpec.Triggers array where the BuildTriggerPolicy.ImageChange pointer is set to a non-nil value.  The logical key for each entry in this array is expressed by the ImageStreamTagReference type.  That type captures the required elements for identifying the ImageStreamTag referenced by the more generic ObjectReference BuildTriggerPolicy.ImageChange.From.",
+	"imageChangeTriggers": "imageChangeTriggers captures the runtime state of any ImageChangeTrigger specified in the BuildConfigSpec, including the value reconciled by the OpenShift APIServer for the lastTriggeredImageID. There is a single entry in this array for each image change trigger in spec. Each trigger status references the ImageStreamTag that acts as the source of the trigger.",
 }
 
 func (BuildConfigStatus) SwaggerDoc() map[string]string {
@@ -109,8 +113,9 @@ func (BuildConfigStatus) SwaggerDoc() map[string]string {
 }
 
 var map_BuildList = map[string]string{
-	"":      "BuildList is a collection of Builds.",
-	"items": "items is a list of builds",
+	"":         "BuildList is a collection of Builds.\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
+	"metadata": "metadata is the standard list's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
+	"items":    "items is a list of builds",
 }
 
 func (BuildList) SwaggerDoc() map[string]string {
@@ -118,7 +123,7 @@ func (BuildList) SwaggerDoc() map[string]string {
 }
 
 var map_BuildLog = map[string]string{
-	"": "BuildLog is the (unused) resource associated with the build log redirector",
+	"": "BuildLog is the (unused) resource associated with the build log redirector\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
 }
 
 func (BuildLog) SwaggerDoc() map[string]string {
@@ -126,7 +131,7 @@ func (BuildLog) SwaggerDoc() map[string]string {
 }
 
 var map_BuildLogOptions = map[string]string{
-	"":                             "BuildLogOptions is the REST options for a build log",
+	"":                             "BuildLogOptions is the REST options for a build log\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
 	"container":                    "cointainer for which to stream logs. Defaults to only container if there is one container in the pod.",
 	"follow":                       "follow if true indicates that the build log should be streamed until the build terminates.",
 	"previous":                     "previous returns previous build logs. Defaults to false.",
@@ -135,7 +140,7 @@ var map_BuildLogOptions = map[string]string{
 	"timestamps":                   "timestamps, If true, add an RFC3339 or RFC3339Nano timestamp at the beginning of every line of log output. Defaults to false.",
 	"tailLines":                    "tailLines, If set, is the number of lines from the end of the logs to show. If not specified, logs are shown from the creation of the container or sinceSeconds or sinceTime",
 	"limitBytes":                   "limitBytes, If set, is the number of bytes to read from the server before terminating the log output. This may not display a complete final line of logging, and may return slightly more or slightly less than the specified limit.",
-	"nowait":                       "noWait if true causes the call to return immediately even if the build is not available yet. Otherwise the server will wait until the build has started.",
+	"nowait":                       "nowait if true causes the call to return immediately even if the build is not available yet. Otherwise the server will wait until the build has started.",
 	"version":                      "version of the build for which to view logs.",
 	"insecureSkipTLSVerifyBackend": "insecureSkipTLSVerifyBackend indicates that the apiserver should not confirm the validity of the serving certificate of the backend it is connecting to.  This will make the HTTPS connection between the apiserver and the backend insecure. This means the apiserver cannot verify the log data it is receiving came from the real kubelet.  If the kubelet is configured to verify the apiserver's TLS credentials, it does not mean the connection to the real kubelet is vulnerable to a man in the middle attack (e.g. an attacker could not intercept the actual log data coming from the real kubelet).",
 }
@@ -147,7 +152,7 @@ func (BuildLogOptions) SwaggerDoc() map[string]string {
 var map_BuildOutput = map[string]string{
 	"":            "BuildOutput is input to a build strategy and describes the container image that the strategy should produce.",
 	"to":          "to defines an optional location to push the output of this build to. Kind must be one of 'ImageStreamTag' or 'DockerImage'. This value will be used to look up a container image repository to push to. In the case of an ImageStreamTag, the ImageStreamTag will be looked for in the namespace of the build unless Namespace is specified.",
-	"pushSecret":  "PushSecret is the name of a Secret that would be used for setting up the authentication for executing the Docker push to authentication enabled Docker Registry (or Docker Hub).",
+	"pushSecret":  "pushSecret is the name of a Secret that would be used for setting up the authentication for executing the Docker push to authentication enabled Docker Registry (or Docker Hub).",
 	"imageLabels": "imageLabels define a list of labels that are applied to the resulting image. If there are multiple labels with the same name then the last one in the list is used.",
 }
 
@@ -156,7 +161,7 @@ func (BuildOutput) SwaggerDoc() map[string]string {
 }
 
 var map_BuildPostCommitSpec = map[string]string{
-	"":        "A BuildPostCommitSpec holds a build post commit hook specification. The hook executes a command in a temporary container running the build output image, immediately after the last layer of the image is committed and before the image is pushed to a registry. The command is executed with the current working directory ($PWD) set to the image's WORKDIR.\n\nThe build will be marked as failed if the hook execution fails. It will fail if the script or command return a non-zero exit code, or if there is any other error related to starting the temporary container.\n\nThere are five different ways to configure the hook. As an example, all forms below are equivalent and will execute `rake test --verbose`.\n\n1. Shell script:\n\n       \"postCommit\": {\n         \"script\": \"rake test --verbose\",\n       }\n\n    The above is a convenient form which is equivalent to:\n\n       \"postCommit\": {\n         \"command\": [\"/bin/sh\", \"-ic\"],\n         \"args\":    [\"rake test --verbose\"]\n       }\n\n2. A command as the image entrypoint:\n\n       \"postCommit\": {\n         \"commit\": [\"rake\", \"test\", \"--verbose\"]\n       }\n\n    Command overrides the image entrypoint in the exec form, as documented in\n    Docker: https://docs.docker.com/engine/reference/builder/#entrypoint.\n\n3. Pass arguments to the default entrypoint:\n\n       \"postCommit\": {\n\t\t      \"args\": [\"rake\", \"test\", \"--verbose\"]\n\t      }\n\n    This form is only useful if the image entrypoint can handle arguments.\n\n4. Shell script with arguments:\n\n       \"postCommit\": {\n         \"script\": \"rake test $1\",\n         \"args\":   [\"--verbose\"]\n       }\n\n    This form is useful if you need to pass arguments that would otherwise be\n    hard to quote properly in the shell script. In the script, $0 will be\n    \"/bin/sh\" and $1, $2, etc, are the positional arguments from Args.\n\n5. Command with arguments:\n\n       \"postCommit\": {\n         \"command\": [\"rake\", \"test\"],\n         \"args\":    [\"--verbose\"]\n       }\n\n    This form is equivalent to appending the arguments to the Command slice.\n\nIt is invalid to provide both Script and Command simultaneously. If none of the fields are specified, the hook is not executed.",
+	"":        "A BuildPostCommitSpec holds a build post commit hook specification. The hook executes a command in a temporary container running the build output image, immediately after the last layer of the image is committed and before the image is pushed to a registry. The command is executed with the current working directory ($PWD) set to the image's WORKDIR.\n\nThe build will be marked as failed if the hook execution fails. It will fail if the script or command return a non-zero exit code, or if there is any other error related to starting the temporary container.\n\nThere are five different ways to configure the hook. As an example, all forms below are equivalent and will execute `rake test --verbose`.\n\n1. Shell script:\n\n\t   \"postCommit\": {\n\t     \"script\": \"rake test --verbose\",\n\t   }\n\n\tThe above is a convenient form which is equivalent to:\n\n\t   \"postCommit\": {\n\t     \"command\": [\"/bin/sh\", \"-ic\"],\n\t     \"args\":    [\"rake test --verbose\"]\n\t   }\n\n2. A command as the image entrypoint:\n\n\t   \"postCommit\": {\n\t     \"commit\": [\"rake\", \"test\", \"--verbose\"]\n\t   }\n\n\tCommand overrides the image entrypoint in the exec form, as documented in\n\tDocker: https://docs.docker.com/engine/reference/builder/#entrypoint.\n\n3. Pass arguments to the default entrypoint:\n\n\t       \"postCommit\": {\n\t\t\t      \"args\": [\"rake\", \"test\", \"--verbose\"]\n\t\t      }\n\n\t    This form is only useful if the image entrypoint can handle arguments.\n\n4. Shell script with arguments:\n\n\t   \"postCommit\": {\n\t     \"script\": \"rake test $1\",\n\t     \"args\":   [\"--verbose\"]\n\t   }\n\n\tThis form is useful if you need to pass arguments that would otherwise be\n\thard to quote properly in the shell script. In the script, $0 will be\n\t\"/bin/sh\" and $1, $2, etc, are the positional arguments from Args.\n\n5. Command with arguments:\n\n\t   \"postCommit\": {\n\t     \"command\": [\"rake\", \"test\"],\n\t     \"args\":    [\"--verbose\"]\n\t   }\n\n\tThis form is equivalent to appending the arguments to the Command slice.\n\nIt is invalid to provide both Script and Command simultaneously. If none of the fields are specified, the hook is not executed.",
 	"command": "command is the command to run. It may not be specified with Script. This might be needed if the image doesn't have `/bin/sh`, or if you do not want to use a shell. In all other cases, using Script might be more convenient.",
 	"args":    "args is a list of arguments that are provided to either Command, Script or the container image's default entrypoint. The arguments are placed immediately after the command to be run.",
 	"script":  "script is a shell script to be run with `/bin/sh -ic`. It may not be specified with Command. Use Script when a shell script is appropriate to execute the post build hook, for example for running unit tests with `rake test`. If you need control over the image entrypoint, or if the image does not have `/bin/sh`, use Command and/or Args. The `-i` flag is needed to support CentOS and RHEL images that use Software Collections (SCL), in order to have the appropriate collections enabled in the shell. E.g., in the Ruby image, this is necessary to make `ruby`, `bundle` and other binaries available in the PATH.",
@@ -167,7 +172,8 @@ func (BuildPostCommitSpec) SwaggerDoc() map[string]string {
 }
 
 var map_BuildRequest = map[string]string{
-	"":                      "BuildRequest is the resource used to pass parameters to build generator",
+	"":                      "BuildRequest is the resource used to pass parameters to build generator\n\nCompatibility level 1: Stable within a major release for a minimum of 12 months or 3 minor releases (whichever is longer).",
+	"metadata":              "metadata is the standard object's metadata. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata",
 	"revision":              "revision is the information from the source for a specific repo snapshot.",
 	"triggeredByImage":      "triggeredByImage is the Image that triggered this build.",
 	"from":                  "from is the reference to the ImageStreamTag that triggered the build.",
@@ -175,8 +181,8 @@ var map_BuildRequest = map[string]string{
 	"lastVersion":           "lastVersion (optional) is the LastVersion of the BuildConfig that was used to generate the build. If the BuildConfig in the generator doesn't match, a build will not be generated.",
 	"env":                   "env contains additional environment variables you want to pass into a builder container.",
 	"triggeredBy":           "triggeredBy describes which triggers started the most recent update to the build configuration and contains information about those triggers.",
-	"dockerStrategyOptions": "DockerStrategyOptions contains additional docker-strategy specific options for the build",
-	"sourceStrategyOptions": "SourceStrategyOptions contains additional source-strategy specific options for the build",
+	"dockerStrategyOptions": "dockerStrategyOptions contains additional docker-strategy specific options for the build",
+	"sourceStrategyOptions": "sourceStrategyOptions contains additional source-strategy specific options for the build",
 }
 
 func (BuildRequest) SwaggerDoc() map[string]string {
@@ -223,7 +229,7 @@ var map_BuildStatus = map[string]string{
 	"output":                     "output describes the container image the build has produced.",
 	"stages":                     "stages contains details about each stage that occurs during the build including start time, duration (in milliseconds), and the steps that occured within each stage.",
 	"logSnippet":                 "logSnippet is the last few lines of the build log.  This value is only set for builds that failed.",
-	"conditions":                 "Conditions represents the latest available observations of a build's current state.",
+	"conditions":                 "conditions represents the latest available observations of a build's current state.",
 }
 
 func (BuildStatus) SwaggerDoc() map[string]string {
@@ -254,7 +260,7 @@ var map_BuildStrategy = map[string]string{
 	"dockerStrategy":          "dockerStrategy holds the parameters to the container image build strategy.",
 	"sourceStrategy":          "sourceStrategy holds the parameters to the Source build strategy.",
 	"customStrategy":          "customStrategy holds the parameters to the Custom build strategy",
-	"jenkinsPipelineStrategy": "JenkinsPipelineStrategy holds the parameters to the Jenkins Pipeline build strategy. Deprecated: use OpenShift Pipelines",
+	"jenkinsPipelineStrategy": "jenkinsPipelineStrategy holds the parameters to the Jenkins Pipeline build strategy. Deprecated: use OpenShift Pipelines",
 }
 
 func (BuildStrategy) SwaggerDoc() map[string]string {
@@ -265,10 +271,10 @@ var map_BuildTriggerCause = map[string]string{
 	"":                 "BuildTriggerCause holds information about a triggered build. It is used for displaying build trigger data for each build and build configuration in oc describe. It is also used to describe which triggers led to the most recent update in the build configuration.",
 	"message":          "message is used to store a human readable message for why the build was triggered. E.g.: \"Manually triggered by user\", \"Configuration change\",etc.",
 	"genericWebHook":   "genericWebHook holds data about a builds generic webhook trigger.",
-	"githubWebHook":    "gitHubWebHook represents data for a GitHub webhook that fired a specific build.",
+	"githubWebHook":    "githubWebHook represents data for a GitHub webhook that fired a specific build.",
 	"imageChangeBuild": "imageChangeBuild stores information about an imagechange event that triggered a new build.",
-	"gitlabWebHook":    "GitLabWebHook represents data for a GitLab webhook that fired a specific build.",
-	"bitbucketWebHook": "BitbucketWebHook represents data for a Bitbucket webhook that fired a specific build.",
+	"gitlabWebHook":    "gitlabWebHook represents data for a GitLab webhook that fired a specific build.",
+	"bitbucketWebHook": "bitbucketWebHook represents data for a Bitbucket webhook that fired a specific build.",
 }
 
 func (BuildTriggerCause) SwaggerDoc() map[string]string {
@@ -287,6 +293,38 @@ var map_BuildTriggerPolicy = map[string]string{
 
 func (BuildTriggerPolicy) SwaggerDoc() map[string]string {
 	return map_BuildTriggerPolicy
+}
+
+var map_BuildVolume = map[string]string{
+	"":       "BuildVolume describes a volume that is made available to build pods, such that it can be mounted into buildah's runtime environment. Only a subset of Kubernetes Volume sources are supported.",
+	"name":   "name is a unique identifier for this BuildVolume. It must conform to the Kubernetes DNS label standard and be unique within the pod. Names that collide with those added by the build controller will result in a failed build with an error message detailing which name caused the error. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names",
+	"source": "source represents the location and type of the mounted volume.",
+	"mounts": "mounts represents the location of the volume in the image build container",
+}
+
+func (BuildVolume) SwaggerDoc() map[string]string {
+	return map_BuildVolume
+}
+
+var map_BuildVolumeMount = map[string]string{
+	"":                "BuildVolumeMount describes the mounting of a Volume within buildah's runtime environment.",
+	"destinationPath": "destinationPath is the path within the buildah runtime environment at which the volume should be mounted. The transient mount within the build image and the backing volume will both be mounted read only. Must be an absolute path, must not contain '..' or ':', and must not collide with a destination path generated by the builder process Paths that collide with those added by the build controller will result in a failed build with an error message detailing which path caused the error.",
+}
+
+func (BuildVolumeMount) SwaggerDoc() map[string]string {
+	return map_BuildVolumeMount
+}
+
+var map_BuildVolumeSource = map[string]string{
+	"":          "BuildVolumeSource represents the source of a volume to mount Only one of its supported types may be specified at any given time.",
+	"type":      "type is the BuildVolumeSourceType for the volume source. Type must match the populated volume source. Valid types are: Secret, ConfigMap",
+	"secret":    "secret represents a Secret that should populate this volume. More info: https://kubernetes.io/docs/concepts/storage/volumes#secret",
+	"configMap": "configMap represents a ConfigMap that should populate this volume",
+	"csi":       "csi represents ephemeral storage provided by external CSI drivers which support this capability",
+}
+
+func (BuildVolumeSource) SwaggerDoc() map[string]string {
+	return map_BuildVolumeSource
 }
 
 var map_CommonSpec = map[string]string{
@@ -309,8 +347,8 @@ func (CommonSpec) SwaggerDoc() map[string]string {
 
 var map_CommonWebHookCause = map[string]string{
 	"":         "CommonWebHookCause factors out the identical format of these webhook causes into struct so we can share it in the specific causes;  it is too late for GitHub and Generic but we can leverage this pattern with GitLab and Bitbucket.",
-	"revision": "Revision is the git source revision information of the trigger.",
-	"secret":   "Secret is the obfuscated webhook secret that triggered a build.",
+	"revision": "revision is the git source revision information of the trigger.",
+	"secret":   "secret is the obfuscated webhook secret that triggered a build.",
 }
 
 func (CommonWebHookCause) SwaggerDoc() map[string]string {
@@ -350,8 +388,9 @@ var map_DockerBuildStrategy = map[string]string{
 	"env":                     "env contains additional environment variables you want to pass into a builder container.",
 	"forcePull":               "forcePull describes if the builder should pull the images from registry prior to building.",
 	"dockerfilePath":          "dockerfilePath is the path of the Dockerfile that will be used to build the container image, relative to the root of the context (contextDir). Defaults to `Dockerfile` if unset.",
-	"buildArgs":               "buildArgs contains build arguments that will be resolved in the Dockerfile.  See https://docs.docker.com/engine/reference/builder/#/arg for more details.",
+	"buildArgs":               "buildArgs contains build arguments that will be resolved in the Dockerfile.  See https://docs.docker.com/engine/reference/builder/#/arg for more details. NOTE: Only the 'name' and 'value' fields are supported. Any settings on the 'valueFrom' field are ignored.",
 	"imageOptimizationPolicy": "imageOptimizationPolicy describes what optimizations the system can use when building images to reduce the final size or time spent building the image. The default policy is 'None' which means the final build image will be equivalent to an image created by the container image build API. The experimental policy 'SkipLayers' will avoid commiting new layers in between each image step, and will fail if the Dockerfile cannot provide compatibility with the 'None' policy. An additional experimental policy 'SkipLayersAndWarn' is the same as 'SkipLayers' but simply warns if compatibility cannot be preserved.",
+	"volumes":                 "volumes is a list of input volumes that can be mounted into the builds runtime environment. Only a subset of Kubernetes Volume sources are supported by builds. More info: https://kubernetes.io/docs/concepts/storage/volumes",
 }
 
 func (DockerBuildStrategy) SwaggerDoc() map[string]string {
@@ -383,7 +422,7 @@ var map_GenericWebHookEvent = map[string]string{
 	"type":                  "type is the type of source repository",
 	"git":                   "git is the git information if the Type is BuildSourceGit",
 	"env":                   "env contains additional environment variables you want to pass into a builder container. ValueFrom is not supported.",
-	"dockerStrategyOptions": "DockerStrategyOptions contains additional docker-strategy specific options for the build",
+	"dockerStrategyOptions": "dockerStrategyOptions contains additional docker-strategy specific options for the build",
 }
 
 func (GenericWebHookEvent) SwaggerDoc() map[string]string {
@@ -412,7 +451,7 @@ func (GitHubWebHookCause) SwaggerDoc() map[string]string {
 
 var map_GitInfo = map[string]string{
 	"":     "GitInfo is the aggregated git information for a generic webhook post",
-	"refs": "Refs is a list of GitRefs for the provided repo - generally sent when used from a post-receive hook. This field is optional and is used when sending multiple refs",
+	"refs": "refs is a list of GitRefs for the provided repo - generally sent when used from a post-receive hook. This field is optional and is used when sending multiple refs",
 }
 
 func (GitInfo) SwaggerDoc() map[string]string {
@@ -449,7 +488,7 @@ func (GitSourceRevision) SwaggerDoc() map[string]string {
 
 var map_ImageChangeCause = map[string]string{
 	"":        "ImageChangeCause contains information about the image that triggered a build",
-	"imageID": "imageID is the ID of the image that triggered a a new build.",
+	"imageID": "imageID is the ID of the image that triggered a new build.",
 	"fromRef": "fromRef contains detailed information about an image that triggered a build.",
 }
 
@@ -470,9 +509,9 @@ func (ImageChangeTrigger) SwaggerDoc() map[string]string {
 
 var map_ImageChangeTriggerStatus = map[string]string{
 	"":                     "ImageChangeTriggerStatus tracks the latest resolved status of the associated ImageChangeTrigger policy specified in the BuildConfigSpec.Triggers struct.",
-	"lastTriggeredImageID": "lastTriggeredImageID represents, at the last time a Build for this BuildConfig was instantiated, the sha/id of the image referenced by the the ImageStreamTag cited in the 'from' of this struct. The lastTriggeredImageID field will be updated by the OpenShift APIServer on all instantiations of a Build from the BuildConfig it processes, regardless of what is considered the cause of instantiation. Specifically, an instantiation of a Build could have been manually requested, or could have resulted from changes with any of the Triggers defined in BuildConfigSpec.Triggers. The reason for always updating this field across all ImageChangeTriggerStatus instances is to prevent multiple builds being instantiated concurrently when multiple ImageChangeTriggers fire concurrently.  The system compares the the sha/id stored here with the associated ImageStreamTag's sha/id for the image.  If they match, then this trigger is not a valid reason for instantiating a Build.  So when ImageChangeTriggers fire concurrently, only one of them can \"win\", meaning selected as the cause for a Build instantiation request. Lastly, to clarify exactly what is meant by \"Build instantiation\", from a REST perspective, it is a HTTP POST of a BuildRequest object as the HTTP Body that is made to the OpenShift APIServer, where that HTTP POST also specifies the \"buildconfigs\" resource,  \"instantiate\" subresource, as well as the namespace and name of the BuildConfig.",
-	"from":                 "from is the ImageStreamTag that is used as the source of the trigger. This can come from an ImageStream tag referenced in this BuildConfig's Spec ImageChange Triggers, or the \"from\"\n this BuildConfig's build strategy if it happens to be an ImageStreamTag (where the user has specified an\nImageChange Trigger in the spec with a 'nil' for its 'from'.",
-	"lastTriggerTime":      "lastTriggerTime is the last time this particular ImageChangeTrigger fired, and that trigger firing was chosen as the cause for the Build being instantiated from this BuildConfig.  So on each Build instantiation, while lastTriggeredImageID will be updated regardless of whether this ImageChangeTrigger fired and deemed the cause for the Build Instantiation, this field is only updated when this trigger was in fact deemed the cause.  As such, it is valid that this field may not be set across all the ImageChangeTriggers, as they may have not yet been deemed to be the cause of a Build instantiation.  It is also valid that the times stored in lastTriggerTime will vary across all the ImageChangeTriggers, as the system explicitly picks only one trigger cause for a given Build.",
+	"lastTriggeredImageID": "lastTriggeredImageID represents the sha/id of the ImageStreamTag when a Build for this BuildConfig was started. The lastTriggeredImageID is updated each time a Build for this BuildConfig is started, even if this ImageStreamTag is not the reason the Build is started.",
+	"from":                 "from is the ImageStreamTag that is the source of the trigger.",
+	"lastTriggerTime":      "lastTriggerTime is the last time this particular ImageStreamTag triggered a Build to start. This field is only updated when this trigger specifically started a Build.",
 }
 
 func (ImageChangeTriggerStatus) SwaggerDoc() map[string]string {
@@ -512,9 +551,9 @@ func (ImageSourcePath) SwaggerDoc() map[string]string {
 }
 
 var map_ImageStreamTagReference = map[string]string{
-	"":          "ImageStreamTagReference captures the required elements for identifying the ImageStreamTag referenced by the more generic ObjectReference BuildTriggerPolicy.ImageChange.From.  It is used by ImageChangeTriggerStatus, where a specific instance of ImageChangeTriggerStatus in maintained in BuildConfigStatus.ImageChangeTriggers for each entry in the BuildConfigSpec.Triggers array where the BuildTriggerPolicy.ImageChange pointer is set to a non-nil value",
-	"namespace": "namespace is the namespace where the ImageStreamTag used for an ImageChangeTrigger is located",
-	"name":      "name is the name of the ImageStreamTag used for an ImageChangeTrigger",
+	"":          "ImageStreamTagReference references the ImageStreamTag in an image change trigger by namespace and name.",
+	"namespace": "namespace is the namespace where the ImageStreamTag for an ImageChangeTrigger is located",
+	"name":      "name is the name of the ImageStreamTag for an ImageChangeTrigger",
 }
 
 func (ImageStreamTagReference) SwaggerDoc() map[string]string {
@@ -523,8 +562,8 @@ func (ImageStreamTagReference) SwaggerDoc() map[string]string {
 
 var map_JenkinsPipelineBuildStrategy = map[string]string{
 	"":                "JenkinsPipelineBuildStrategy holds parameters specific to a Jenkins Pipeline build. Deprecated: use OpenShift Pipelines",
-	"jenkinsfilePath": "JenkinsfilePath is the optional path of the Jenkinsfile that will be used to configure the pipeline relative to the root of the context (contextDir). If both JenkinsfilePath & Jenkinsfile are both not specified, this defaults to Jenkinsfile in the root of the specified contextDir.",
-	"jenkinsfile":     "Jenkinsfile defines the optional raw contents of a Jenkinsfile which defines a Jenkins pipeline build.",
+	"jenkinsfilePath": "jenkinsfilePath is the optional path of the Jenkinsfile that will be used to configure the pipeline relative to the root of the context (contextDir). If both JenkinsfilePath & Jenkinsfile are both not specified, this defaults to Jenkinsfile in the root of the specified contextDir.",
+	"jenkinsfile":     "jenkinsfile defines the optional raw contents of a Jenkinsfile which defines a Jenkins pipeline build.",
 	"env":             "env contains additional environment variables you want to pass into a build pipeline.",
 }
 
@@ -555,7 +594,7 @@ func (SecretBuildSource) SwaggerDoc() map[string]string {
 
 var map_SecretLocalReference = map[string]string{
 	"":     "SecretLocalReference contains information that points to the local secret being used",
-	"name": "Name is the name of the resource in the same namespace being referenced",
+	"name": "name is the name of the resource in the same namespace being referenced",
 }
 
 func (SecretLocalReference) SwaggerDoc() map[string]string {
@@ -580,6 +619,7 @@ var map_SourceBuildStrategy = map[string]string{
 	"scripts":     "scripts is the location of Source scripts",
 	"incremental": "incremental flag forces the Source build to do incremental builds if true.",
 	"forcePull":   "forcePull describes if the builder should pull the images from registry prior to building.",
+	"volumes":     "volumes is a list of input volumes that can be mounted into the builds runtime environment. Only a subset of Kubernetes Volume sources are supported by builds. More info: https://kubernetes.io/docs/concepts/storage/volumes",
 }
 
 func (SourceBuildStrategy) SwaggerDoc() map[string]string {
@@ -599,7 +639,7 @@ func (SourceControlUser) SwaggerDoc() map[string]string {
 var map_SourceRevision = map[string]string{
 	"":     "SourceRevision is the revision or commit information from the source for the build",
 	"type": "type of the build source, may be one of 'Source', 'Dockerfile', 'Binary', or 'Images'",
-	"git":  "Git contains information about git-based build source",
+	"git":  "git contains information about git-based build source",
 }
 
 func (SourceRevision) SwaggerDoc() map[string]string {

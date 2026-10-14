@@ -15,11 +15,11 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/util/clock"
 	"k8s.io/apimachinery/pkg/util/sets"
+	clocktesting "k8s.io/utils/clock/testing"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 
-	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
+	machinev1 "github.com/openshift/api/machine/v1beta1"
 )
 
 /*
@@ -419,7 +419,7 @@ rj/Dkdwyag==
 var baseTime = time.Date(2020, 11, 19, 0, 0, 0, 0, time.UTC)
 
 func init() {
-	now = clock.NewFakePassiveClock(baseTime).Now
+	now = clocktesting.NewFakePassiveClock(baseTime).Now
 }
 
 func Test_authorizeCSR(t *testing.T) {

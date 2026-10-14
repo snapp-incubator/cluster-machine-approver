@@ -7,316 +7,30 @@ import (
 	fmt "fmt"
 
 	io "io"
+	"sort"
 
-	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
 	strings "strings"
 )
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
-var _ = fmt.Errorf
-var _ = math.Inf
+func (m *AppliedClusterResourceQuota) Reset() { *m = AppliedClusterResourceQuota{} }
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+func (m *AppliedClusterResourceQuotaList) Reset() { *m = AppliedClusterResourceQuotaList{} }
 
-func (m *AppliedClusterResourceQuota) Reset()      { *m = AppliedClusterResourceQuota{} }
-func (*AppliedClusterResourceQuota) ProtoMessage() {}
-func (*AppliedClusterResourceQuota) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{0}
-}
-func (m *AppliedClusterResourceQuota) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AppliedClusterResourceQuota) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AppliedClusterResourceQuota) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppliedClusterResourceQuota.Merge(m, src)
-}
-func (m *AppliedClusterResourceQuota) XXX_Size() int {
-	return m.Size()
-}
-func (m *AppliedClusterResourceQuota) XXX_DiscardUnknown() {
-	xxx_messageInfo_AppliedClusterResourceQuota.DiscardUnknown(m)
-}
+func (m *ClusterResourceQuota) Reset() { *m = ClusterResourceQuota{} }
 
-var xxx_messageInfo_AppliedClusterResourceQuota proto.InternalMessageInfo
+func (m *ClusterResourceQuotaList) Reset() { *m = ClusterResourceQuotaList{} }
 
-func (m *AppliedClusterResourceQuotaList) Reset()      { *m = AppliedClusterResourceQuotaList{} }
-func (*AppliedClusterResourceQuotaList) ProtoMessage() {}
-func (*AppliedClusterResourceQuotaList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{1}
-}
-func (m *AppliedClusterResourceQuotaList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AppliedClusterResourceQuotaList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AppliedClusterResourceQuotaList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppliedClusterResourceQuotaList.Merge(m, src)
-}
-func (m *AppliedClusterResourceQuotaList) XXX_Size() int {
-	return m.Size()
-}
-func (m *AppliedClusterResourceQuotaList) XXX_DiscardUnknown() {
-	xxx_messageInfo_AppliedClusterResourceQuotaList.DiscardUnknown(m)
-}
+func (m *ClusterResourceQuotaSelector) Reset() { *m = ClusterResourceQuotaSelector{} }
 
-var xxx_messageInfo_AppliedClusterResourceQuotaList proto.InternalMessageInfo
+func (m *ClusterResourceQuotaSpec) Reset() { *m = ClusterResourceQuotaSpec{} }
 
-func (m *ClusterResourceQuota) Reset()      { *m = ClusterResourceQuota{} }
-func (*ClusterResourceQuota) ProtoMessage() {}
-func (*ClusterResourceQuota) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{2}
-}
-func (m *ClusterResourceQuota) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClusterResourceQuota) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClusterResourceQuota) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterResourceQuota.Merge(m, src)
-}
-func (m *ClusterResourceQuota) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClusterResourceQuota) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClusterResourceQuota.DiscardUnknown(m)
-}
+func (m *ClusterResourceQuotaStatus) Reset() { *m = ClusterResourceQuotaStatus{} }
 
-var xxx_messageInfo_ClusterResourceQuota proto.InternalMessageInfo
-
-func (m *ClusterResourceQuotaList) Reset()      { *m = ClusterResourceQuotaList{} }
-func (*ClusterResourceQuotaList) ProtoMessage() {}
-func (*ClusterResourceQuotaList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{3}
-}
-func (m *ClusterResourceQuotaList) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClusterResourceQuotaList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClusterResourceQuotaList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterResourceQuotaList.Merge(m, src)
-}
-func (m *ClusterResourceQuotaList) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClusterResourceQuotaList) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClusterResourceQuotaList.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ClusterResourceQuotaList proto.InternalMessageInfo
-
-func (m *ClusterResourceQuotaSelector) Reset()      { *m = ClusterResourceQuotaSelector{} }
-func (*ClusterResourceQuotaSelector) ProtoMessage() {}
-func (*ClusterResourceQuotaSelector) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{4}
-}
-func (m *ClusterResourceQuotaSelector) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClusterResourceQuotaSelector) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClusterResourceQuotaSelector) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterResourceQuotaSelector.Merge(m, src)
-}
-func (m *ClusterResourceQuotaSelector) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClusterResourceQuotaSelector) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClusterResourceQuotaSelector.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ClusterResourceQuotaSelector proto.InternalMessageInfo
-
-func (m *ClusterResourceQuotaSpec) Reset()      { *m = ClusterResourceQuotaSpec{} }
-func (*ClusterResourceQuotaSpec) ProtoMessage() {}
-func (*ClusterResourceQuotaSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{5}
-}
-func (m *ClusterResourceQuotaSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClusterResourceQuotaSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClusterResourceQuotaSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterResourceQuotaSpec.Merge(m, src)
-}
-func (m *ClusterResourceQuotaSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClusterResourceQuotaSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClusterResourceQuotaSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ClusterResourceQuotaSpec proto.InternalMessageInfo
-
-func (m *ClusterResourceQuotaStatus) Reset()      { *m = ClusterResourceQuotaStatus{} }
-func (*ClusterResourceQuotaStatus) ProtoMessage() {}
-func (*ClusterResourceQuotaStatus) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{6}
-}
-func (m *ClusterResourceQuotaStatus) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClusterResourceQuotaStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClusterResourceQuotaStatus) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClusterResourceQuotaStatus.Merge(m, src)
-}
-func (m *ClusterResourceQuotaStatus) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClusterResourceQuotaStatus) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClusterResourceQuotaStatus.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ClusterResourceQuotaStatus proto.InternalMessageInfo
-
-func (m *ResourceQuotaStatusByNamespace) Reset()      { *m = ResourceQuotaStatusByNamespace{} }
-func (*ResourceQuotaStatusByNamespace) ProtoMessage() {}
-func (*ResourceQuotaStatusByNamespace) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f605e5b8440aecb8, []int{7}
-}
-func (m *ResourceQuotaStatusByNamespace) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ResourceQuotaStatusByNamespace) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ResourceQuotaStatusByNamespace) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ResourceQuotaStatusByNamespace.Merge(m, src)
-}
-func (m *ResourceQuotaStatusByNamespace) XXX_Size() int {
-	return m.Size()
-}
-func (m *ResourceQuotaStatusByNamespace) XXX_DiscardUnknown() {
-	xxx_messageInfo_ResourceQuotaStatusByNamespace.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ResourceQuotaStatusByNamespace proto.InternalMessageInfo
-
-func init() {
-	proto.RegisterType((*AppliedClusterResourceQuota)(nil), "github.com.openshift.api.quota.v1.AppliedClusterResourceQuota")
-	proto.RegisterType((*AppliedClusterResourceQuotaList)(nil), "github.com.openshift.api.quota.v1.AppliedClusterResourceQuotaList")
-	proto.RegisterType((*ClusterResourceQuota)(nil), "github.com.openshift.api.quota.v1.ClusterResourceQuota")
-	proto.RegisterType((*ClusterResourceQuotaList)(nil), "github.com.openshift.api.quota.v1.ClusterResourceQuotaList")
-	proto.RegisterType((*ClusterResourceQuotaSelector)(nil), "github.com.openshift.api.quota.v1.ClusterResourceQuotaSelector")
-	proto.RegisterMapType((map[string]string)(nil), "github.com.openshift.api.quota.v1.ClusterResourceQuotaSelector.AnnotationsEntry")
-	proto.RegisterType((*ClusterResourceQuotaSpec)(nil), "github.com.openshift.api.quota.v1.ClusterResourceQuotaSpec")
-	proto.RegisterType((*ClusterResourceQuotaStatus)(nil), "github.com.openshift.api.quota.v1.ClusterResourceQuotaStatus")
-	proto.RegisterType((*ResourceQuotaStatusByNamespace)(nil), "github.com.openshift.api.quota.v1.ResourceQuotaStatusByNamespace")
-}
-
-func init() {
-	proto.RegisterFile("github.com/openshift/api/quota/v1/generated.proto", fileDescriptor_f605e5b8440aecb8)
-}
-
-var fileDescriptor_f605e5b8440aecb8 = []byte{
-	// 715 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x55, 0x41, 0x6f, 0xd3, 0x48,
-	0x18, 0x8d, 0xdd, 0xa6, 0x6a, 0xa6, 0xdb, 0x55, 0x3b, 0xea, 0x21, 0xca, 0xae, 0x9c, 0xae, 0xa5,
-	0x15, 0xbd, 0x30, 0x26, 0x05, 0x41, 0x05, 0xa2, 0xa8, 0x46, 0x1c, 0x40, 0x85, 0x82, 0xe1, 0x84,
-	0x0a, 0x62, 0xe2, 0x4e, 0x13, 0x13, 0xdb, 0x63, 0x3c, 0xe3, 0x48, 0xb9, 0xf1, 0x0b, 0x10, 0xbf,
-	0x81, 0x1f, 0xc2, 0x0d, 0xa9, 0x37, 0x7a, 0x01, 0xf5, 0x54, 0x11, 0xc3, 0x0f, 0x41, 0x33, 0x9e,
-	0xd8, 0x69, 0x9b, 0xb4, 0xa1, 0x3d, 0x70, 0xe1, 0xe6, 0xf9, 0x32, 0xef, 0xbd, 0x79, 0xcf, 0x6f,
-	0x1c, 0xd0, 0x68, 0x79, 0xbc, 0x9d, 0x34, 0x91, 0x4b, 0x03, 0x8b, 0x46, 0x24, 0x64, 0x6d, 0x6f,
-	0x97, 0x5b, 0x38, 0xf2, 0xac, 0x37, 0x09, 0xe5, 0xd8, 0xea, 0x36, 0xac, 0x16, 0x09, 0x49, 0x8c,
-	0x39, 0xd9, 0x41, 0x51, 0x4c, 0x39, 0x85, 0xff, 0x15, 0x10, 0x94, 0x43, 0x10, 0x8e, 0x3c, 0x24,
-	0x21, 0xa8, 0xdb, 0xa8, 0x5d, 0x1e, 0x62, 0x6d, 0xd1, 0x16, 0xb5, 0x24, 0xb2, 0x99, 0xec, 0xca,
-	0x95, 0x5c, 0xc8, 0xa7, 0x8c, 0xb1, 0x66, 0x76, 0xd6, 0x18, 0xf2, 0xa8, 0x94, 0x75, 0x69, 0x4c,
-	0x46, 0xa8, 0xd6, 0xae, 0x15, 0x7b, 0x02, 0xec, 0xb6, 0xbd, 0x90, 0xc4, 0x3d, 0x2b, 0xea, 0xb4,
-	0xc4, 0x80, 0x59, 0x01, 0x19, 0x79, 0xd6, 0xda, 0xf5, 0x71, 0xa8, 0x38, 0x09, 0xb9, 0x17, 0x10,
-	0x8b, 0xb9, 0x6d, 0x12, 0xe0, 0xe3, 0x38, 0xf3, 0x93, 0x0e, 0xfe, 0xd9, 0x88, 0x22, 0xdf, 0x23,
-	0x3b, 0x77, 0xfd, 0x84, 0x71, 0x12, 0x3b, 0x84, 0xd1, 0x24, 0x76, 0xc9, 0x13, 0xe1, 0x11, 0xbe,
-	0x02, 0xb3, 0x42, 0x72, 0x07, 0x73, 0x5c, 0xd5, 0x96, 0xb5, 0x95, 0xb9, 0xd5, 0x2b, 0x28, 0x93,
-	0x42, 0xc3, 0x52, 0x28, 0xea, 0xb4, 0xc4, 0x80, 0x21, 0xb1, 0x1b, 0x75, 0x1b, 0x68, 0xab, 0xf9,
-	0x9a, 0xb8, 0xfc, 0x21, 0xe1, 0xd8, 0x86, 0x7b, 0x87, 0xf5, 0x52, 0x7a, 0x58, 0x07, 0xc5, 0xcc,
-	0xc9, 0x59, 0xe1, 0x0b, 0x30, 0xcd, 0x22, 0xe2, 0x56, 0x75, 0xc9, 0x7e, 0x0b, 0x9d, 0x19, 0x3a,
-	0x1a, 0x75, 0xd0, 0xa7, 0x11, 0x71, 0xed, 0xbf, 0x94, 0xd0, 0xb4, 0x58, 0x39, 0x92, 0x16, 0x12,
-	0x30, 0xc3, 0x38, 0xe6, 0x09, 0xab, 0x4e, 0x49, 0x81, 0xdb, 0xe7, 0x15, 0x90, 0x24, 0xf6, 0xdf,
-	0x4a, 0x62, 0x26, 0x5b, 0x3b, 0x8a, 0xdc, 0xfc, 0xa1, 0x81, 0xfa, 0x29, 0x39, 0x6e, 0x7a, 0x8c,
-	0xc3, 0xed, 0x13, 0x59, 0xa2, 0xc9, 0xb2, 0x14, 0x68, 0x99, 0xe4, 0x82, 0x52, 0x9f, 0x1d, 0x4c,
-	0x86, 0x72, 0x74, 0x41, 0xd9, 0xe3, 0x24, 0x60, 0x55, 0x7d, 0x79, 0x6a, 0x65, 0x6e, 0x75, 0x7d,
-	0x02, 0x9f, 0xa7, 0x1c, 0xd8, 0x9e, 0x57, 0x52, 0xe5, 0xfb, 0x82, 0xd4, 0xc9, 0xb8, 0xcd, 0x8f,
-	0x3a, 0x58, 0xfa, 0xd3, 0x93, 0x0b, 0xf4, 0xe4, 0xab, 0x06, 0xaa, 0xbf, 0xa9, 0x20, 0xdb, 0x47,
-	0x0b, 0x72, 0xe3, 0x9c, 0x06, 0xc7, 0x34, 0xe3, 0xb3, 0x0e, 0xfe, 0x1d, 0x99, 0x07, 0xf1, 0x89,
-	0xcb, 0x69, 0x0c, 0x5f, 0x82, 0x19, 0x1f, 0x37, 0x89, 0xcf, 0x94, 0xb5, 0xab, 0x13, 0x5a, 0x13,
-	0x98, 0x01, 0x89, 0xbd, 0x98, 0x1e, 0xd6, 0xe7, 0x8f, 0x8c, 0x1c, 0xc5, 0x0a, 0xdf, 0x69, 0x60,
-	0x0e, 0x87, 0x21, 0xe5, 0x98, 0x7b, 0x34, 0x1c, 0xb8, 0x7c, 0x7c, 0xde, 0xd7, 0xa8, 0xe8, 0xd1,
-	0x46, 0x41, 0x79, 0x2f, 0xe4, 0x71, 0xcf, 0xae, 0x29, 0xfb, 0xb0, 0xf8, 0x25, 0x3f, 0xcb, 0xf0,
-	0x01, 0x6a, 0xeb, 0x60, 0xe1, 0x38, 0x18, 0x2e, 0x80, 0xa9, 0x0e, 0xe9, 0xc9, 0x04, 0x2a, 0x8e,
-	0x78, 0x84, 0x4b, 0xa0, 0xdc, 0xc5, 0x7e, 0x42, 0x64, 0xaf, 0x2b, 0x4e, 0xb6, 0xb8, 0xa9, 0xaf,
-	0x69, 0xe6, 0x97, 0x31, 0x55, 0x11, 0xa5, 0x85, 0x01, 0x98, 0x65, 0x4a, 0x55, 0xe5, 0x79, 0xe7,
-	0x82, 0x4e, 0x8b, 0xee, 0xe4, 0x76, 0x72, 0x09, 0xf8, 0x00, 0x94, 0x25, 0x89, 0xba, 0x7d, 0xff,
-	0x0f, 0xbd, 0x3b, 0x24, 0xfe, 0xc8, 0x04, 0xf9, 0xc9, 0x7b, 0x96, 0x37, 0x45, 0x8e, 0x9c, 0x8c,
-	0xc2, 0xec, 0x6b, 0xa0, 0x36, 0xfe, 0xe6, 0xc0, 0x4d, 0x50, 0xe6, 0x94, 0x63, 0x5f, 0xd9, 0xba,
-	0x74, 0xb6, 0x54, 0x76, 0xe3, 0x72, 0xb1, 0x67, 0x02, 0xed, 0x64, 0x24, 0x30, 0x01, 0x20, 0xc4,
-	0x01, 0x61, 0x11, 0x76, 0xc9, 0xa0, 0x13, 0x1b, 0x13, 0x24, 0x35, 0x4a, 0xa1, 0xf7, 0x68, 0xc0,
-	0x54, 0x7c, 0xaa, 0xf2, 0x11, 0x73, 0x86, 0x84, 0xcc, 0x0f, 0x1a, 0x30, 0x4e, 0xa7, 0x80, 0x16,
-	0xa8, 0xe4, 0x80, 0xac, 0x10, 0xf6, 0xa2, 0x62, 0xad, 0xe4, 0xbb, 0x9c, 0x62, 0x0f, 0xdc, 0xca,
-	0xbf, 0x50, 0xfa, 0xaf, 0x25, 0x33, 0xe6, 0x5b, 0x64, 0xaf, 0xec, 0xf5, 0x8d, 0xd2, 0x7e, 0xdf,
-	0x28, 0x1d, 0xf4, 0x8d, 0xd2, 0xdb, 0xd4, 0xd0, 0xf6, 0x52, 0x43, 0xdb, 0x4f, 0x0d, 0xed, 0x20,
-	0x35, 0xb4, 0x6f, 0xa9, 0xa1, 0xbd, 0xff, 0x6e, 0x94, 0x9e, 0xeb, 0xdd, 0xc6, 0xcf, 0x00, 0x00,
-	0x00, 0xff, 0xff, 0xa7, 0x76, 0xc9, 0x6f, 0x3d, 0x09, 0x00, 0x00,
-}
+func (m *ResourceQuotaStatusByNamespace) Reset() { *m = ResourceQuotaStatusByNamespace{} }
 
 func (m *AppliedClusterResourceQuota) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
@@ -543,7 +257,7 @@ func (m *ClusterResourceQuotaSelector) MarshalToSizedBuffer(dAtA []byte) (int, e
 		for k := range m.AnnotationSelector {
 			keysForAnnotationSelector = append(keysForAnnotationSelector, string(k))
 		}
-		github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotationSelector)
+		sort.Strings(keysForAnnotationSelector)
 		for iNdEx := len(keysForAnnotationSelector) - 1; iNdEx >= 0; iNdEx-- {
 			v := m.AnnotationSelector[string(keysForAnnotationSelector[iNdEx])]
 			baseI := i
@@ -914,7 +628,7 @@ func (this *ClusterResourceQuotaSelector) String() string {
 	for k := range this.AnnotationSelector {
 		keysForAnnotationSelector = append(keysForAnnotationSelector, k)
 	}
-	github_com_gogo_protobuf_sortkeys.Strings(keysForAnnotationSelector)
+	sort.Strings(keysForAnnotationSelector)
 	mapStringForAnnotationSelector := "map[string]string{"
 	for _, k := range keysForAnnotationSelector {
 		mapStringForAnnotationSelector += fmt.Sprintf("%v: %v,", k, this.AnnotationSelector[k])

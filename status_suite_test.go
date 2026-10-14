@@ -20,19 +20,17 @@ import (
 	"path/filepath"
 	"testing"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
-	"k8s.io/klog/v2/klogr"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
-	"sigs.k8s.io/controller-runtime/pkg/envtest/printer"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 )
 
 func init() {
 	klog.InitFlags(nil)
-	logf.SetLogger(klogr.New())
+	logf.SetLogger(klog.NewKlogr())
 }
 
 var (
@@ -43,9 +41,7 @@ var (
 func TestMachinesetController(t *testing.T) {
 	RegisterFailHandler(Fail)
 
-	RunSpecsWithDefaultAndCustomReporters(t,
-		"Cluster Operator status controller Suite",
-		[]Reporter{printer.NewlineReporter{}})
+	RunSpecs(t, "Cluster Operator status controller Suite")
 }
 
 var _ = BeforeSuite(func() {

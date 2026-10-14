@@ -49,25 +49,7 @@ func (mc *metadataClient) getResourceInterface(gvk schema.GroupVersionKind, ns s
 	return mc.client.Resource(mapping.Resource).Namespace(ns), nil
 }
 
-// Delete implements client.Client
-func (mc *metadataClient) Delete(ctx context.Context, obj Object, opts ...DeleteOption) error {
-	metadata, ok := obj.(*metav1.PartialObjectMetadata)
-	if !ok {
-		return fmt.Errorf("metadata client did not understand object: %T", obj)
-	}
-
-	resInt, err := mc.getResourceInterface(metadata.GroupVersionKind(), metadata.Namespace)
-	if err != nil {
-		return err
-	}
-
-	deleteOpts := DeleteOptions{}
-	deleteOpts.ApplyOptions(opts)
-
-	return resInt.Delete(ctx, metadata.Name, *deleteOpts.AsDeleteOptions())
-}
-
-// DeleteAllOf implements client.Client
+// DeleteAllOf implements client.Client.
 func (mc *metadataClient) DeleteAllOf(ctx context.Context, obj Object, opts ...DeleteAllOfOption) error {
 	metadata, ok := obj.(*metav1.PartialObjectMetadata)
 	if !ok {
@@ -85,7 +67,7 @@ func (mc *metadataClient) DeleteAllOf(ctx context.Context, obj Object, opts ...D
 	return resInt.DeleteCollection(ctx, *deleteAllOfOpts.AsDeleteOptions(), *deleteAllOfOpts.AsListOptions())
 }
 
-// Patch implements client.Client
+// Patch implements client.Client.
 func (mc *metadataClient) Patch(ctx context.Context, obj Object, patch Patch, opts ...PatchOption) error {
 	metadata, ok := obj.(*metav1.PartialObjectMetadata)
 	if !ok {
@@ -115,8 +97,8 @@ func (mc *metadataClient) Patch(ctx context.Context, obj Object, patch Patch, op
 	return nil
 }
 
-// Get implements client.Client
-func (mc *metadataClient) Get(ctx context.Context, key ObjectKey, obj Object) error {
+// Get implements client.Client.
+func (mc *metadataClient) Get(ctx context.Context, key ObjectKey, obj Object, opts ...GetOption) error {
 	metadata, ok := obj.(*metav1.PartialObjectMetadata)
 	if !ok {
 		return fmt.Errorf("metadata client did not understand object: %T", obj)
@@ -124,12 +106,15 @@ func (mc *metadataClient) Get(ctx context.Context, key ObjectKey, obj Object) er
 
 	gvk := metadata.GroupVersionKind()
 
+	getOpts := GetOptions{}
+	getOpts.ApplyOptions(opts)
+
 	resInt, err := mc.getResourceInterface(gvk, key.Namespace)
 	if err != nil {
 		return err
 	}
 
-	res, err := resInt.Get(ctx, key.Name, metav1.GetOptions{})
+	res, err := resInt.Get(ctx, key.Name, *getOpts.AsGetOptions())
 	if err != nil {
 		return err
 	}
@@ -138,7 +123,7 @@ func (mc *metadataClient) Get(ctx context.Context, key ObjectKey, obj Object) er
 	return nil
 }
 
-// List implements client.Client
+// List implements client.Client.
 func (mc *metadataClient) List(ctx context.Context, obj ObjectList, opts ...ListOption) error {
 	metadata, ok := obj.(*metav1.PartialObjectMetadataList)
 	if !ok {
@@ -146,9 +131,7 @@ func (mc *metadataClient) List(ctx context.Context, obj ObjectList, opts ...List
 	}
 
 	gvk := metadata.GroupVersionKind()
-	if strings.HasSuffix(gvk.Kind, "List") {
-		gvk.Kind = gvk.Kind[:len(gvk.Kind)-4]
-	}
+	gvk.Kind = strings.TrimSuffix(gvk.Kind, "List")
 
 	listOpts := ListOptions{}
 	listOpts.ApplyOptions(opts)
@@ -167,7 +150,7 @@ func (mc *metadataClient) List(ctx context.Context, obj ObjectList, opts ...List
 	return nil
 }
 
-func (mc *metadataClient) PatchStatus(ctx context.Context, obj Object, patch Patch, opts ...PatchOption) error {
+func (mc *metadataClient) PatchSubResource(ctx context.Context, obj Object, subResource string, patch Patch, opts ...SubResourcePatchOption) error {
 	metadata, ok := obj.(*metav1.PartialObjectMetadata)
 	if !ok {
 		return fmt.Errorf("metadata client did not understand object: %T", obj)
@@ -179,16 +162,24 @@ func (mc *metadataClient) PatchStatus(ctx context.Context, obj Object, patch Pat
 		return err
 	}
 
-	data, err := patch.Data(obj)
+	patchOpts := &SubResourcePatchOptions{}
+	patchOpts.ApplyOptions(opts)
+
+	body := obj
+	if patchOpts.SubResourceBody != nil {
+		body = patchOpts.SubResourceBody
+	}
+
+	data, err := patch.Data(body)
 	if err != nil {
 		return err
 	}
 
-	patchOpts := &PatchOptions{}
-	res, err := resInt.Patch(ctx, metadata.Name, patch.Type(), data, *patchOpts.AsPatchOptions(), "status")
+	res, err := resInt.Patch(ctx, metadata.Name, patch.Type(), data, *patchOpts.AsPatchOptions(), subResource)
 	if err != nil {
 		return err
 	}
+
 	*metadata = *res
 	metadata.SetGroupVersionKind(gvk) // restore the GVK, which isn't set on metadata
 	return nil

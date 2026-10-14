@@ -24,14 +24,16 @@ import (
 	"time"
 
 	configv1 "github.com/openshift/api/config/v1"
-	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
+	machinev1 "github.com/openshift/api/machine/v1beta1"
 	"github.com/openshift/cluster-machine-approver/pkg/controller"
 	"github.com/openshift/cluster-machine-approver/pkg/metrics"
 	corev1 "k8s.io/api/core/v1"
 	control "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	ctrl "sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
+	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
 	"k8s.io/klog/v2"
 )
@@ -62,8 +64,19 @@ func main() {
 	klog.Info("setting up manager")
 	syncPeriod := 10 * time.Minute
 	mgr, err := manager.New(control.GetConfigOrDie(), manager.Options{
-		MetricsBindAddress: metricsPort,
-		SyncPeriod:         &syncPeriod,
+		Metrics: metricsserver.Options{BindAddress: metricsPort},
+		Cache:   cache.Options{SyncPeriod: &syncPeriod},
+		// Prevent the controller from caching node and machine objects.
+		// Stale nodes and machines can cause the approver to not approve certificates
+		// within a timely manner, leading to failed node bootstraps.
+		Client: client.Options{
+			Cache: &client.CacheOptions{
+				DisableFor: []client.Object{
+					&machinev1.Machine{},
+					&corev1.Node{},
+				},
+			},
+		},
 	})
 	if err != nil {
 		klog.Fatalf("unable to set up overall controller manager: %v", err)
@@ -80,27 +93,7 @@ func main() {
 		klog.Fatal("unable to add Machines to scheme")
 	}
 
-	directClient, err := client.New(mgr.GetConfig(), client.Options{
-		Scheme: mgr.GetScheme(),
-		Mapper: mgr.GetRESTMapper(),
-	})
-	if err != nil {
-		klog.Fatal("unable to set up client")
-	}
-	// Prevent the controller from caching node and machine objects.
-	// Stale nodes and machines can cause the approver to not approve certificates
-	// within a timely manner, leading to failed node bootstraps.
-	approverClient, err := client.NewDelegatingClient(client.NewDelegatingClientInput{
-		Client:      directClient,
-		CacheReader: mgr.GetClient(),
-		UncachedObjects: []client.Object{
-			&machinev1.Machine{},
-			&corev1.Node{},
-		},
-	})
-	if err != nil {
-		klog.Fatalf("unable to set up delegating client: %v", err)
-	}
+	approverClient := mgr.GetClient()
 
 	// Setup all Controllers
 	klog.Info("setting up controllers")

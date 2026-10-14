@@ -17,8 +17,8 @@ limitations under the License.
 package cache
 
 import (
-	"k8s.io/apimachinery/pkg/util/clock"
 	"k8s.io/apimachinery/pkg/util/sets"
+	"k8s.io/utils/clock"
 )
 
 type fakeThreadSafeMap struct {
@@ -35,7 +35,7 @@ func (c *fakeThreadSafeMap) Delete(key string) {
 
 // FakeExpirationPolicy keeps the list for keys which never expires.
 type FakeExpirationPolicy struct {
-	NeverExpire     sets.String
+	NeverExpire     sets.Set[string]
 	RetrieveKeyFunc KeyFunc
 }
 
